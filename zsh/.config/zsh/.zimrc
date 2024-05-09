@@ -1,0 +1,96 @@
+# -------------------
+# Zimrc Configuration
+# -------------------
+
+#
+# Theme
+# Check `https://github.com/zimfw/asciiship`
+#
+
+# Exposes to prompts how long the last command took to execute, used by asciiship.
+zmodule duration-info
+# Exposes git repository status information to prompts, used by asciiship.
+zmodule git-info
+# A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
+zmodule asciiship
+
+#
+# Auto-complete
+# Check `https://github.com/zsh-users/zsh-completions`
+#
+
+# Additional completion definitions for Zsh.
+zmodule zsh-users/zsh-completions --fpath src
+
+# Enables and configures smart and extensive tab completion.
+# Completion must be sourced after all modules that add completion definitions.
+# Check `https://github.com/zimfw/completion?tab=readme-ov-file`
+zmodule completion
+
+#
+# Other behavior and productivity modules
+#
+
+# Set sane Zsh built-in environment options.
+# Check `https://github.com/zimfw/environment`
+zmodule environment
+
+# Provide handy git aliases and functions.
+# Check `https://github.com/zimfw/git`
+zmodule git
+
+# Apply correct bindkeys for input events.
+# Check `https://github.com/zimfw/input`
+zmodule input
+
+# Utility aliases and functions. Adds colour to ls, grep and less.
+# Check `https://github.com/zimfw/utility`
+#
+# Example
+# * `get` downloads from the given URL using `aria2c`, `axel`, `wget` or `curl`.
+# * `df` reports file system disk usage with human-readable sizes.
+# * `du` reports file disk usage with human-readable sizes.
+# * `chmod` changes file mode verbosely, not operating from `/` (GNU only).
+# * `chown` changes file owner verbosely, not operating from `/` (GNU only).
+# * `rm` uses `safe-rm` if available.
+# * `mkcd` creates and changes to the given directory.
+# * `mkpw` generates a random password with the given length and set of characters.
+# 	The default parameters are equivalent to `mkpw 32 0-9A-Za-z`.
+zmodule utility
+
+# Adds aliases and better defaults for exa.
+# Check `https://github.com/zimfw/exa`
+#
+# Example
+# * `ls` lists directories first (applies to all aliases below).
+# * `ll` lists with long format and git status (applies to all aliases below).
+# * `l`  lists all files.
+# * `lr` lists recursively as a tree.
+# * `lx` lists sorted by extension.
+# * `lk` lists sorted by largest file size last.
+# * `lt` lists sorted by newest modification time last.
+# * `lc` lists sorted by newest status change (ctime) last.
+zmodule exa
+
+# Cache the fzf to set up zsh shell integration
+# Check `https://github.com/zimfw/zsh`
+zmodule fzf
+
+# Git fuzzy
+# Check `https://github.com/bigH/git-fuzzy`
+zmodule bigH/git-fuzzy
+
+#
+# Modules that must be initialized last
+#
+
+# Syntax hightlighting
+# Check `https://github.com/zsh-users/zsh-syntax-highlighting`
+zmodule zsh-users/zsh-syntax-highlighting
+
+#
+# Auto cmd suggestion
+# Check `https://github.com/zsh-users/zsh-autosuggestions`
+zmodule zsh-users/zsh-autosuggestions
+
+# vim: set filetype=zsh

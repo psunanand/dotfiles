@@ -1,0 +1,35 @@
+# Change the cursor when Vi mode switches between "insert" and "normal"
+
+# BLOCK_SHAPE -> '\e[2 q'
+# BEAM_SHAPE -> '\e[6 q'
+
+vicursor-zle-keymap-select() {
+    case $KEYMAP in
+        vicmd|visual)
+        printf '\e[2 q'
+        ;;
+        viins|main|*)
+        printf '\e[6 q'
+        ;;
+    esac
+}
+
+# Set Vi as line editor at startup with BEAM
+vicursor-zle-line-init() {
+    zle -K viins
+    printf '\e[6 q'
+}
+
+vicursor-bind-widget() {
+    local -a to_binds
+    to_binds=(zle-line-init zle-keymap-select)
+    for bind in $to_binds; do
+        eval "${bind}() {$functions[vicursor-${bind}]; $functions[$bind]}"
+        zle -N $bind
+    done
+}
+
+vicursor-bind-widget
+
+
+# vim: set filetype=zsh:

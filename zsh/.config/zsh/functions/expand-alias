@@ -1,0 +1,14 @@
+# Expand alias
+
+expand-alias(){
+   if [[ "$LBUFFER" =~ "(^|[;|&])\s*(${(j:|:)ealiases})\$" ]]; then
+      zle _expand_alias
+      zle expand-word
+   fi
+   zle self-insert
+}
+
+expand-alias "$@"
+
+
+# vim: set filetype=zsh:

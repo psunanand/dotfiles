@@ -1,0 +1,12 @@
+# Run multiple (same) programs in the background
+
+background(){
+    for ((i=2; i<=$#; i++)); do
+        "${@[1]}" "${@[$i]}" &> /dev/null &
+    done
+}
+
+background "$@"
+
+
+# vim: set filetype=zsh:
