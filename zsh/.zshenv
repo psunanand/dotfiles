@@ -6,6 +6,7 @@
 : ${XDG_CONFIG_HOME:="$HOME/.config"}
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export EDITOR=nvim
 export VISUAL="$EDITOR"
 
 export HISTFILE="$ZDOTDIR/.zhistory"

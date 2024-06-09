@@ -47,9 +47,9 @@ for m in visual viopp; do
         bindkey -M $m $c select-bracketed
     done
 done
-bindkey -a cs change-surround
-bindkey -a ds delete-surround
-bindkey -a ys add-surround
+bindkey -a sr change-surround
+bindkey -a sd delete-surround
+bindkey -a sa add-surround
 bindkey -M visual S add-surround
 
 # Add latency for "surround"
