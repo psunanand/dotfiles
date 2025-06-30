@@ -61,10 +61,12 @@
         delta = {
           enable = true;
           options = {
+            features = "decorations";
             navigate = true;
             dark = true;
             side-by-side = true;
             line-numbers = true;
+            keep-plus-minus-markers = true;
           };
         };
 
