@@ -67,11 +67,7 @@
           "zdharma-continuum/fast-syntax-highlighting" # must be last
         ];
       };
-      # envExtra = builtins.readFile zsh/.zshenv;
 
-      # Add extra ENV variables to the ones provided by home-manager in .zshenv
-      # envExtra = "source ${config.home.homeDirectory}/dotfiles/stow/zsh/.zshenv";
-      # initContent = "source ${config.home.homeDirectory}/dotfiles/stow/zsh/.config/zsh/.zshrc";
       shellAliases = {
         # Put to sleep when away from keyboard
         afk = "pmset displaysleepnow";
@@ -94,8 +90,15 @@
       enable = true;
       enableZshIntegration = true;
       settings = {
+        username = {
+          disabled = false;
+          show_always = true;
+        };
+        hostname = {
+          ssh_only = false;
+          disabled = false;
+        };
       };
     };
-
   };
 }

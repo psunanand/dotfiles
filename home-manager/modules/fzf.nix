@@ -30,7 +30,7 @@
       fileWidgetCommand = config.programs.fzf.defaultCommand;
       # FZF_CTRL_T_OPTS
       fileWidgetOptions = [
-        "--preview 'if [ -d {} ]; then ${lib.getExe pkgs.eza} --tree --color=always {} | head -200; else ${lib.getExe pkgs.bat} -n --color=always --line-range :350 {}; fi'"
+        "--preview 'if [ -d {} ]; then ${lib.getExe pkgs.eza} --tree --color=always {} | head -200; else ${lib.getExe pkgs.bat} -n --color=always --line-range :500 {}; fi'"
       ];
       # FZF_ALT_C_COMMAND
       changeDirWidgetCommand = "${lib.getExe pkgs.fd} --type=d --hidden --strip-cwd-prefix --exclude .git";
