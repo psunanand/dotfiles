@@ -8,14 +8,16 @@ clean:
     just warn "cleaning up nix garbage..."
     sudo nix-collect-garbage -d
 
+[macos]
 install-darwin profile:
     if ! type darwin-rebuild >/dev/null 2>&1 then \
-        just info "install darwin-rebuild" && \
+        just info "installing nix-darwin and applying the configurations/settings according to `profile`..." && \
         sudo nix run nix-darwin/master#darwin-rebuild --extra-experimental-features 'nix-command flakes' -- switch --flake '.#{{profile}}'
     fi
 
+[macos]
 update-darwin profile:
-    just info "applying nix-darwin configuration to MacOS system-wide settings..."
+    just info "re-applying nix-darwin configurations/settings..."
     sudo darwin-rebuild switch --flake '.#{{profile}}'
 
 update-flake:

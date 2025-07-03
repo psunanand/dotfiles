@@ -44,8 +44,8 @@
         enable = true;
         strategy = [
           "completion"
-          "match_prev_cmd"
           "history"
+          "match_prev_cmd"
         ];
       };
       localVariables = {
@@ -74,7 +74,7 @@
         # Reload shell
         reload = "exec -l $SHELL";
         # Safe rm: https://github.com/nivekuil/rip
-        rm = "${lib.getExe pkgs.rm-improved} --graveyard ${config.home.homeDirectory}/.local/share/Trash";
+        rip = "${lib.getExe pkgs.rm-improved} --graveyard ${config.home.homeDirectory}/.local/share/Trash";
         # Another shortcut for Neovim
         v = lib.getExe config.programs.neovim.finalPackage;
         # Interactive/informative copy
@@ -83,6 +83,10 @@
         mv = "mv -iv";
         # Replace cat with bat
         cat = "${lib.getExe pkgs.bat} --plain --color=always";
+        # Diff files
+        diff = "${lib.getExe pkgs.delta} --diff-so-fancy --side-by-side";
+        # Grep with colors
+        grep = "grep --color=auto";
       };
     };
 

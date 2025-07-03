@@ -101,6 +101,7 @@
           extraConfig = ''
             set -g @kanagawa-theme "dragon"
             set -g @kanagawa-show-powerline true
+            set -g @kanagawa-show-left-icon hostname
             set -g @kanagawa-plugins "cpu-usage ram-usage"
             set -g @kanagawa-cpu-display-load true
             set -g @kanagawa-ignore-window-colors true

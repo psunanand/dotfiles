@@ -1,3 +1,11 @@
+if not vim.g.mason_enabled then
+  vim.lsp.enable({
+    'lua_ls',
+    'bashls',
+    'nixd',
+  })
+end
+
 local capabilities = require('blink.cmp').get_lsp_capabilities()
 
 vim.lsp.config('*', {
@@ -54,20 +62,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
       if client:supports_method('textDocument/documentHighlight', event.buf) then
         local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
 
-        -- When cursor stops moving: Highlights all instances of the symbol under the cursor
-        -- When cursor moves: Clears the highlighting
+        -- Highlight all instances of the symbol under the cursor when the cursor stops
         vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
           buffer = event.buf,
           group = highlight_augroup,
           callback = vim.lsp.buf.document_highlight,
         })
+        -- Clear the the highlight when the cursor moves
         vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
           buffer = event.buf,
           group = highlight_augroup,
           callback = vim.lsp.buf.clear_references,
         })
 
-        -- When LSP detaches: Clears the highlighting
+        -- Clear the highlight after LSP detaches
         vim.api.nvim_create_autocmd('LspDetach', {
           group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
           callback = function(event2)
@@ -86,10 +94,65 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-if not vim.g.mason_enabled then
-  vim.lsp.enable({
-    'lua_ls',
-    'bashls',
-    'nixd',
-  })
+local function lsp_restart()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local attached_clients = vim.lsp.get_clients({ bufnr = bufnr })
+  vim.lsp.stop_client(attached_clients)
+  vim.defer_fn(vim.cmd('edit'), 100)
 end
+
+vim.api.nvim_create_user_command('LspRestart', lsp_restart, { desc = 'Restart LSP' })
+
+local function lsp_status()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local attached_clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+  if #attached_clients == 0 then
+    vim.notify('No LSP clients attached', vim.log.levels.WARN)
+    return
+  end
+
+  vim.notify('[LSP Status] for buffer ID ' .. bufnr .. ':', vim.log.levels.INFO)
+
+  for i, attached_client in ipairs(attached_clients) do
+    vim.notify(
+      string.format('- Client %d: %s (ID: %d)', i, attached_client.name, attached_client.id),
+      vim.log.levels.INFO
+    )
+    vim.notify('- Root Directory: ' .. (attached_client.config.root_dir or 'N/A'), vim.log.levels.INFO)
+    vim.notify('- Filetype: ' .. table.concat(attached_client.config.filetypes or {}, ', '), vim.log.levels.INFO)
+
+    local attached_capabilities = attached_client.server_capabilities
+    local capabilities = {}
+    if attached_capabilities then
+      if attached_capabilities.completionProvider then
+        table.insert(capabilities, 'completion')
+      end
+      if attached_capabilities.hoverProvider then
+        table.insert(capabilities, 'hover')
+      end
+      if attached_capabilities.signatureHelpProvider then
+        table.insert(capabilities, 'signature help')
+      end
+      if attached_capabilities.definitionProvider then
+        table.insert(capabilities, 'definition')
+      end
+      if attached_capabilities.referencesProvider then
+        table.insert(capabilities, 'references')
+      end
+      if attached_capabilities.renameProvider then
+        table.insert(capabilities, 'rename')
+      end
+      if attached_capabilities.codeActionProvider then
+        table.insert(capabilities, 'code_action')
+      end
+      if attached_capabilities.documentFormattingProvider then
+        table.insert(capabilities, 'formatting')
+      end
+    end
+
+    vim.notify('- Capabilities: ' .. table.concat(capabilities, ', '), vim.log.levels.INFO)
+  end
+end
+
+vim.api.nvim_create_user_command('LspStatus', lsp_status, { desc = 'Show LSP status' })
