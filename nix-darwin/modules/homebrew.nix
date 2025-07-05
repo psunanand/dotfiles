@@ -38,8 +38,8 @@
       "obsidian"
       # Password manager: https://bitwarden.com/
       "bitwarden"
-      # Mouse control with keyboard: https://mouseless.click/
-      "mouseless"
+      # Google drive: https://www.google.com/drive/
+      "google-drive"
     ];
   };
 
