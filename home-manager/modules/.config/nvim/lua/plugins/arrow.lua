@@ -1,3 +1,4 @@
+-- `Marks made simple!
 return {
   'otavioschwanck/arrow.nvim',
   dependencies = {

@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('n', 'grE', vim.diagnostic.open_float, 'Open diagnostics float')
     map('n', 'grD', require('fzf-lua').lsp_declarations, 'Go to Declaration')
     map('n', 'grr', require('fzf-lua').lsp_references, 'Go to References')
-    map('n', 'grn', vim.lsp.buf.rename, 'Go to References')
+    map('n', 'grn', vim.lsp.buf.rename, 'Rename')
     map('n', 'gri', require('fzf-lua').lsp_implementations, 'Go to Implementations')
     map('n', 'g0', require('fzf-lua').lsp_document_symbols, 'Document Symbols')
     map('n', 'gW', require('fzf-lua').lsp_live_workspace_symbols, 'Workspace Symbols')
@@ -98,7 +98,7 @@ local function lsp_restart()
   local bufnr = vim.api.nvim_get_current_buf()
   local attached_clients = vim.lsp.get_clients({ bufnr = bufnr })
   vim.lsp.stop_client(attached_clients)
-  vim.defer_fn(vim.cmd('edit'), 100)
+  vim.defer_fn(vim.cmd.edit, 10)
 end
 
 vim.api.nvim_create_user_command('LspRestart', lsp_restart, { desc = 'Restart LSP' })
@@ -123,35 +123,35 @@ local function lsp_status()
     vim.notify('- Filetype: ' .. table.concat(attached_client.config.filetypes or {}, ', '), vim.log.levels.INFO)
 
     local attached_capabilities = attached_client.server_capabilities
-    local capabilities = {}
-    if attached_capabilities then
+    local server_capabilities = {}
+    if attached_capabilities ~= nil then
       if attached_capabilities.completionProvider then
-        table.insert(capabilities, 'completion')
+        table.insert(server_capabilities, 'completion')
       end
       if attached_capabilities.hoverProvider then
-        table.insert(capabilities, 'hover')
+        table.insert(server_capabilities, 'hover')
       end
       if attached_capabilities.signatureHelpProvider then
-        table.insert(capabilities, 'signature help')
+        table.insert(server_capabilities, 'signature help')
       end
       if attached_capabilities.definitionProvider then
-        table.insert(capabilities, 'definition')
+        table.insert(server_capabilities, 'definition')
       end
       if attached_capabilities.referencesProvider then
-        table.insert(capabilities, 'references')
+        table.insert(server_capabilities, 'references')
       end
       if attached_capabilities.renameProvider then
-        table.insert(capabilities, 'rename')
+        table.insert(server_capabilities, 'rename')
       end
       if attached_capabilities.codeActionProvider then
-        table.insert(capabilities, 'code_action')
+        table.insert(server_capabilities, 'code_action')
       end
       if attached_capabilities.documentFormattingProvider then
-        table.insert(capabilities, 'formatting')
+        table.insert(server_capabilities, 'formatting')
       end
     end
 
-    vim.notify('- Capabilities: ' .. table.concat(capabilities, ', '), vim.log.levels.INFO)
+    vim.notify('- Capabilities: ' .. table.concat(server_capabilities, ', '), vim.log.levels.INFO)
   end
 end
 

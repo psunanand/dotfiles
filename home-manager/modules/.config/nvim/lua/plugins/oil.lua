@@ -1,3 +1,4 @@
+-- Neovim File explorer
 return {
   'stevearc/oil.nvim',
   lazy = false,
