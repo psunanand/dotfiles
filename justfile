@@ -10,9 +10,11 @@ clean:
 
 [macos]
 install-darwin profile:
-    if ! type darwin-rebuild >/dev/null 2>&1 then \
-        just info "installing nix-darwin and applying the configurations/settings according to `profile`..." && \
-        sudo nix run nix-darwin/master#darwin-rebuild --extra-experimental-features 'nix-command flakes' -- switch --flake '.#{{profile}}'
+    if ! type darwin-rebuild >/dev/null 2>&1; then \
+      just info "installing nix-darwin and applying the configurations/settings according to `profile`..." \
+      && sudo nix run nix-darwin/master#darwin-rebuild \
+        --extra-experimental-features 'nix-command flakes' \
+        -- switch --flake '.#{{profile}}'; \
     fi
 
 [macos]
