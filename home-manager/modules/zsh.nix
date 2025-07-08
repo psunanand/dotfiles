@@ -40,14 +40,6 @@
       };
       # Use other source of completion
       enableCompletion = false;
-      autosuggestion = {
-        enable = true;
-        strategy = [
-          "completion"
-          "history"
-          "match_prev_cmd"
-        ];
-      };
       localVariables = {
         # Resolve conflicting shortcuts (like Ctrl-R) with fzf: https://github.com/jeffreytse/zsh-vi-mode/issues/24#issuecomment-873029329
         ZVM_INIT_MODE = "sourcing";
@@ -63,10 +55,35 @@
           "ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z"
           "jeffreytse/zsh-vi-mode"
           "hlissner/zsh-autopair"
+          "zsh-users/zsh-completions"
           "MichaelAquilina/zsh-you-should-use"
           "zdharma-continuum/fast-syntax-highlighting" # must be last
         ];
       };
+
+      initContent = ''
+        # No completion menu as we have fzf-tab
+        zstyle ':completion:*' menu no
+
+        # Use eza to preview directory
+        zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -a1 --color=always $realpath'
+
+        # Bind ctrl-y to accept, and ctrl-t to toggle
+        zstyle ':fzf-tab:*' fzf-bindings 'ctrl-y:accept' 'ctrl-t:toggle-all'
+
+        # Switch group using `<` and `>`
+        zstyle ':fzf-tab:*' switch-group '<' '>'
+
+        # Pop up window to select in tmux
+        zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+        zstyle ':fzf-tab:*' popup-min-size 30 10
+        zstyle ':fzf-tab:*' popup-pad 0 0
+        zstyle ':fzf-tab:*' popup-fit-preview yes
+
+        # Preview diff files in git
+        zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $word | delta'
+        zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview 'case "$group" in "modified file") git diff $word | delta ;; "recent commit object name") git show --color=always $word | delta ;; *) git log --color=always $word ;; esac'
+      '';
 
       shellAliases = {
         # Put to sleep when away from keyboard
