@@ -7,10 +7,9 @@
 }:
 let
   packages = with pkgs; [
-    # Improved `make` in rust
+    # Improved `make` in rust: https://github.com/casey/just
     just
-    # Syntax-highlighting for gitdiff: https://github.com/dandavison/delta
-    delta
+    # Neofetch-like tool to fetch system info: https://github.com/fastfetch-cli/fastfetch
     fastfetch
   ];
 in
@@ -25,7 +24,6 @@ in
   };
 
   # Which module to enable
-  # aerospace.enable = true;
   bat.enable = true;
   btop.enable = true;
   eza.enable = true;
@@ -34,8 +32,10 @@ in
   git.enable = true;
   kitty.enable = true;
   neovim.enable = true;
+  ripgrep.enable = true;
   tmux.enable = true;
   yazi.enable = true;
   zoxide.enable = true;
   zsh.enable = true;
+
 }
