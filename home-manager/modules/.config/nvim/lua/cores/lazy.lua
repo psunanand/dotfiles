@@ -18,15 +18,13 @@ require('lazy').setup({
   --  For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   spec = { { import = 'plugins' } },
 
-  install = { colorscheme = { 'kanagawabones' } },
-
   checker = {
     enabled = true, -- automatically check for plugin updates
-    notify = false, -- don't notify when updating
+    notify = true, -- don't notify when updating
   },
 
   change_detection = {
     enabled = true,
-    notify = false,
+    notify = true,
   },
 })

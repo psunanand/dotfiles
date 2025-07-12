@@ -9,6 +9,10 @@ return {
     dimInactive = true,
     terminalColors = true,
     theme = 'dragon',
+    background = {
+      dark = 'dragon',
+      light = 'lotus',
+    },
   },
   config = function(_, opts)
     require('kanagawa').setup(opts)
