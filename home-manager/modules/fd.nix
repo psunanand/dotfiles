@@ -18,6 +18,11 @@
     # Fast and user-friendly alternative to `find`: https://github.com/sharkdp/fd
     programs.fd = {
       enable = true;
+      ignores = [
+        ".git/"
+        ".DS_Store"
+      ];
+      hidden = true;
     };
 
   };

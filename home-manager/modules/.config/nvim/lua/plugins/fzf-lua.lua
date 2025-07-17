@@ -107,5 +107,14 @@ return {
       desc = 'Search by Grep in current buffer',
     },
   },
-  opts = {},
+  config = function()
+    local actions = require('fzf-lua')
+    require('fzf-lua').setup({
+      actions = {
+        files = true,
+        ['ctrl-q'] = actions.file_sel_to_qf,
+        ['ctrl-Q'] = actions.file_sel_to_ll,
+      },
+    })
+  end,
 }
