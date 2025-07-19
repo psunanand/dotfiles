@@ -108,12 +108,13 @@ return {
     },
   },
   config = function()
-    local actions = require('fzf-lua')
+    local actions = require('fzf-lua').actions
     require('fzf-lua').setup({
       actions = {
-        files = true,
-        ['ctrl-q'] = actions.file_sel_to_qf,
-        ['ctrl-Q'] = actions.file_sel_to_ll,
+        files = {
+          true,
+          ['ctrl-q'] = actions.file_sel_to_qf,
+        },
       },
     })
   end,
