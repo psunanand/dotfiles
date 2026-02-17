@@ -34,6 +34,7 @@ in
   neovim.enable = true;
   ripgrep.enable = true;
   tmux.enable = true;
+  uv.enable = true;
   yazi.enable = true;
   zoxide.enable = true;
   zsh.enable = true;
