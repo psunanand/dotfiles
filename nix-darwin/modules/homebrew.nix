@@ -40,6 +40,8 @@
       "bitwarden"
       # Google drive: https://www.google.com/drive/
       "google-drive"
+      # vscode: https://code.visualstudio.com/
+      "visual-studio-code"
     ];
   };
 
