@@ -31,6 +31,7 @@ in
   fzf.enable = true;
   git.enable = true;
   go.enable = true;
+  gh.enable = true;
   kitty.enable = true;
   neovim.enable = true;
   ripgrep.enable = true;
