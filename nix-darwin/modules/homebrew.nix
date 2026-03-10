@@ -42,6 +42,8 @@
       "google-drive"
       # vscode: https://code.visualstudio.com/
       "visual-studio-code"
+      # sqllite browser: https://sqlitebrowser.org/dl/
+      "db-browser-for-sqlite"
     ];
   };
 
