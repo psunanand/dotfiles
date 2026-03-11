@@ -1,6 +1,6 @@
 -- Make Lua LSP supports Neovim
 -- Source:
--- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/bashls.luarn
+-- https://github.com/neovim/nvim-lspconfig/blob/master/lsp/bashls.lua
 return {
   cmd = { 'bash-language-server', 'start' },
   settings = {

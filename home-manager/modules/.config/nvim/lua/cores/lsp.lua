@@ -3,6 +3,7 @@ if not vim.g.mason_enabled then
     'lua_ls',
     'bashls',
     'nixd',
+    'basedpyright',
   })
 end
 

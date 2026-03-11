@@ -36,6 +36,7 @@
         bash-language-server
         lua-language-server
         nixd
+        basedpyright
 
         # Formatters
         stylua
