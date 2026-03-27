@@ -24,6 +24,11 @@
       cleanup = "zap";
     };
 
+    brews = [
+      # nodejs
+      "node@24"
+    ];
+
     # Let Homebrew know the casks from nix-homebrew
     # https://github.com/zhaofengli/nix-homebrew/issues/5#issuecomment-1878798641
     taps = builtins.attrNames config.nix-homebrew.taps;
@@ -44,6 +49,8 @@
       "visual-studio-code"
       # sqllite browser: https://sqlitebrowser.org/dl/
       "db-browser-for-sqlite"
+      # discord: https://discord.com/
+      "discord"
     ];
   };
 

@@ -6,6 +6,7 @@
   ...
 }:
 let
+  # List of all available packages: https://search.nixos.org/packages?
   packages = with pkgs; [
     # Improved `make` in rust: https://github.com/casey/just
     just
