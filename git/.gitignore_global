@@ -1,0 +1,39 @@
+# General
+.git
+.vim
+.idea/
+out/
+local.properties
+/.ipynb_checkpoints
+*.o
+*.so
+
+# Archives
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# macOS
+.DS_Store
+.DS_Store?
+Icon?
+Thumbs.db
+
+# Python
+**/__pycache__/**
+*.py[cod]
+*$py.class
+.Python
+
+# Build directories
+build/**
+dist/**
+sdist/
+wheels/
+
+# JavaScript
+node_modules/

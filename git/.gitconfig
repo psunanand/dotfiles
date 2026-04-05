@@ -1,0 +1,95 @@
+[user]
+    name = psunanand
+    email = p.sunanand@gmail.com
+
+[core]
+    editor = nvim
+    pager = delta
+    # Treat spaces before tabs and trailing whitespace as errors
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+    # Make `git rebase` safer on macOS
+    trustctime = false
+    # Link to your global ignore file
+    excludesfile = ~/.gitignore_global
+
+[init]
+    defaultBranch = main
+
+[alias]
+    a = add
+    aa = add --all
+    au = add --update
+    bl = blame -w -C -C -C
+    u = reset --soft HEAD~1
+    l = log --pretty=oneline -n 20 --graph --abbrev-commit
+    s = status -s
+    d = "!git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
+    di = "!d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+    pl = pull --recurse-submodules
+    c = clone --recursive
+    co = commit -v
+    coa = commit -v --amend
+    p = push
+    po = push origin
+    pf = push --force-with-lease
+    go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+    tags = tag -l
+    branches = branch --all
+    remotes = remote --verbose
+    aliases = config --get-regexp alias
+    amend = commit --amend --reuse-message=HEAD
+    reb = "!r() { git rebase -i HEAD~$1; }; r"
+    fb = "!f() { git branch -a --contains $1; }; f"
+    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
+    dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+    whoami = config user.email
+
+[delta]
+    features = decorations
+    navigate = true
+    dark = true
+    side-by-side = true
+    line-numbers = true
+    keep-plus-minus-markers = true
+
+[interactive]
+    diffFilter = delta --color-only
+
+[merge]
+    tool = nvimdiff
+    conflictstyle = zdiff3
+
+[commit]
+    verbose = true
+    template = ~/.gitmessage # Standard filename for commit templates
+
+[pull]
+    rebase = interactive
+
+[push]
+    autoSetupRemote = true
+    followTags = true
+
+[rebase]
+    autosquash = true
+    autoStash = true
+
+[rerere]
+    enabled = true
+    autoupdate = true
+
+[branch]
+    sort = -committerdate
+
+[tag]
+    sort = version:refname
+
+[blame]
+    coloring = repeatedLines
+    markIgnoredLines = true
+    markUnblamables = true
+
+[fetch]
+    prune = true
+    pruneTags = true
