@@ -1,5 +1,0 @@
-require('configs.options')
-require('cores.lazy')
-require('cores.lsp')
-require('configs.keymaps')
-require('configs.autocmds')
