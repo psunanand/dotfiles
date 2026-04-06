@@ -4,6 +4,13 @@ compinit
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*:history-words' list-colors '=(#b) #(.+)=38;5;06'
 
+# Highlighting style (faint gray)
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
+# Strategy: suggest based on history first, then completion
+export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+bindkey '^f' vi-forward-word
+bindkey '^ ' autosuggest-accept
+
 # Antidote boostrapping
 zsh_plugins="$HOME/.zsh_plugins"
 [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
@@ -15,6 +22,11 @@ if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
   antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
 fi
 source ${zsh_plugins}.zsh
+
+# Vi mode
+export ZVM_INIT_MODE="sourcing"
+export VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
+export VI_MODE_SET_CURSOR=true
 
 # Edit command line in neovim with Ctrl-x Ctrl-e
 autoload -U edit-command-line
@@ -81,3 +93,10 @@ if [[ -n "$KITTY_INSTALLATION_DIR" ]]; then
   kitty-integration
   unfunction kitty-integration
 fi
+
+# BAT: Replacement for cat
+export BAT_STYLE="numbers,changes,header"
+export BAT_THEME="Monokai Extended Bright"
+
+# FD: Replacement for find
+export FD_OPTIONS="--hidden --exclude .git --exclude .DS_Store"

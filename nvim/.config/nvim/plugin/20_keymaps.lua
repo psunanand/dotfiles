@@ -148,6 +148,10 @@ nmap_leader("sw", "<Cmd>lua MiniSessions.write()<CR>", { desc = "Write current" 
 nmap_leader("tT", "<Cmd>horizontal term<CR>", { desc = "Terminal (horizontal)" })
 nmap_leader("tt", "<Cmd>vertical term<CR>", { desc = "Terminal (vertical)" })
 vim.keymap.set("t", "<Leader>t<Esc>", "<C-\\><C-n>", { desc = "Exit terminal session" })
+vim.keymap.set("n", "<C-H>", "<Cmd>TmuxNavigateLeft<CR>", { desc = "Tmux-navigate left" })
+vim.keymap.set("n", "<C-J>", "<Cmd>TmuxNavigateDown<CR>", { desc = "Tmux-navigate down" })
+vim.keymap.set("n", "<C-K>", "<Cmd>TmuxNavigateUp<CR>", { desc = "Tmux-navigate up" })
+vim.keymap.set("n", "<C-L>", "<Cmd>TmuxNavigateRight<CR>", { desc = "Tmux-navigate right" })
 
 -- `v` -> Visit
 local make_pick_core = function(cwd, desc)

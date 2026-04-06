@@ -1,0 +1,55 @@
+# ------------------------------
+# COMMAND LINE UTILITIES (Brews)
+# ------------------------------
+# Core Shell Enhancements
+brew "zsh"                   # Zsh shell
+brew "antidote"              # Lightweight zsh plugin manager
+brew "rm-improved"           # Better 'rm'
+brew "starship"              # Recommended prompt for zsh
+brew "zoxide"                # Better 'cd' (z)
+brew "fzf"                   # Fuzzy finder
+brew "eza"                   # Better 'ls'
+brew "bat"                   # Better 'cat'
+brew "fd"                    # Better 'find'
+brew "ripgrep"               # Better 'grep' (rg)
+brew "git-delta"             # Better 'diff'
+
+# System Monitoring & Tools
+brew "btop"                  # Resource monitor
+brew "fastfetch"             # System info display
+brew "just"                  # Command runner/Task switch
+brew "stow"                  # Symlink farm manager
+
+# Development Environment
+brew "neovim"                # Best terminal editor
+brew "tmux"                  # Terminal multiplexer
+brew "git"                   # Version control
+brew "gh"                    # GitHub CLI
+brew "go"                    # Go
+brew "uv"                    # Fast Python package manager
+brew "node@24"               # Specific Node.js version
+brew "yazi"                  # Terminal file manager
+brew "pam-reattach"          # Required for TouchID inside tmux
+
+# ------------------------
+# GUI APPLICATIONS (Casks)
+# ------------------------
+# Productivity & Browsing
+cask "raycast"               # Spotlight replacement
+cask "zen-browser"           # Privacy-focused browser
+cask "obsidian"              # Knowledge base
+cask "bitwarden"             # Password manager
+
+cask "visual-studio-code"    # vscode
+cask "kitty"                 # terminal emulator
+cask "db-browser-for-sqlite" # sqlite
+
+                             # Communication & Utilities
+cask "discord"
+cask "google-drive"
+cask "hyperkey"              # Caps Lock remapping tool
+
+# -----
+# FONTS
+# -----
+cask "font-sauce-code-pro-nerd-font"

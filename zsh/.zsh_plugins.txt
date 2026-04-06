@@ -3,6 +3,7 @@ ohmyzsh/ohmyzsh path:plugins/colored-man-pages
 ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z
 jeffreytse/zsh-vi-mode
 hlissner/zsh-autopair
+zsh-users/zsh-autosuggestions
 zsh-users/zsh-completions
 MichaelAquilina/zsh-you-should-use
 zdharma-continuum/fast-syntax-highlighting

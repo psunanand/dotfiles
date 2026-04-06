@@ -9,7 +9,7 @@
     whitespace = space-before-tab,-indent-with-non-tab,trailing-space
     # Make `git rebase` safer on macOS
     trustctime = false
-    # Link to your global ignore file
+    # Link to global ignore file
     excludesfile = ~/.gitignore_global
 
 [init]
@@ -46,9 +46,7 @@
     whoami = config user.email
 
 [delta]
-    features = decorations
     navigate = true
-    dark = true
     side-by-side = true
     line-numbers = true
     keep-plus-minus-markers = true

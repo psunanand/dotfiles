@@ -68,6 +68,8 @@ later(function()
 		formatters_by_ft = {
 			lua = { "stylua" },
 			sh = { "shfmt" },
+			bash = { "shfmt" },
+			zsh = { "shfmt" },
 			["_"] = { "trim_whitespace", "trim_newlines" },
 		},
 		format_on_save = {
@@ -90,4 +92,11 @@ Config.now(function()
 	vim.g.everforest_background = "dark"
 	vim.g.everforest_enable_italic = true
 	vim.cmd("colorscheme everforest")
+end)
+
+-- == Tmux
+now_if_args(function()
+	add({
+		"https://github.com/christoomey/vim-tmux-navigator",
+	})
 end)
