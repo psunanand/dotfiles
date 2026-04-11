@@ -1,9 +1,16 @@
+# This must come first to avoid keybinding conflict between zsh-vi-mode with fzf
+function zvm_after_init() {
+  source <(fzf --zsh)
+}
+
+# PATH & COMPLETION INIT
 typeset -U path cdpath fpath manpath
 autoload -Uz compinit
 compinit
+
+# STYLYING & AUTOCOMPLETE
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*:history-words' list-colors '=(#b) #(.+)=38;5;06'
-
 # Highlighting style (faint gray)
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
 # Strategy: suggest based on history first, then completion
@@ -11,24 +18,20 @@ export ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 bindkey '^f' vi-forward-word
 bindkey '^ ' autosuggest-accept
 
-# Antidote boostrapping
+# ANTIDOTE BOOSTRAPPING
 zsh_plugins="$HOME/.zsh_plugins"
 [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
-
 fpath=("$(brew --prefix)/opt/antidote/share/antidote/functions" $fpath)
 autoload -Uz antidote
-
 if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
   antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
 fi
 source ${zsh_plugins}.zsh
 
-# Vi mode
+# VI MODE
 export ZVM_INIT_MODE="sourcing"
 export VI_MODE_RESET_PROMPT_ON_MODE_CHANGE=true
 export VI_MODE_SET_CURSOR=true
-
-# Edit command line in neovim with Ctrl-x Ctrl-e
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line
@@ -78,13 +81,10 @@ alias mv='mv -iv'
 alias reload='exec -l $SHELL'
 alias rip='rip --graveyard $HOME/.local/share/Trash'
 alias vi='nvim'
-
-bindkey '^R' fzf-history-widget
-
-# Tool initialization
-eval "$(starship init zsh)"
-eval "$(zoxide init zsh --cmd cd)"
-source <(fzf --zsh)
+alias bs='brew services'
+alias bsl='brew services list'
+alias bsr='brew services restart'
+alias uiwindow-reload='bsr borders && bsr aerospace && bsr sketchybar'
 
 # Kitty integration (If running in Kitty)
 if [[ -n "$KITTY_INSTALLATION_DIR" ]]; then
@@ -100,3 +100,7 @@ export BAT_THEME="Monokai Extended Bright"
 
 # FD: Replacement for find
 export FD_OPTIONS="--hidden --exclude .git --exclude .DS_Store"
+
+# Tool initialization
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh --cmd cd)"

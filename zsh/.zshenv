@@ -1,3 +1,8 @@
+# Ensure Homebrew is ready before anything else
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 export EDITOR="nvim"
 export VISUAL="nvim"
 
@@ -15,8 +20,4 @@ export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 export HISTFILE="$HOME/.local/share/zsh/zsh_history"
 export HISTSIZE=50000
 export SAVEHIST=50000
-mkdir -p "$(dirname "$HISTFILE")"
-
-if [[ -f /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+[[ -d "$(dirname "$HISTFILE")" ]] || mkdir -p "$(dirname "$HISTFILE")"
