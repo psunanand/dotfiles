@@ -152,6 +152,9 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 
+# Automatically hide the menu bar
+defaults write NSGlobalDomain _HIHideMenuBar -int 1
+
 # ------------------------------------------------------------------------------
 # ACTIVITY MONITOR & SCREEN CAPTURE
 # ------------------------------------------------------------------------------
@@ -174,6 +177,22 @@ defaults write com.apple.screencapture disable-shadow -bool true
 # Don't create .DS_Store files on network or USB volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# Set "Displays have separate Spaces" to ON for sketchy bar
+defaults write com.apple.spaces spans-displays -bool false
+
+# ------------------------------------------------------------------------------
+# APP CONFIGURATIONS
+# ------------------------------------------------------------------------------
+
+# Hyperkey
+defaults write com.knollsoft.Hyperkey capsLockKeycode -int 224
+defaults write com.knollsoft.Hyperkey capsLockRemapped -int 1
+defaults write com.knollsoft.Hyperkey executeQuickHyperKey -int 1
+defaults write com.knollsoft.Hyperkey hyperFlags -int 1966080
+defaults write com.knollsoft.Hyperkey keyRemap -int 1
+defaults write com.knollsoft.Hyperkey launchOnLogin -int 1
+defaults write com.knollsoft.Hyperkey quickHyperKeycode -int 53
 
 # ------------------------------------------------------------------------------
 # CLEANUP & REFRESH

@@ -19,6 +19,8 @@ brew "btop"                  # Resource monitor
 brew "fastfetch"             # System info display
 brew "just"                  # Command runner/Task switch
 brew "stow"                  # Symlink farm manager
+brew "cirruslabs/cli/tart"   # VM for MacOS
+brew "blueutil"              # Bluetooth CLI
 
 # Development Environment
 brew "neovim"                # Best terminal editor
@@ -35,21 +37,26 @@ brew "pam-reattach"          # Required for TouchID inside tmux
 # GUI APPLICATIONS (Casks)
 # ------------------------
 # Productivity & Browsing
-cask "raycast"               # Spotlight replacement
-cask "zen-browser"           # Privacy-focused browser
-cask "obsidian"              # Knowledge base
-cask "bitwarden"             # Password manager
+cask "raycast"                   # Spotlight replacement
+cask "arc"                       # Browser
+cask "obsidian"                  # Knowledge base
+cask "bitwarden"                 # Password manager
 
-cask "visual-studio-code"    # vscode
-cask "kitty"                 # terminal emulator
-cask "db-browser-for-sqlite" # sqlite
+cask "visual-studio-code"        # Vscode
+cask "kitty"                     # Terminal emulator
+cask "db-browser-for-sqlite"     # Sqlite
 
-                             # Communication & Utilities
+# Communication & Utilities
 cask "discord"
 cask "google-drive"
-cask "hyperkey"              # Caps Lock remapping tool
+cask "hyperkey"                  # Caps Lock remapping tool
+cask "nikitabobko/tap/aerospace" # Window tiling manager
+cask "FelixKratz/formulae/borders" # Colored borders for windows
+cask "FelixKratz/formulae/sketchybar" # Customizable menu bar
 
 # -----
 # FONTS
 # -----
 cask "font-sauce-code-pro-nerd-font"
+cask "font-sf-pro"
+cask "sf-symbols"

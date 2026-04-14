@@ -81,10 +81,7 @@ alias mv='mv -iv'
 alias reload='exec -l $SHELL'
 alias rip='rip --graveyard $HOME/.local/share/Trash'
 alias vi='nvim'
-alias bs='brew services'
-alias bsl='brew services list'
-alias bsr='brew services restart'
-alias uiwindow-reload='bsr borders && bsr aerospace && bsr sketchybar'
+alias uistack-reload='brew services restart borders && aerospace reload-config && brew services restart sketchybar'
 
 # Kitty integration (If running in Kitty)
 if [[ -n "$KITTY_INSTALLATION_DIR" ]]; then

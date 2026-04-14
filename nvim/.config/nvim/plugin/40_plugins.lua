@@ -52,6 +52,7 @@ now_if_args(function()
 			"shfmt",
 			"lua_ls",
 			"stylua",
+			"pyrefly",
 		},
 		auto_update = false,
 		run_on_start = true,
