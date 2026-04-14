@@ -1,7 +1,12 @@
-**MacOS:**
+# My Dotfiles
 
-MacOS terminal and APP settings
+## Technologies Used:
 
-```bash
-  ./sync.sh
-```
+*   **Shell:** Zsh
+*   **Editor:** Neovim
+*   **Terminal:** Kitty & Tmux
+*   **Window Manager:** Aerospace & Jankyborders
+*   **Status Bar:** Sketchybar
+*   **Package Manager:** Homebrew
+
+![showcase](./assets/showcase.png)
