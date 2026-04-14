@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# Define Colors (Format: 0xAARRGGBB)
+ACTIVE_COLOR=0xffa7c080   # everforest green
+INACTIVE_COLOR=0xff3a4248 # grey
+
+# Configuration
+options=(
+  active_color=$ACTIVE_COLOR
+  inactive_color=$INACTIVE_COLOR
+  width=6     # thickness of the border in pixels
+  radius=12   # corner roundness
+  hidpi=on    # accounts for retina display scaling
+  order=above # border drawn on top on window so it's not hidden by the window itself
+  style=round
+  blacklist="SketchyBar"
+)
+
+pkill borders
+borders "${options[@]}"
