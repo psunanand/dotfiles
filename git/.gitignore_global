@@ -37,3 +37,8 @@ wheels/
 
 # JavaScript
 node_modules/
+
+# SSH
+ssh/id_ed25519
+ssh/id_rsa
+ssh/id_ecdsa
