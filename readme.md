@@ -1,6 +1,6 @@
-# My Dotfiles
+# MK's dotfiles
 
-## Technologies Used:
+## What I'm using:
 
 *   **Shell:** Zsh
 *   **Editor:** Neovim
