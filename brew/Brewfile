@@ -1,62 +1,74 @@
-# ------------------------------
-# COMMAND LINE UTILITIES (Brews)
-# ------------------------------
-# Core Shell Enhancements
-brew "zsh"                   # Zsh shell
-brew "antidote"              # Lightweight zsh plugin manager
-brew "rm-improved"           # Better 'rm'
-brew "starship"              # Recommended prompt for zsh
-brew "zoxide"                # Better 'cd' (z)
-brew "fzf"                   # Fuzzy finder
-brew "eza"                   # Better 'ls'
-brew "bat"                   # Better 'cat'
-brew "fd"                    # Better 'find'
-brew "ripgrep"               # Better 'grep' (rg)
-brew "git-delta"             # Better 'diff'
+# ------------------------------------------------------------
+# DEVELOPMENT TOOLS & ENVIRONMENT
+# ------------------------------------------------------------
 
-# System Monitoring & Tools
-brew "btop"                  # Resource monitor
-brew "fastfetch"             # System info display
-brew "just"                  # Command runner/Task switch
-brew "stow"                  # Symlink farm manager
-brew "cirruslabs/cli/tart"   # VM for MacOS
-brew "blueutil"              # Bluetooth CLI
-
-# Development Environment
-brew "neovim"                # Best terminal editor
-brew "tmux"                  # Terminal multiplexer
+# Core Development
 brew "git"                   # Version control
 brew "gh"                    # GitHub CLI
-brew "go"                    # Go
-brew "uv"                    # Fast Python package manager
-brew "node@24"               # Specific Node.js version
-brew "yazi"                  # Terminal file manager
+brew "neovim"                # Best terminal editor
+brew "tmux"                  # Terminal multiplexer
 brew "pam-reattach"          # Required for TouchID inside tmux
+brew "ollama"                # Tool to run local llm
 
-# ------------------------
+# Programming Languages & Runtimes
+brew "go"                    # Go language
+brew "node@24"               # Specific Node.js version (LTS)
+brew "uv"                    # Fast Python package manager
+
+# System & CLI Utilities (Command Line Utilities)
+brew "zsh"                   # Zsh shell (default shell)
+brew "antidote"              # Lightweight zsh plugin manager
+brew "starship"              # Recommended prompt for zsh
+brew "zoxide"                # Better 'cd' (zoxide integrates with shells)
+brew "fzf"                   # Fuzzy finder for command line
+brew "eza"                   # Better 'ls' (replacement for ls)
+brew "bat"                   # Better 'cat' (syntax highlighting, Git integration)
+brew "fd"                    # Better 'find' (simple, fast, user-friendly alternative)
+brew "ripgrep"               # Better 'grep' (rg - extremely fast recursive grep)
+brew "git-delta"             # Better 'diff' (syntax-highlighted diff viewer)
+brew "stow"                  # Symlink farm manager (for dotfiles)
+
+# Containerization & Virtualization
+brew "docker"
+brew "docker-compose"
+brew "docker-buildx"
+brew "cirruslabs/cli/tart"   # VM for MacOS
+
+# System Monitoring & Bluetooth
+brew "btop"                  # Resource monitor (modern Htop alternative)
+brew "fastfetch"             # System info display (like neofetch)
+brew "blueutil"              # Bluetooth CLI control
+
+# ------------------------------------------------------------
 # GUI APPLICATIONS (Casks)
-# ------------------------
+# ------------------------------------------------------------
+
 # Productivity & Browsing
-cask "raycast"                   # Spotlight replacement
-cask "arc"                       # Browser
-cask "obsidian"                  # Knowledge base
-cask "bitwarden"                 # Password manager
+cask "raycast"               # Spotlight replacement with extensibility
+cask "arc"                       # Modern browser with unique features
+cask "obsidian"                  # Knowledge base and note-taking app
+cask "visual-studio-code"        # Popular code editor
+cask "db-browser-for-sqlite"     # GUI for SQLite databases
 
-cask "visual-studio-code"        # Vscode
-cask "kitty"                     # Terminal emulator
-cask "db-browser-for-sqlite"     # Sqlite
-
-# Communication & Utilities
+# Communication
 cask "discord"
-cask "google-drive"
-cask "hyperkey"                  # Caps Lock remapping tool
-cask "nikitabobko/tap/aerospace" # Window tiling manager
-cask "FelixKratz/formulae/borders" # Colored borders for windows
+cask "telegram"
+
+# Cloud Storage & File Management
+cask "google-drive"          # Google Drive client
+cask "yazi"                  # Terminal file manager (can be used as GUI alternative for some tasks)
+
+# System & UI Enhancements
+cask "kitty"                     # Fast, feature-rich terminal emulator
+cask "bitwarden"                 # Open-source password manager
+cask "hyperkey"                       # Caps Lock remapping tool for productivity
+cask "nikitabobko/tap/aerospace"      # Window tiling manager for macOS (i3-like)
+cask "FelixKratz/formulae/borders"    # Adds colored borders to windows
 cask "FelixKratz/formulae/sketchybar" # Customizable menu bar
 
-# -----
+# ------------------------------------------------------------
 # FONTS
-# -----
+# ------------------------------------------------------------
 cask "font-sauce-code-pro-nerd-font"
 cask "font-sf-pro"
 cask "sf-symbols"
