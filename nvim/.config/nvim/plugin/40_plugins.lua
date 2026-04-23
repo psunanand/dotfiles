@@ -1,6 +1,30 @@
 local add = vim.pack.add
 local now_if_args, later = Config.now_if_args, Config.later
 
+-- Picker
+later(function()
+	add({ "https://github.com/ibhagwan/fzf-lua" })
+	require("fzf-lua").setup({
+		winopts = {
+			height = 0.40,
+			width = 1.00,
+			row = 1.00,
+			col = 0.00,
+			border = "none",
+			preview = {
+				layout = "flex",
+				flip_columns = 120,
+				scrollbar = false,
+			},
+		},
+		actions = {
+			files = {
+				["ctrl-q"] = FzfLua.actions.file_sel_to_qf,
+			},
+		},
+	})
+end)
+
 -- == Tree-sitter
 now_if_args(function()
 	local ts_update = function()
@@ -52,7 +76,6 @@ now_if_args(function()
 			"shfmt",
 			"lua_ls",
 			"stylua",
-			"pyrefly",
 		},
 		auto_update = false,
 		run_on_start = true,
@@ -71,6 +94,7 @@ later(function()
 			sh = { "shfmt" },
 			bash = { "shfmt" },
 			zsh = { "shfmt" },
+			python = { "ruff" },
 			["_"] = { "trim_whitespace", "trim_newlines" },
 		},
 		format_on_save = {
@@ -83,6 +107,11 @@ end)
 -- == Snippets
 later(function()
 	add({ "https://github.com/rafamadriz/friendly-snippets" })
+end)
+
+-- == Preview
+later(function()
+	add({ "https://github.com/OXY2DEV/markview.nvim" })
 end)
 
 -- == Colorscheme

@@ -237,18 +237,18 @@ later(function()
 	require("mini.pairs").setup({ modes = { insert = true, terminal = false, command = false } })
 end)
 
--- Picker
-later(function()
-	require("mini.pick").setup()
-	MiniPick.registry.files_fd = function()
-		local command = { "fd", "--type=f", "--no-follow", "--color=never", "--hidden", "--exclude", ".git" }
-		local show_with_icons = function(buf_id, items, query)
-			return MiniPick.default_show(buf_id, items, query, { show_icons = true })
-		end
-		local source = { name = "Files fd", show = show_with_icons }
-		return MiniPick.builtin.cli({ command = command }, { source = source })
-	end
-end)
+-- -- Picker
+-- later(function()
+-- 	require("mini.pick").setup()
+-- 	MiniPick.registry.files_fd = function()
+-- 		local command = { "fd", "--type=f", "--no-follow", "--color=never", "--hidden", "--exclude", ".git" }
+-- 		local show_with_icons = function(buf_id, items, query)
+-- 			return MiniPick.default_show(buf_id, items, query, { show_icons = true })
+-- 		end
+-- 		local source = { name = "Files fd", show = show_with_icons }
+-- 		return MiniPick.builtin.cli({ command = command }, { source = source })
+-- 	end
+-- end)
 
 -- Snippet
 later(function()
