@@ -202,26 +202,6 @@ later(function()
 	MiniKeymap.map_multistep("i", "<BS>", { "minipairs_bs" })
 end)
 
--- Window with text overview
-later(function()
-	local map = require("mini.map")
-	map.setup({
-		-- Use Braille dots to encode text
-		symbols = { encode = map.gen_encode_symbols.dot("4x2") },
-		-- Show built-in search matches, 'mini.diff' hunks, and diagnostic entries
-		integrations = {
-			map.gen_integration.builtin_search(),
-			map.gen_integration.diff(),
-			map.gen_integration.diagnostic(),
-		},
-	})
-
-	for _, key in ipairs({ "n", "N", "*", "#" }) do
-		local rhs = key .. "zv" .. "<Cmd>lua MiniMap.refresh({}, { lines = false, scrollbar = false })<CR>"
-		vim.keymap.set("n", key, rhs)
-	end
-end)
-
 -- Autopairs
 later(function()
 	require("mini.pairs").setup({ modes = { insert = true, terminal = false, command = false } })
@@ -251,4 +231,9 @@ end)
 -- Surround
 later(function()
 	require("mini.surround").setup()
+end)
+
+-- Visits
+later(function()
+	require("mini.visits").setup()
 end)

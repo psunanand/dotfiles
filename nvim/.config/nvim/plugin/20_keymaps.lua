@@ -18,12 +18,9 @@ Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>f", desc = "+Find" },
 	{ mode = "n", keys = "<Leader>g", desc = "+Git" },
 	{ mode = "n", keys = "<Leader>l", desc = "+LSP" },
-	{ mode = "n", keys = "<Leader>m", desc = "+Map" },
 	{ mode = "n", keys = "<Leader>o", desc = "+Other" },
-	{ mode = "n", keys = "<Leader>s", desc = "+Session" },
 	{ mode = "n", keys = "<Leader>t", desc = "+Terminal" },
 	{ mode = "n", keys = "<Leader>v", desc = "+Visits" },
-
 	{ mode = "x", keys = "<Leader>g", desc = "+Git" },
 	{ mode = "x", keys = "<Leader>l", desc = "+LSP" },
 }
@@ -110,34 +107,21 @@ nmap_leader("gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Show at cur
 xmap_leader("gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Show at selection" })
 
 -- `l` -> LSP
-nmap_leader("la", "<Cmd>FzfLua lsp_code_actions", { desc = "Actions" })
+nmap_leader("la", "<Cmd>FzfLua lsp_code_actions<CR>", { desc = "Actions" })
 nmap_leader("ld", "<Cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Diagnostic popup" })
 nmap_leader("lf", '<Cmd>lua require("conform").format()<CR>', { desc = "Format" })
-nmap_leader("li", "<Cmd>FzfLua lsp_implementations", { desc = "Implementation" })
+nmap_leader("li", "<Cmd>FzfLua lsp_implementations<CR>", { desc = "Implementation" })
 nmap_leader("lh", "<Cmd>lua vim.lsp.buf.hover()<CR>", { desc = "Hover" })
 nmap_leader("ll", "<Cmd>lua vim.lsp.codelens.run()<CR>", { desc = "Lens" })
 nmap_leader("lr", "<Cmd>lua vim.lsp.buf.rename()<CR>", { desc = "Rename" })
-nmap_leader("lR", "<Cmd>FzfLua lsp_references", { desc = "References" })
-nmap_leader("ls", "<Cmd>FzfLua lsp_definitions", { desc = "Source definition" })
-nmap_leader("lt", "<Cmd>FzfLua lsp_typedefs", { desc = "Type definition" })
+nmap_leader("lR", "<Cmd>FzfLua lsp_references<CR>", { desc = "References" })
+nmap_leader("ls", "<Cmd>FzfLua lsp_definitions<CR>", { desc = "Source definition" })
+nmap_leader("lt", "<Cmd>FzfLua lsp_typedefs<CR>", { desc = "Type definition" })
 xmap_leader("lf", '<Cmd>lua require("conform").format()<CR>', { desc = "Format selection" })
-
--- `m` -> Map
-nmap_leader("mf", "<Cmd>lua MiniMap.toggle_focus()<CR>", { desc = "Focus (toggle)" })
-nmap_leader("mr", "<Cmd>lua MiniMap.refresh()<CR>", { desc = "Refresh" })
-nmap_leader("ms", "<Cmd>lua MiniMap.toggle_side()<CR>", { desc = "Side (toggle)" })
-nmap_leader("mt", "<Cmd>lua MiniMap.toggle()<CR>", { desc = "Toggle" })
 
 -- `o` -> Other
 nmap_leader("or", "<Cmd>lua MiniMisc.resize_window()<CR>", { desc = "Resize to default width" })
 nmap_leader("oz", "<Cmd>lua MiniMisc.zoom()<CR>", { desc = "Zoom toggle" })
-
--- `s` -> Session
-local session_new = 'MiniSessions.write(vim.fn.input("Session name: "))'
-nmap_leader("sd", '<Cmd>lua MiniSessions.select("delete")<CR>', { desc = "Delete" })
-nmap_leader("sn", "<Cmd>lua " .. session_new .. "<CR>", { desc = "New" })
-nmap_leader("sr", '<Cmd>lua MiniSessions.select("read")<CR>', { desc = "Read" })
-nmap_leader("sw", "<Cmd>lua MiniSessions.write()<CR>", { desc = "Write current" })
 
 -- `t` -> Terminal
 nmap_leader("tT", "<Cmd>horizontal term<CR>", { desc = "Terminal (horizontal)" })
