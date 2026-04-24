@@ -27,16 +27,6 @@ now(function()
 	require("mini.notify").setup()
 end)
 
--- Session management
-now(function()
-	require("mini.sessions").setup()
-end)
-
--- Start screen
-now(function()
-	require("mini.starter").setup()
-end)
-
 -- Statusline
 now(function()
 	require("mini.statusline").setup({})
@@ -237,19 +227,6 @@ later(function()
 	require("mini.pairs").setup({ modes = { insert = true, terminal = false, command = false } })
 end)
 
--- -- Picker
--- later(function()
--- 	require("mini.pick").setup()
--- 	MiniPick.registry.files_fd = function()
--- 		local command = { "fd", "--type=f", "--no-follow", "--color=never", "--hidden", "--exclude", ".git" }
--- 		local show_with_icons = function(buf_id, items, query)
--- 			return MiniPick.default_show(buf_id, items, query, { show_icons = true })
--- 		end
--- 		local source = { name = "Files fd", show = show_with_icons }
--- 		return MiniPick.builtin.cli({ command = command }, { source = source })
--- 	end
--- end)
-
 -- Snippet
 later(function()
 	-- Define language patterns to work better with 'friendly-snippets'
@@ -268,16 +245,10 @@ later(function()
 			snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
 		},
 	})
-
 	MiniSnippets.start_lsp_server()
 end)
 
 -- Surround
 later(function()
 	require("mini.surround").setup()
-end)
-
--- Visits
-later(function()
-	require("mini.visits").setup()
 end)

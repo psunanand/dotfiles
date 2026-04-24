@@ -17,11 +17,6 @@ later(function()
 				scrollbar = false,
 			},
 		},
-		actions = {
-			files = {
-				["ctrl-q"] = FzfLua.actions.file_sel_to_qf,
-			},
-		},
 	})
 end)
 
