@@ -1,5 +1,4 @@
 vim.keymap.set("n", "<Esc>", "<Cmd>nohlsearch<CR>", { desc = "Clear highlight" })
-
 vim.keymap.set("n", "[p", '<Cmd>exe "iput! " . v:register<CR>', { desc = "Paste Above" })
 vim.keymap.set("n", "]p", '<Cmd>exe "iput "  . v:register<CR>', { desc = "Paste Below" })
 vim.keymap.set("n", "<C-H>", "<C-w>h", { desc = "Focus on left window" })
@@ -122,6 +121,7 @@ xmap_leader("lf", '<Cmd>lua require("conform").format()<CR>', { desc = "Format s
 -- `o` -> Other
 nmap_leader("or", "<Cmd>lua MiniMisc.resize_window()<CR>", { desc = "Resize to default width" })
 nmap_leader("oz", "<Cmd>lua MiniMisc.zoom()<CR>", { desc = "Zoom toggle" })
+nmap_leader("ou", "<Cmd>Undotree<CR>", { desc = "Undotree" })
 
 -- `t` -> Terminal
 nmap_leader("tT", "<Cmd>horizontal term<CR>", { desc = "Terminal (horizontal)" })

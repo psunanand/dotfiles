@@ -44,3 +44,33 @@ Config.on_packchanged = function(plugin_name, kinds, callback, desc)
 	end
 	Config.new_autocmd("PackChanged", "*", f, desc)
 end
+
+-- vim.pack helper
+local function all_packages(match)
+	return vim.iter(vim.pack.get())
+		:map(function(pack)
+			return pack.spec.name
+		end)
+		:filter(function(pack)
+			return pack:find(match)
+		end)
+		:totable()
+end
+
+vim.api.nvim_create_user_command("PackUpdate", function(opts)
+	if #opts.fargs ~= 0 then
+		vim.pack.update(opts.fargs)
+	else
+		vim.pack.update()
+	end
+end, {
+	nargs = "*",
+	complete = all_packages,
+})
+
+vim.api.nvim_create_user_command("PackDelete", function(opts)
+	vim.pack.del(opts.fargs)
+end, {
+	nargs = "+",
+	complete = all_packages,
+})

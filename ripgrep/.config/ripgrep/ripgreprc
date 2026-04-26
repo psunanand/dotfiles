@@ -4,3 +4,4 @@
 !.git/*
 --smart-case
 --color=always
+--hidden

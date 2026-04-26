@@ -1,9 +1,19 @@
 local add = vim.pack.add
 local now_if_args, later = Config.now_if_args, Config.later
 
+-- Undotree
+later(function()
+	vim.cmd.packadd("nvim.undotree")
+end)
+
 -- Picker
 later(function()
 	add({ "https://github.com/ibhagwan/fzf-lua" })
+
+	local fd_opts = "--color=never --type f --no-ignore --hidden --follow --exclude .git"
+	local rg_opts =
+		"--column --line-number --no-heading --color=always --smart-case --hidden --no-ignore --follow -g '!.git'"
+
 	require("fzf-lua").setup({
 		winopts = {
 			height = 0.40,
@@ -16,6 +26,12 @@ later(function()
 				flip_columns = 120,
 				scrollbar = false,
 			},
+		},
+		files = {
+			fd_opts = fd_opts,
+		},
+		grep = {
+			rg_opts = rg_opts,
 		},
 	})
 end)
@@ -59,10 +75,12 @@ end)
 
 -- == LSP
 now_if_args(function()
-	add({ "https://github.com/neovim/nvim-lspconfig" })
-	add({ "https://github.com/mason-org/mason-lspconfig.nvim" })
-	add({ "https://github.com/mason-org/mason.nvim" })
-	add({ "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim" })
+	add({
+		"https://github.com/neovim/nvim-lspconfig",
+		"https://github.com/mason-org/mason-lspconfig.nvim",
+		"https://github.com/mason-org/mason.nvim",
+		"https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
+	})
 	require("mason").setup()
 	require("mason-lspconfig").setup()
 	require("mason-tool-installer").setup({
@@ -123,5 +141,22 @@ end)
 now_if_args(function()
 	add({
 		"https://github.com/christoomey/vim-tmux-navigator",
+	})
+end)
+
+-- == AI cursortab
+later(function()
+	Config.new_autocmd("PackChanged", nil, function(ev)
+		local name, kind = ev.data.spec.name, ev.data.kind
+		if name == "cursortab.nvim" and (kind == "install" or kind == "update") then
+			vim.system({ "go", "build" }, { cwd = ev.data.path .. "/server" }):wait()
+		end
+	end, nil)
+	add({ "https://github.com/cursortab/cursortab.nvim" })
+	require("cursortab").setup({
+		provider = {
+			type = "zeta-2",
+			url = "http://127.0.0.1:8000",
+		},
 	})
 end)
