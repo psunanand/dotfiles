@@ -9,6 +9,8 @@ brew "neovim"                # Best terminal editor
 brew "tmux"                  # Terminal multiplexer
 brew "pam-reattach"          # Required for TouchID inside tmux
 brew "ollama"                # Tool to run local llm
+brew "tree-sitter"           # Tool for parser
+brew "tree-sitter-cli"
 
 # Programming Languages & Runtimes
 brew "go"                    # Go language

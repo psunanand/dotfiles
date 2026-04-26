@@ -50,8 +50,11 @@ now_if_args(function()
 
 	local languages = {
 		"lua",
+		"javascript",
 		"vimdoc",
 		"markdown",
+		"python",
+		"html",
 	}
 	local isnt_installed = function(lang)
 		return #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".*", false) == 0
@@ -122,11 +125,6 @@ later(function()
 	add({ "https://github.com/rafamadriz/friendly-snippets" })
 end)
 
--- == Preview
-later(function()
-	add({ "https://github.com/OXY2DEV/markview.nvim" })
-end)
-
 -- == Colorscheme
 Config.now(function()
 	add({
@@ -135,6 +133,11 @@ Config.now(function()
 	vim.g.everforest_background = "dark"
 	vim.g.everforest_enable_italic = true
 	vim.cmd("colorscheme everforest")
+end)
+
+-- == Preview
+later(function()
+	add({ "https://github.com/OXY2DEV/markview.nvim" })
 end)
 
 -- == Tmux
