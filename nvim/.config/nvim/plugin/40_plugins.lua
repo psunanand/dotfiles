@@ -135,11 +135,6 @@ Config.now(function()
 	vim.cmd("colorscheme everforest")
 end)
 
--- == Preview
-later(function()
-	add({ "https://github.com/OXY2DEV/markview.nvim" })
-end)
-
 -- == Tmux
 now_if_args(function()
 	add({
@@ -161,5 +156,18 @@ later(function()
 			type = "zeta-2",
 			url = "http://127.0.0.1:8000",
 		},
+	})
+end)
+
+-- == markdown, html previwer
+later(function()
+	add({ "https://github.com/brianhuster/live-preview.nvim" })
+	require("livepreview.config").set({
+		port = 5500,
+		browser = "default",
+		dynamic_root = false,
+		sync_scroll = true,
+		picker = "fzf-lua",
+		address = "127.0.0.1",
 	})
 end)
