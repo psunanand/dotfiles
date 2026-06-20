@@ -118,11 +118,7 @@ sketchybar --add item clock right \
            --subscribe network wifi_change mouse.entered mouse.exited system_woke \
            --add item usage right \
            --set usage update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
-           --subscribe usage mouse.entered mouse.exited system_woke \
-           --add item bluetooth right \
-           --set bluetooth script="$PLUGIN_DIR/bluetooth.sh" \
-                           update_freq=30 \
-           --subscribe bluetooth mouse.entered mouse.exited
+           --subscribe usage mouse.entered mouse.exited system_woke
 
 
 ##### Force all scripts to run the first time  #####

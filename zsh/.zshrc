@@ -101,3 +101,6 @@ export FD_OPTIONS="--hidden --exclude .git --exclude .DS_Store"
 # Tool initialization
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh --cmd cd)"
+
+# OpenClaw Completion
+source "/Users/psunanand/.openclaw/completions/openclaw.zsh"

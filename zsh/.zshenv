@@ -21,3 +21,4 @@ export HISTFILE="$HOME/.local/share/zsh/zsh_history"
 export HISTSIZE=50000
 export SAVEHIST=50000
 [[ -d "$(dirname "$HISTFILE")" ]] || mkdir -p "$(dirname "$HISTFILE")"
+. "$HOME/.cargo/env"
