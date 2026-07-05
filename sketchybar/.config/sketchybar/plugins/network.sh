@@ -64,16 +64,17 @@ else
   LABEL="Other"
 fi
 
-HOVER_LABEL="$LABEL | ↓$DOWN_STR ↑$UP_STR"
+POPUP_LABEL="$LABEL | ↓$DOWN_STR ↑$UP_STR"
 
 case "$SENDER" in
 "mouse.entered")
-  sketchybar --set "$NAME" label="$HOVER_LABEL" label.drawing=on icon.padding_right=0
+  sketchybar --set "$NAME" popup.drawing=on
   ;;
 "mouse.exited")
-  sketchybar --set "$NAME" label.drawing=off icon.padding_right=12
+  sketchybar --set "$NAME" popup.drawing=off
   ;;
 *)
-  sketchybar --set "$NAME" icon="$ICON" label="$LABEL" icon.padding_right=12
+  sketchybar --set "$NAME" icon="$ICON" label="$LABEL" icon.padding_right=12 \
+    --set "$NAME".popup label="$POPUP_LABEL"
   ;;
 esac
