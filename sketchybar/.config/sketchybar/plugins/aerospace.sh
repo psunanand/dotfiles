@@ -66,14 +66,8 @@ else
   exit 0
 fi
 
-# All pills use bar color background; focused ones get accent border
-if $IS_FOCUSED; then
-  BORDER_COLOR=$ACCENT_COLOR
-  BORDER_WIDTH=2
-else
-  BORDER_COLOR=$BAR_COLOR
-  BORDER_WIDTH=0
-fi
+# Only the number pill shows the accent (border when focused).
+# App pills always have no border — the gap creates vertical separation.
 
 # --- Update the app pills ---
 if [ "$APP_COUNT" -eq 0 ]; then
@@ -89,8 +83,7 @@ elif [ "$APP_COUNT" -le 3 ]; then
         drawing=on \
         display="$DISPLAY_ID" \
         background.color=$BAR_COLOR \
-        background.border_color=$BORDER_COLOR \
-        background.border_width=$BORDER_WIDTH \
+        background.border_width=0 \
         icon.background.drawing=on \
         icon.background.image="app.$APP" \
         icon.background.image.scale=0.65 \
@@ -108,8 +101,7 @@ else
       drawing=on \
       display="$DISPLAY_ID" \
       background.color=$BAR_COLOR \
-      background.border_color=$BORDER_COLOR \
-      background.border_width=$BORDER_WIDTH \
+      background.border_width=0 \
       icon.background.drawing=on \
       icon.background.image="app.$APP" \
       icon.background.image.scale=0.65 \
@@ -123,8 +115,7 @@ else
     drawing=on \
     display="$DISPLAY_ID" \
     background.color=$BAR_COLOR \
-    background.border_color=$BORDER_COLOR \
-    background.border_width=$BORDER_WIDTH \
+    background.border_width=0 \
     icon.background.drawing=off \
     icon.padding_left=0 \
     icon.padding_right=0 \
