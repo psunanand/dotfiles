@@ -124,19 +124,19 @@ sketchybar --add item front_app left \
 # https://felixkratz.github.io/SketchyBar/config/events
 
 sketchybar --add item clock right \
-           --set clock background.drawing=off update_freq=10 script="$PLUGIN_DIR/clock.sh" \
+           --set clock background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=10 script="$PLUGIN_DIR/clock.sh" \
            click_script="open -a Calendar" \
            --add item volume right \
-            --set volume background.drawing=off script="$PLUGIN_DIR/volume.sh" \
-           click_script="open x-apple.systempreferences:com.apple.Sound-Settings.extension" \
-           --subscribe volume volume_change \
-           --add item battery right \
-            --set battery background.drawing=off update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-           click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
-           --subscribe battery system_woke power_source_change \
+            --set volume background.drawing=off background.padding_left=0 background.padding_right=0 script="$PLUGIN_DIR/volume.sh" \
+            click_script="open x-apple.systempreferences:com.apple.Sound-Settings.extension" \
+            --subscribe volume volume_change \
+            --add item battery right \
+            --set battery background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+            click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
+            --subscribe battery system_woke power_source_change \
            --add item network right \
             --set network \
-              background.drawing=off update_freq=2 label.drawing=off script="$PLUGIN_DIR/network.sh" \
+              background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=2 label.drawing=off script="$PLUGIN_DIR/network.sh" \
               popup.background.color=$POPUP_BACKGROUND_COLOR \
               popup.background.corner_radius=15 \
               popup.background.border_width=2 \
@@ -160,7 +160,7 @@ sketchybar --add item clock right \
               background.drawing=off \
            --add item usage right \
             --set usage \
-              background.drawing=off update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
+              background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
               popup.background.color=$POPUP_BACKGROUND_COLOR \
               popup.background.corner_radius=15 \
               popup.background.border_width=2 \
