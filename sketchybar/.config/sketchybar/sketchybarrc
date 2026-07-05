@@ -72,9 +72,9 @@ for sid in {1..10}; do
             script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
             click_script="aerospace workspace $sid" \
             icon.drawing=off \
-            label="$sid" \
-            label.padding_left=12 \
-            label.padding_right=12
+            label="[$sid]" \
+            label.padding_left=10 \
+            label.padding_right=10
 
     for idx in 1 2 3; do
         sketchybar --add item space.$sid.app$idx left \
