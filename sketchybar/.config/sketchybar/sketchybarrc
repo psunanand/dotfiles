@@ -70,7 +70,18 @@ for sid in {1..10}; do
         --set space.$sid \
             drawing=off \
             script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
-            click_script="aerospace workspace $sid"
+            click_script="aerospace workspace $sid" \
+            icon.drawing=off \
+            label="$sid" \
+            label.padding_left=12 \
+            label.padding_right=12
+
+    for idx in 1 2 3; do
+        sketchybar --add item space.$sid.app$idx left \
+            --set space.$sid.app$idx \
+                drawing=off \
+                click_script="aerospace workspace $sid"
+    done
 done
 
 sketchybar --add item space_separator left \
@@ -111,39 +122,58 @@ sketchybar --add item clock right \
            click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
            --subscribe battery system_woke power_source_change \
            --add item network right \
-           --set network \
-             update_freq=2 label.drawing=off script="$PLUGIN_DIR/network.sh" \
-             popup.background.color=$POPUP_BACKGROUND_COLOR \
-             popup.background.corner_radius=12 \
-             popup.background.border_width=1 \
-             popup.background.border_color=$POPUP_BORDER_COLOR \
-             popup.blur_radius=0 \
-             click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
-           --subscribe network wifi_change mouse.entered mouse.exited system_woke \
-           --add item network.popup popup.network \
-           --set network.popup drawing=on \
-             label.font="SF pro:Semibold:14.0" \
-             label.color=$LABEL_COLOR \
-             label.padding_left=12 \
-             label.padding_right=12 \
-             background.drawing=off \
+            --set network \
+              update_freq=2 label.drawing=off script="$PLUGIN_DIR/network.sh" \
+              popup.background.color=$POPUP_BACKGROUND_COLOR \
+              popup.background.corner_radius=15 \
+              popup.background.border_width=0 \
+              popup.blur_radius=0 \
+              click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
+            --subscribe network wifi_change mouse.entered mouse.exited system_woke \
+            --add item network.popup.ssid popup.network \
+            --set network.popup.ssid drawing=on \
+              label.font="SF pro:Semibold:14.0" \
+              label.color=$LABEL_COLOR \
+              label.padding_left=16 \
+              label.padding_right=16 \
+              background.drawing=off \
+            --add item network.popup.speed popup.network \
+            --set network.popup.speed drawing=on \
+              label.font="SF pro:Semibold:14.0" \
+              label.color=$LABEL_COLOR \
+              label.padding_left=16 \
+              label.padding_right=16 \
+              background.drawing=off \
            --add item usage right \
-           --set usage \
-             update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
-             popup.background.color=$POPUP_BACKGROUND_COLOR \
-             popup.background.corner_radius=12 \
-             popup.background.border_width=1 \
-             popup.background.border_color=$POPUP_BORDER_COLOR \
-             popup.blur_radius=0 \
-             click_script="open -a 'Activity Monitor'" \
-           --subscribe usage mouse.entered mouse.exited system_woke \
-           --add item usage.popup popup.usage \
-           --set usage.popup drawing=on \
-             label.font="SF pro:Semibold:14.0" \
-             label.color=$LABEL_COLOR \
-             label.padding_left=12 \
-             label.padding_right=12 \
-             background.drawing=off
+            --set usage \
+              update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
+              popup.background.color=$POPUP_BACKGROUND_COLOR \
+              popup.background.corner_radius=15 \
+              popup.background.border_width=0 \
+              popup.blur_radius=0 \
+              click_script="open -a 'Activity Monitor'" \
+            --subscribe usage mouse.entered mouse.exited system_woke \
+            --add item usage.popup.cpu popup.usage \
+            --set usage.popup.cpu drawing=on \
+              label.font="SF pro:Semibold:14.0" \
+              label.color=$LABEL_COLOR \
+              label.padding_left=16 \
+              label.padding_right=16 \
+              background.drawing=off \
+            --add item usage.popup.ram popup.usage \
+            --set usage.popup.ram drawing=on \
+              label.font="SF pro:Semibold:14.0" \
+              label.color=$LABEL_COLOR \
+              label.padding_left=16 \
+              label.padding_right=16 \
+              background.drawing=off \
+            --add item usage.popup.disk popup.usage \
+            --set usage.popup.disk drawing=on \
+              label.font="SF pro:Semibold:14.0" \
+              label.color=$LABEL_COLOR \
+              label.padding_left=16 \
+              label.padding_right=16 \
+              background.drawing=off
 
 
 ##### Force all scripts to run the first time  #####

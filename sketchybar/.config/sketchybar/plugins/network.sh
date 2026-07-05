@@ -3,7 +3,7 @@
 STATE_FILE="/tmp/sketchybar_net_state"
 [[ ! -f "$STATE_FILE" ]] && echo "0 0 $(date +%s)" >"$STATE_FILE"
 
-# 'route -n get default' to find the active gateway interface
+# Find the active gateway interface
 INTERFACE=$(route -n get default 2>/dev/null | awk '/interface: / {print $2}')
 
 if [[ -z "$INTERFACE" ]]; then
@@ -11,17 +11,15 @@ if [[ -z "$INTERFACE" ]]; then
   exit 0
 fi
 
-# Extract hardware type (Wi-Fi, Ethernet, Thunderbolt Bridge, etc.)
+# Extract hardware type
 HW_TYPE=$(networksetup -listallhardwareports | grep -B 1 "$INTERFACE" | awk -F': ' '/Hardware Port/ {print $2}')
 
-# Fallback for virtual or bridge interfaces
 if [[ -z "$HW_TYPE" ]]; then
   [[ "$INTERFACE" == bridge* ]] && HW_TYPE="Bridge" || HW_TYPE="Virtual"
 fi
 
 SSID=""
 if [[ "$HW_TYPE" == "Wi-Fi" ]]; then
-  # Standard macOS utility for SSID retrieval
   SSID=$(ipconfig getsummary "$INTERFACE" | awk -F': ' '/ SSID : / {print $2}' | xargs)
 fi
 
@@ -64,8 +62,6 @@ else
   LABEL="Other"
 fi
 
-POPUP_LABEL="$LABEL | ↓$DOWN_STR ↑$UP_STR"
-
 case "$SENDER" in
 "mouse.entered")
   sketchybar --set "$NAME" popup.drawing=on
@@ -75,6 +71,7 @@ case "$SENDER" in
   ;;
 *)
   sketchybar --set "$NAME" icon="$ICON" label="$LABEL" icon.padding_right=12 \
-    --set "$NAME".popup label="$POPUP_LABEL"
+    --set "$NAME".popup.ssid label="$LABEL" \
+    --set "$NAME".popup.speed label="↓$DOWN_STR  ↑$UP_STR"
   ;;
 esac

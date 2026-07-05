@@ -27,6 +27,8 @@ case "$SENDER" in
   ;;
 *)
   sketchybar --set "$NAME" icon="$ICON" label="$LABEL" icon.padding_right=12 \
-    --set "$NAME".popup label="$LABEL"
+    --set "$NAME".popup.cpu label="CPU: ${CPU_USAGE}%" \
+    --set "$NAME".popup.ram label="RAM: ${RAM_PRESSURE}%" \
+    --set "$NAME".popup.disk label="DISK: ${DISK_USAGE}"
   ;;
 esac
