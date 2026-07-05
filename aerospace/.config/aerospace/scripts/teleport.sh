@@ -23,8 +23,7 @@ if ! command -v aerospace &>/dev/null; then
   exit 1
 fi
 
-while IFS= read -r WID || [[ -n "$WID" ]]; do
-  [[ -n "$WID" ]] || continue
+while IFS= read -r WID; do
   if [[ -n "$WORKSPACE" ]]; then
     aerospace move-node-to-workspace "$WORKSPACE" --window-id "$WID"
   else
