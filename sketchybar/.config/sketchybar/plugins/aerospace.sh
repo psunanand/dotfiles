@@ -2,6 +2,10 @@
 
 source "$CONFIG_DIR/plugins/colors.sh"
 
+if ! command -v aerospace &>/dev/null; then
+  exit 0
+fi
+
 # $1 is the workspace ID passed from sketchybarrc of the item being updated
 # $FOCUSED_WORKSPACE is passed from the Aerospace trigger
 
@@ -10,12 +14,29 @@ if [ -z "$FOCUSED_WORKSPACE" ]; then
   FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
 fi
 
+# Determine display dynamically. Query Aerospace for workspace-to-monitor mapping.
+DISPLAY_ID=$(aerospace list-workspaces --monitor all --format "%{workspace} %{monitor-appkit-nsscreen-screens-id}" 2>/dev/null | awk -v ws="$1" '$1 == ws {print $2}')
+if [ -z "$DISPLAY_ID" ]; then
+  DISPLAY_ID=1
+  [ "$1" -ge 8 ] && DISPLAY_ID=2
+fi
+
+# Only update display if it changed (avoids unnecessary sketchybar IPC)
+DISPLAY_CACHE="/tmp/sketchybar_display_${NAME}"
+CACHED_DISPLAY=$(cat "$DISPLAY_CACHE" 2>/dev/null || echo "")
+if [ "$DISPLAY_ID" != "$CACHED_DISPLAY" ]; then
+  sketchybar --set "$NAME" display="$DISPLAY_ID"
+  echo "$DISPLAY_ID" > "$DISPLAY_CACHE"
+fi
+
 COMMON_PROPS=(
-  # background.corner_radius=5
   label.font="sketchybar-app-font:Regular:16.0"
   label.padding_right=20
   background.drawing=on
 )
+
+# Query windows once (single atomic call)
+APPS_LIST=$(aerospace list-windows --workspace "$1" --format "%{app-name}")
 
 # Check if this specific item is the one that should be focused
 if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
@@ -27,25 +48,19 @@ if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
     icon.color=$ACCENT_COLOR \
     label.color=$WHITE \
     drawing=on
+elif [ -n "$APPS_LIST" ]; then
+  sketchybar --set "$NAME" \
+    "${COMMON_PROPS[@]}" \
+    background.color=$ITEM_BG_COLOR \
+    background.border_width=0 \
+    icon.color=$GREY \
+    label.color=$GREY \
+    drawing=on
 else
-  # Check if it has windows to decide if it should be drawn
-  WIN_COUNT=$(aerospace list-windows --workspace "$1" --count)
-  if [ "$WIN_COUNT" -gt 0 ]; then
-    sketchybar --set "$NAME" \
-      "${COMMON_PROPS[@]}" \
-      background.color=$ITEM_BG_COLOR \
-      background.border_width=0 \
-      icon.color=$GREY \
-      label.color=$GREY \
-      drawing=on
-  else
-    sketchybar --set "$NAME" drawing=off
-  fi
+  sketchybar --set "$NAME" drawing=off
 fi
 
-# Update Icons (optional but recommended here)
-# This ensures icons are correct on startup too
-APPS_LIST=$(aerospace list-windows --workspace "$1" --format "%{app-name}")
+# Update Icons
 ICON_STRIP=""
 if [ -n "$APPS_LIST" ]; then
   while read -r app; do

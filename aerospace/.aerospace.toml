@@ -107,12 +107,12 @@ exec-on-workspace-change = ['/bin/bash', '-c',
   alt-f = 'fullscreen'
 
   # Teleport to Apps
-  alt-b = ['workspace 1', 'exec-and-forget open -a /Applications/Arc.app']
+  alt-b = ['workspace 1', 'exec-and-forget open -a /Applications/Vivaldi.app']
   alt-t = ['workspace 2', 'exec-and-forget open -a /Applications/kitty.app']
   alt-o = ['workspace 3', 'exec-and-forget open -a /Applications/Obsidian.app']
-  alt-shift-b = "exec-and-forget bash -c 'aerospace move-node-to-workspace current --window-id $(aerospace list-windows --app-id app.zen-browser.zen --format %{window-id} | head -n 1)'"
-  alt-shift-t = "exec-and-forget bash -c 'aerospace move-node-to-workspace current --window-id $(aerospace list-windows --app-id net.kovidgoyal.kitty --format %{window-id} | head -n 1)'"
-  alt-shift-o = "exec-and-forget bash -c 'aerospace move-node-to-workspace current --window-id $(aerospace list-windows --app-id md.obsidian --format %{window-id} | head -n 1)'"
+  alt-shift-b = "exec-and-forget bash -c 'aerospace move-node-to-workspace $(aerospace list-workspaces --focused) --window-id $(aerospace list-windows --monitor all --app-id com.vivaldi.Vivaldi --format %{window-id} | head -n 1)'"
+  alt-shift-t = "exec-and-forget bash -c 'aerospace move-node-to-workspace $(aerospace list-workspaces --focused) --window-id $(aerospace list-windows --monitor all --app-id net.kovidgoyal.kitty --format %{window-id} | head -n 1)'"
+  alt-shift-o = "exec-and-forget bash -c 'aerospace move-node-to-workspace $(aerospace list-workspaces --focused) --window-id $(aerospace list-windows --monitor all --app-id md.obsidian --format %{window-id} | head -n 1)'"
 
   # See: https://nikitabobko.github.ioeAeroSpace/commands#layout
   alt-slash = 'layout tiles horizontal vertical'
@@ -158,9 +158,9 @@ exec-on-workspace-change = ['/bin/bash', '-c',
   r = ['flatten-workspace-tree', 'mode main'] # reset layout
   f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
   backspace = [
-      "exec-and-forget bash -c 'aerospace move-node-to-workspace 1 --window-id $(aerospace list-windows --app-id app.zen-browser.zen --format %{window-id} | head -n 1)'",
-      "exec-and-forget bash -c 'aerospace move-node-to-workspace 2 --window-id $(aerospace list-windows --app-id net.kovidgoyal.kitty --format %{window-id} | head -n 1)'",
-      "exec-and-forget bash -c 'aerospace move-node-to-workspace 3 --window-id $(aerospace list-windows --app-id md.obsidian --format %{window-id} | head -n 1)'",
+      "exec-and-forget bash -c 'aerospace move-node-to-workspace 1 --window-id $(aerospace list-windows --monitor all --app-id com.vivaldi.Vivaldi --format %{window-id} | head -n 1)'",
+      "exec-and-forget bash -c 'aerospace move-node-to-workspace 2 --window-id $(aerospace list-windows --monitor all --app-id net.kovidgoyal.kitty --format %{window-id} | head -n 1)'",
+      "exec-and-forget bash -c 'aerospace move-node-to-workspace 3 --window-id $(aerospace list-windows --monitor all --app-id md.obsidian --format %{window-id} | head -n 1)'",
       "mode main"
   ]
   t = ['exec-and-forget open -a /Applications/kitty.app', 'mode main']
@@ -175,7 +175,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 # Default Apps in each workspace
 [[on-window-detected]]
-if.app-id ='company.thebrowser.Browser'
+if.app-id ='com.vivaldi.Vivaldi'
 run = ['move-node-to-workspace 1']
 
 [[on-window-detected]]

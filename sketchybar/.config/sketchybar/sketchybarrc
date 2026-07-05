@@ -65,14 +65,9 @@ sketchybar --default "${default[@]}"
 sketchybar --add event aerospace_workspace_change
 
 for sid in {1..10}; do
-    # Logic for multi-monitor placement
-    display_id=1
-    if [ "$sid" -ge 8 ]; then display_id=2; fi
-
     sketchybar --add item space.$sid left \
         --subscribe space.$sid aerospace_workspace_change \
         --set space.$sid \
-            display=$display_id \
             drawing=off \
             icon="$sid" \
             script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
@@ -107,17 +102,22 @@ sketchybar --add item front_app left \
 
 sketchybar --add item clock right \
            --set clock update_freq=10 script="$PLUGIN_DIR/clock.sh" \
+           click_script="open -a Calendar" \
            --add item volume right \
            --set volume script="$PLUGIN_DIR/volume.sh" \
+           click_script="open x-apple.systempreferences:com.apple.Sound-Settings.extension" \
            --subscribe volume volume_change \
            --add item battery right \
            --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
            --subscribe battery system_woke power_source_change \
            --add item network right \
            --set network update_freq=2 label.drawing=off script="$PLUGIN_DIR/network.sh" \
+           click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
            --subscribe network wifi_change mouse.entered mouse.exited system_woke \
            --add item usage right \
            --set usage update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
+           click_script="open -a 'Activity Monitor'" \
            --subscribe usage mouse.entered mouse.exited system_woke
 
 
