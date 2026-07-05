@@ -44,18 +44,18 @@ IS_FOCUSED=false
 [ "$1" = "$FOCUSED_WORKSPACE" ] && IS_FOCUSED=true
 WS=$1
 
-# --- Update the number pill ---
+# Fixed background: green accent for focused, bar color for others. No borders.
 if $IS_FOCUSED; then
+  PILL_BG=$ACCENT_COLOR
+else
+  PILL_BG=$BAR_COLOR
+fi
+
+# --- Update the number pill ---
+if $IS_FOCUSED || [ "$APP_COUNT" -gt 0 ]; then
   sketchybar --set space."$1" \
     label.drawing=on \
-    background.color=$BAR_COLOR \
-    background.border_color=$ACCENT_COLOR \
-    background.border_width=2 \
-    drawing=on
-elif [ "$APP_COUNT" -gt 0 ]; then
-  sketchybar --set space."$1" \
-    label.drawing=on \
-    background.color=$BAR_COLOR \
+    background.color=$PILL_BG \
     background.border_width=0 \
     drawing=on
 else
@@ -66,14 +66,9 @@ else
   exit 0
 fi
 
-# All pills use bar color background; focused ones get accent border
-if $IS_FOCUSED; then
-  BORDER_COLOR=$ACCENT_COLOR
-  BORDER_WIDTH=2
-else
-  BORDER_COLOR=$BAR_COLOR
-  BORDER_WIDTH=0
-fi
+# Label color for +N badge — white on green accent for contrast
+N_COLOR=$GREY
+$IS_FOCUSED && N_COLOR=$WHITE
 
 # --- Update the app pills ---
 if [ "$APP_COUNT" -eq 0 ]; then
@@ -88,9 +83,8 @@ elif [ "$APP_COUNT" -le 3 ]; then
       sketchybar --set space."$WS".app$idx \
         drawing=on \
         display="$DISPLAY_ID" \
-        background.color=$BAR_COLOR \
-        background.border_color=$BORDER_COLOR \
-        background.border_width=$BORDER_WIDTH \
+        background.color=$PILL_BG \
+        background.border_width=0 \
         icon.background.drawing=on \
         icon.background.image="app.$APP" \
         icon.background.image.scale=0.65 \
@@ -107,9 +101,8 @@ else
     sketchybar --set space."$WS".app$((i+1)) \
       drawing=on \
       display="$DISPLAY_ID" \
-      background.color=$BAR_COLOR \
-      background.border_color=$BORDER_COLOR \
-      background.border_width=$BORDER_WIDTH \
+      background.color=$PILL_BG \
+      background.border_width=0 \
       icon.background.drawing=on \
       icon.background.image="app.$APP" \
       icon.background.image.scale=0.65 \
@@ -122,15 +115,14 @@ else
   sketchybar --set space."$WS".app3 \
     drawing=on \
     display="$DISPLAY_ID" \
-    background.color=$BAR_COLOR \
-    background.border_color=$BORDER_COLOR \
-    background.border_width=$BORDER_WIDTH \
+    background.color=$PILL_BG \
+    background.border_width=0 \
     icon.background.drawing=off \
     icon.padding_left=0 \
     icon.padding_right=0 \
     label.drawing=on \
     label="+${EXTRA}" \
-    label.color=$GREY \
+    label.color=$N_COLOR \
     label.font="SF pro:Semibold:12.0" \
     label.padding_left=8 \
     label.padding_right=8
