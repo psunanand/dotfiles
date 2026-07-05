@@ -29,4 +29,4 @@ while IFS= read -r WID; do
   else
     aerospace move-node-to-workspace current --window-id "$WID"
   fi
-done < <(aerospace list-windows --app-id "$APP_ID" --format "%{window-id}" 2>/dev/null)
+done < <(aerospace list-windows --monitor all --app-id "$APP_ID" --format "%{window-id}" 2>/dev/null)

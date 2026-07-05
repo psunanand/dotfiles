@@ -15,11 +15,8 @@ if [ -z "$FOCUSED_WORKSPACE" ]; then
 fi
 
 # Determine display dynamically. Query Aerospace for workspace-to-monitor mapping.
-MONITOR_INDEX=$(aerospace list-workspaces --format "%{workspace} %{monitor-index}" 2>/dev/null | awk -v ws="$1" '$1 == ws {print $2}')
-if [ -n "$MONITOR_INDEX" ]; then
-  DISPLAY_ID=$(aerospace list-monitors --format "%{monitor-index} %{monitor-appkit-nsscreen-screens-id}" 2>/dev/null | awk -v mi="$MONITOR_INDEX" '$1 == mi {print $2}')
-fi
-if [ -z "${DISPLAY_ID:-}" ]; then
+DISPLAY_ID=$(aerospace list-workspaces --monitor all --format "%{workspace} %{monitor-appkit-nsscreen-screens-id}" 2>/dev/null | awk -v ws="$1" '$1 == ws {print $2}')
+if [ -z "$DISPLAY_ID" ]; then
   DISPLAY_ID=1
   [ "$1" -ge 8 ] && DISPLAY_ID=2
 fi
