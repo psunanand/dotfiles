@@ -40,49 +40,57 @@ if [ -n "$APPS" ]; then
   APP_COUNT=${#APP_LIST[@]}
 fi
 
+IS_FOCUSED=false
+[ "$1" = "$FOCUSED_WORKSPACE" ] && IS_FOCUSED=true
+WS=$1
+
 # --- Update the number pill ---
-if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
+if $IS_FOCUSED; then
   sketchybar --set space."$1" \
     label.drawing=on \
     background.color=$BAR_COLOR \
     background.border_color=$ACCENT_COLOR \
-    background.border_width=3 \
+    background.border_width=2 \
     drawing=on
 elif [ "$APP_COUNT" -gt 0 ]; then
   sketchybar --set space."$1" \
     label.drawing=on \
-    background.color=$ITEM_BG_COLOR \
+    background.color=$BAR_COLOR \
     background.border_width=0 \
     drawing=on
 else
   sketchybar --set space."$1" drawing=off
   for idx in 1 2 3; do
-    sketchybar --set space."$1".app$idx drawing=off
+    sketchybar --set space."$WS".app$idx drawing=off
   done
   exit 0
 fi
 
-# Set app pill background to match number pill
-if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
-  APP_BG=$BAR_COLOR
+# All pills use bar color background; focused ones get accent border
+if $IS_FOCUSED; then
+  BORDER_COLOR=$ACCENT_COLOR
+  BORDER_WIDTH=2
 else
-  APP_BG=$ITEM_BG_COLOR
+  BORDER_COLOR=$BAR_COLOR
+  BORDER_WIDTH=0
 fi
 
 # --- Update the app pills ---
 if [ "$APP_COUNT" -eq 0 ]; then
   for idx in 1 2 3; do
-    sketchybar --set space."$1".app$idx drawing=off
+    sketchybar --set space."$WS".app$idx drawing=off
   done
 elif [ "$APP_COUNT" -le 3 ]; then
   for ((i=0; i<3; i++)); do
     idx=$((i+1))
     if [ "$i" -lt "$APP_COUNT" ]; then
       APP="${APP_LIST[$i]}"
-      sketchybar --set space."$1".app$idx \
+      sketchybar --set space."$WS".app$idx \
         drawing=on \
         display="$DISPLAY_ID" \
-        background.color="$APP_BG" \
+        background.color=$BAR_COLOR \
+        background.border_color=$BORDER_COLOR \
+        background.border_width=$BORDER_WIDTH \
         icon.background.drawing=on \
         icon.background.image="app.$APP" \
         icon.background.image.scale=0.65 \
@@ -90,16 +98,18 @@ elif [ "$APP_COUNT" -le 3 ]; then
         icon.padding_right=8 \
         label.drawing=off
     else
-      sketchybar --set space."$1".app$idx drawing=off
+      sketchybar --set space."$WS".app$idx drawing=off
     fi
   done
 else
   for ((i=0; i<2; i++)); do
     APP="${APP_LIST[$i]}"
-    sketchybar --set space."$1".app$((i+1)) \
+    sketchybar --set space."$WS".app$((i+1)) \
       drawing=on \
       display="$DISPLAY_ID" \
-      background.color="$APP_BG" \
+      background.color=$BAR_COLOR \
+      background.border_color=$BORDER_COLOR \
+      background.border_width=$BORDER_WIDTH \
       icon.background.drawing=on \
       icon.background.image="app.$APP" \
       icon.background.image.scale=0.65 \
@@ -109,10 +119,12 @@ else
   done
 
   EXTRA=$((APP_COUNT - 2))
-  sketchybar --set space."$1".app3 \
+  sketchybar --set space."$WS".app3 \
     drawing=on \
     display="$DISPLAY_ID" \
-    background.color="$APP_BG" \
+    background.color=$BAR_COLOR \
+    background.border_color=$BORDER_COLOR \
+    background.border_width=$BORDER_WIDTH \
     icon.background.drawing=off \
     icon.padding_left=0 \
     icon.padding_right=0 \

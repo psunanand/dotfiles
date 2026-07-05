@@ -126,53 +126,55 @@ sketchybar --add item clock right \
               update_freq=2 label.drawing=off script="$PLUGIN_DIR/network.sh" \
               popup.background.color=$POPUP_BACKGROUND_COLOR \
               popup.background.corner_radius=15 \
-              popup.background.border_width=0 \
+              popup.background.border_width=2 \
+              popup.background.border_color=$ACCENT_COLOR \
               popup.blur_radius=0 \
               click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
             --subscribe network wifi_change mouse.entered mouse.exited system_woke \
             --add item network.popup.ssid popup.network \
             --set network.popup.ssid drawing=on \
-              label.font="SF pro:Semibold:14.0" \
+              label.font="SF pro:Semibold:13.0" \
               label.color=$LABEL_COLOR \
-              label.padding_left=16 \
-              label.padding_right=16 \
+              label.padding_left=12 \
+              label.padding_right=12 \
               background.drawing=off \
             --add item network.popup.speed popup.network \
             --set network.popup.speed drawing=on \
-              label.font="SF pro:Semibold:14.0" \
+              label.font="SF pro:Semibold:13.0" \
               label.color=$LABEL_COLOR \
-              label.padding_left=16 \
-              label.padding_right=16 \
+              label.padding_left=12 \
+              label.padding_right=12 \
               background.drawing=off \
            --add item usage right \
             --set usage \
               update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
               popup.background.color=$POPUP_BACKGROUND_COLOR \
               popup.background.corner_radius=15 \
-              popup.background.border_width=0 \
+              popup.background.border_width=2 \
+              popup.background.border_color=$ACCENT_COLOR \
               popup.blur_radius=0 \
               click_script="open -a 'Activity Monitor'" \
             --subscribe usage mouse.entered mouse.exited system_woke \
             --add item usage.popup.cpu popup.usage \
             --set usage.popup.cpu drawing=on \
-              label.font="SF pro:Semibold:14.0" \
+              label.font="SF pro:Semibold:13.0" \
               label.color=$LABEL_COLOR \
-              label.padding_left=16 \
-              label.padding_right=16 \
+              label.padding_left=12 \
+              label.padding_right=12 \
               background.drawing=off \
             --add item usage.popup.ram popup.usage \
             --set usage.popup.ram drawing=on \
-              label.font="SF pro:Semibold:14.0" \
+              label.font="SF pro:Semibold:13.0" \
               label.color=$LABEL_COLOR \
-              label.padding_left=16 \
-              label.padding_right=16 \
+              label.padding_left=12 \
+              label.padding_right=12 \
               background.drawing=off \
             --add item usage.popup.disk popup.usage \
             --set usage.popup.disk drawing=on \
-              label.font="SF pro:Semibold:14.0" \
+              label.font="SF pro:Semibold:13.0" \
               label.color=$LABEL_COLOR \
-              label.padding_left=16 \
-              label.padding_right=16 \
+              label.padding_left=12 \
+              label.padding_right=12 \
               background.drawing=off
 
 
