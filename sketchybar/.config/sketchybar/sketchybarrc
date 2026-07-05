@@ -74,12 +74,15 @@ for sid in {1..10}; do
             icon.drawing=off \
             label="$sid" \
             label.padding_left=12 \
-            label.padding_right=12
+            label.padding_right=12 \
+            background.padding_right=2
 
     for idx in 1 2 3; do
         sketchybar --add item space.$sid.app$idx left \
             --set space.$sid.app$idx \
                 drawing=off \
+                background.padding_left=2 \
+                background.padding_right=2 \
                 click_script="aerospace workspace $sid"
     done
 done

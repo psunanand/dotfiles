@@ -48,14 +48,14 @@ WS=$1
 if $IS_FOCUSED; then
   sketchybar --set space."$1" \
     label.drawing=on \
-    background.color=$BAR_COLOR \
+    background.color=$ITEM_BG_COLOR \
     background.border_color=$ACCENT_COLOR \
     background.border_width=2 \
     drawing=on
 elif [ "$APP_COUNT" -gt 0 ]; then
   sketchybar --set space."$1" \
     label.drawing=on \
-    background.color=$BAR_COLOR \
+    background.color=$ITEM_BG_COLOR \
     background.border_width=0 \
     drawing=on
 else
@@ -82,7 +82,7 @@ elif [ "$APP_COUNT" -le 3 ]; then
       sketchybar --set space."$WS".app$idx \
         drawing=on \
         display="$DISPLAY_ID" \
-        background.color=$BAR_COLOR \
+        background.color=$ITEM_BG_COLOR \
         background.border_width=0 \
         icon.background.drawing=on \
         icon.background.image="app.$APP" \
@@ -100,7 +100,7 @@ else
     sketchybar --set space."$WS".app$((i+1)) \
       drawing=on \
       display="$DISPLAY_ID" \
-      background.color=$BAR_COLOR \
+      background.color=$ITEM_BG_COLOR \
       background.border_width=0 \
       icon.background.drawing=on \
       icon.background.image="app.$APP" \
@@ -114,7 +114,7 @@ else
   sketchybar --set space."$WS".app3 \
     drawing=on \
     display="$DISPLAY_ID" \
-    background.color=$BAR_COLOR \
+    background.color=$ITEM_BG_COLOR \
     background.border_width=0 \
     icon.background.drawing=off \
     icon.padding_left=0 \
