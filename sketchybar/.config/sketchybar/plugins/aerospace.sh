@@ -52,22 +52,22 @@ if $IS_FOCUSED; then
     background.border_color=$ACCENT_COLOR \
     background.border_width=2 \
     drawing=on
+  [ "$1" -lt 10 ] && sketchybar --set space."$1".sep drawing=on
 elif [ "$APP_COUNT" -gt 0 ]; then
   sketchybar --set space."$1" \
     label.drawing=on \
     background.color=$BAR_COLOR \
     background.border_width=0 \
     drawing=on
+  [ "$1" -lt 10 ] && sketchybar --set space."$1".sep drawing=on
 else
   sketchybar --set space."$1" drawing=off
   for idx in 1 2 3; do
     sketchybar --set space."$WS".app$idx drawing=off
   done
+  [ "$1" -lt 10 ] && sketchybar --set space."$1".sep drawing=off
   exit 0
 fi
-
-# Only the number pill shows the accent (border when focused).
-# App pills always have no border — the gap creates vertical separation.
 
 # --- Update the app pills ---
 if [ "$APP_COUNT" -eq 0 ]; then
