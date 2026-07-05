@@ -23,17 +23,11 @@ if ! command -v aerospace &>/dev/null; then
   exit 1
 fi
 
-WINDOW_IDS=$(aerospace list-windows --app-id "$APP_ID" --format "%{window-id}" 2>/dev/null)
-
-if [[ -z "$WINDOW_IDS" ]]; then
-  exit 0
-fi
-
-while IFS= read -r wid || [[ -n "$wid" ]]; do
-  [[ -n "$wid" ]] || continue
+while IFS= read -r WID || [[ -n "$WID" ]]; do
+  [[ -n "$WID" ]] || continue
   if [[ -n "$WORKSPACE" ]]; then
-    aerospace move-node-to-workspace "$WORKSPACE" --window-id "$wid"
+    aerospace move-node-to-workspace "$WORKSPACE" --window-id "$WID"
   else
-    aerospace move-node-to-workspace current --window-id "$wid"
+    aerospace move-node-to-workspace current --window-id "$WID"
   fi
-done <<< "$WINDOW_IDS"
+done < <(aerospace list-windows --app-id "$APP_ID" --format "%{window-id}" 2>/dev/null)

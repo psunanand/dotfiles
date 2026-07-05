@@ -14,13 +14,23 @@ if [ -z "$FOCUSED_WORKSPACE" ]; then
   FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
 fi
 
-# Determine display dynamically. Try Aerospace query first, fall back to heuristic.
-DISPLAY_ID=$(aerospace list-workspaces --format "%{workspace} %{monitor-appkit-nsscreen-screens-id}" 2>/dev/null | awk -v ws="$1" '$1 == ws {print $2}')
-if [ -z "$DISPLAY_ID" ]; then
+# Determine display dynamically. Query Aerospace for workspace-to-monitor mapping.
+MONITOR_INDEX=$(aerospace list-workspaces --format "%{workspace} %{monitor-index}" 2>/dev/null | awk -v ws="$1" '$1 == ws {print $2}')
+if [ -n "$MONITOR_INDEX" ]; then
+  DISPLAY_ID=$(aerospace list-monitors --format "%{monitor-index} %{monitor-appkit-nsscreen-screens-id}" 2>/dev/null | awk -v mi="$MONITOR_INDEX" '$1 == mi {print $2}')
+fi
+if [ -z "${DISPLAY_ID:-}" ]; then
   DISPLAY_ID=1
   [ "$1" -ge 8 ] && DISPLAY_ID=2
 fi
-sketchybar --set "$NAME" display="$DISPLAY_ID"
+
+# Only update display if it changed (avoids unnecessary sketchybar IPC)
+DISPLAY_CACHE="/tmp/sketchybar_display_${NAME}"
+CACHED_DISPLAY=$(cat "$DISPLAY_CACHE" 2>/dev/null || echo "")
+if [ "$DISPLAY_ID" != "$CACHED_DISPLAY" ]; then
+  sketchybar --set "$NAME" display="$DISPLAY_ID"
+  echo "$DISPLAY_ID" > "$DISPLAY_CACHE"
+fi
 
 COMMON_PROPS=(
   label.font="sketchybar-app-font:Regular:16.0"
