@@ -1,3 +1,3 @@
-# MK's dotfiles
+# MK's dotfiles (macOS)
 
 ![showcase](./assets/showcase.png)
