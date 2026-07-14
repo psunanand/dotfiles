@@ -13,18 +13,10 @@ set_unavailable() {
     icon="$ICON" \
     label="Codex ?" \
     label.color="$GREY" \
-    --set "$NAME".popup.primary label="5-hour remaining: unavailable" \
-    --set "$NAME".popup.primary_reset label="5-hour resets: unknown" \
-    --set "$NAME".popup.secondary label="Weekly remaining: unavailable" \
-    --set "$NAME".popup.secondary_reset label="Weekly resets: unknown"
-}
-
-remaining_text() {
-  if [[ "$1" =~ ^[0-9]+$ ]]; then
-    printf '%s%%' "$1"
-  else
-    printf '?'
-  fi
+    --set "$NAME".popup.primary drawing=on label="Usage unavailable" \
+    --set "$NAME".popup.primary_reset drawing=off \
+    --set "$NAME".popup.secondary drawing=off \
+    --set "$NAME".popup.secondary_reset drawing=off
 }
 
 case "${SENDER:-}" in
@@ -43,23 +35,19 @@ if ! result="$(python3 "$HELPER" 2>/dev/null)"; then
   exit 0
 fi
 
-primary="$(jq -r '.primary.remaining // empty' <<<"$result" 2>/dev/null)"
-secondary="$(jq -r '.secondary.remaining // empty' <<<"$result" 2>/dev/null)"
-primary_reset="$(jq -r '.primary.reset // "unknown"' <<<"$result" 2>/dev/null)"
-secondary_reset="$(jq -r '.secondary.reset // "unknown"' <<<"$result" 2>/dev/null)"
-
-if [[ ! "$primary" =~ ^[0-9]+$ && ! "$secondary" =~ ^[0-9]+$ ]]; then
+if ! window_count="$(jq -er '.windows | length' <<<"$result" 2>/dev/null)" || (( window_count == 0 )); then
   set_unavailable
   exit 0
 fi
 
-if [[ "$primary" =~ ^[0-9]+$ && "$secondary" =~ ^[0-9]+$ ]]; then
-  lowest_remaining=$((primary < secondary ? primary : secondary))
-elif [[ "$primary" =~ ^[0-9]+$ ]]; then
-  lowest_remaining=$primary
-else
-  lowest_remaining=$secondary
-fi
+summary="$(jq -r '[.windows[] | "\(.short_label) \(.remaining)%"] | join(" · ")' <<<"$result")"
+lowest_remaining="$(jq -er '[.windows[].remaining] | min' <<<"$result")"
+first_label="$(jq -r '.windows[0].label' <<<"$result")"
+first_remaining="$(jq -r '.windows[0].remaining' <<<"$result")"
+first_reset="$(jq -r '.windows[0].reset' <<<"$result")"
+second_label="$(jq -r '.windows[1].label // empty' <<<"$result")"
+second_remaining="$(jq -r '.windows[1].remaining // empty' <<<"$result")"
+second_reset="$(jq -r '.windows[1].reset // empty' <<<"$result")"
 
 if (( lowest_remaining <= 10 )); then
   color="$RED"
@@ -71,9 +59,9 @@ fi
 
 sketchybar --set "$NAME" \
   icon="$ICON" \
-  label="5h $(remaining_text "$primary") · W $(remaining_text "$secondary")" \
+  label="$summary" \
   label.color="$color" \
-  --set "$NAME".popup.primary label="5-hour remaining: $(remaining_text "$primary")" \
-  --set "$NAME".popup.primary_reset label="5-hour resets: $primary_reset" \
-  --set "$NAME".popup.secondary label="Weekly remaining: $(remaining_text "$secondary")" \
-  --set "$NAME".popup.secondary_reset label="Weekly resets: $secondary_reset"
+  --set "$NAME".popup.primary drawing=on label="$first_label remaining: $first_remaining%" \
+  --set "$NAME".popup.primary_reset drawing=on label="$first_label resets: $first_reset" \
+  --set "$NAME".popup.secondary drawing=$([[ -n "$second_label" ]] && echo on || echo off) label="$second_label remaining: $second_remaining%" \
+  --set "$NAME".popup.secondary_reset drawing=$([[ -n "$second_label" ]] && echo on || echo off) label="$second_label resets: $second_reset"

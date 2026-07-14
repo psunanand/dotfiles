@@ -59,25 +59,16 @@ class CodexUsageHelperTests(unittest.TestCase):
                 timeout=5,
             )
 
-    def test_prefers_codex_multi_bucket_response(self):
+    def test_labels_a_single_weekly_window_from_its_duration(self):
         result = self.run_helper(
             {
-                "rateLimits": {
-                    "primary": {"usedPercent": 1},
-                    "secondary": {"usedPercent": 2},
-                },
                 "rateLimitsByLimitId": {
                     "codex": {
                         "primary": {
                             "usedPercent": 28,
                             "resetsAt": 0,
-                            "windowDurationMins": 300,
-                        },
-                        "secondary": {
-                            "usedPercent": 59,
-                            "resetsAt": 0,
                             "windowDurationMins": 10080,
-                        },
+                        }
                     }
                 },
             }
@@ -87,36 +78,69 @@ class CodexUsageHelperTests(unittest.TestCase):
         self.assertEqual(
             json.loads(result.stdout),
             {
-                "primary": {"remaining": 72, "reset": "Thu 00:00"},
-                "secondary": {"remaining": 41, "reset": "Thu 00:00"},
+                "windows": [
+                    {
+                        "label": "Weekly",
+                        "short_label": "W",
+                        "remaining": 72,
+                        "reset": "Thu 00:00",
+                    }
+                ]
             },
         )
 
-    def test_falls_back_to_legacy_rate_limits(self):
+    def test_preserves_primary_and_secondary_windows_in_duration_order(self):
         result = self.run_helper(
             {
                 "rateLimits": {
-                    "primary": {"usedPercent": 11, "resetsAt": 0},
-                    "secondary": {"usedPercent": 61, "resetsAt": 0},
+                    "primary": {
+                        "usedPercent": 11,
+                        "resetsAt": 0,
+                        "windowDurationMins": 300,
+                    },
+                    "secondary": {
+                        "usedPercent": 61,
+                        "resetsAt": 0,
+                        "windowDurationMins": 10080,
+                    },
                 }
             }
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(result.stdout)["primary"]["remaining"], 89)
-        self.assertEqual(json.loads(result.stdout)["secondary"]["remaining"], 39)
+        self.assertEqual(
+            json.loads(result.stdout),
+            {
+                "windows": [
+                    {
+                        "label": "5-hour",
+                        "short_label": "5h",
+                        "remaining": 89,
+                        "reset": "Thu 00:00",
+                    },
+                    {
+                        "label": "Weekly",
+                        "short_label": "W",
+                        "remaining": 39,
+                        "reset": "Thu 00:00",
+                    },
+                ]
+            },
+        )
 
     def test_reports_unavailable_windows_without_inventing_values(self):
         result = self.run_helper({"rateLimits": {"primary": None, "secondary": None}})
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(json.loads(result.stdout), {"primary": None, "secondary": None})
+        self.assertEqual(json.loads(result.stdout), {"windows": []})
 
     def test_reports_json_rpc_errors(self):
         result = self.run_helper("error")
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertEqual(json.loads(result.stdout), {"error": "not signed in"})
+        self.assertEqual(
+            json.loads(result.stdout), {"error": "Codex app-server request failed"}
+        )
 
     def test_times_out_when_app_server_stops_responding(self):
         result = self.run_helper("timeout")

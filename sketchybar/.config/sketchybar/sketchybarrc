@@ -218,14 +218,14 @@ sketchybar --add item codex_usage right \
     label.padding_right=12 \
     background.drawing=off \
   --add item codex_usage.popup.secondary popup.codex_usage \
-  --set codex_usage.popup.secondary drawing=on \
+  --set codex_usage.popup.secondary drawing=off \
     label.font="SF pro:Semibold:13.0" \
     label.color=$LABEL_COLOR \
     label.padding_left=12 \
     label.padding_right=12 \
     background.drawing=off \
   --add item codex_usage.popup.secondary_reset popup.codex_usage \
-  --set codex_usage.popup.secondary_reset drawing=on \
+  --set codex_usage.popup.secondary_reset drawing=off \
     label.font="SF pro:Semibold:13.0" \
     label.color=$LABEL_COLOR \
     label.padding_left=12 \

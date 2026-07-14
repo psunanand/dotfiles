@@ -57,12 +57,6 @@ def send(process: subprocess.Popen[str], message: dict[str, Any]) -> None:
     process.stdin.flush()
 
 
-def error_message(error: object) -> str:
-    if isinstance(error, dict) and isinstance(error.get("message"), str):
-        return error["message"]
-    return json.dumps(error, sort_keys=True)
-
-
 def read_response(
     process: subprocess.Popen[str], expected_id: int, timeout: float
 ) -> dict[str, Any]:
@@ -88,7 +82,7 @@ def read_response(
         if message.get("id") != expected_id:
             continue
         if "error" in message:
-            raise CodexUsageError(error_message(message["error"]))
+            raise CodexUsageError("Codex app-server request failed")
 
         result = message.get("result")
         if not isinstance(result, dict):
@@ -106,6 +100,22 @@ def format_reset(timestamp: object) -> str:
         return "unknown"
 
 
+def window_labels(duration_minutes: object) -> tuple[str, str]:
+    if duration_minutes == 300:
+        return "5-hour", "5h"
+    if duration_minutes == 10080:
+        return "Weekly", "W"
+    if isinstance(duration_minutes, int) and duration_minutes > 0:
+        if duration_minutes % 1440 == 0:
+            days = duration_minutes // 1440
+            return f"{days}-day", f"{days}d"
+        if duration_minutes % 60 == 0:
+            hours = duration_minutes // 60
+            return f"{hours}-hour", f"{hours}h"
+        return f"{duration_minutes}-minute", f"{duration_minutes}m"
+    return "Usage", "Usage"
+
+
 def format_window(window: object) -> dict[str, int | str] | None:
     if not isinstance(window, dict):
         return None
@@ -115,7 +125,13 @@ def format_window(window: object) -> dict[str, int | str] | None:
         return None
 
     remaining = max(0, min(100, round(100 - used_percent)))
-    return {"remaining": remaining, "reset": format_reset(window.get("resetsAt"))}
+    label, short_label = window_labels(window.get("windowDurationMins"))
+    return {
+        "label": label,
+        "short_label": short_label,
+        "remaining": remaining,
+        "reset": format_reset(window.get("resetsAt")),
+    }
 
 
 def rate_limits(result: dict[str, Any]) -> dict[str, Any]:
@@ -130,12 +146,14 @@ def rate_limits(result: dict[str, Any]) -> dict[str, Any]:
     raise CodexUsageError("Codex app-server returned no rate-limit data")
 
 
-def usage_snapshot(result: dict[str, Any]) -> dict[str, dict[str, int | str] | None]:
+def usage_snapshot(result: dict[str, Any]) -> dict[str, list[dict[str, int | str]]]:
     limits = rate_limits(result)
-    return {
-        "primary": format_window(limits.get("primary")),
-        "secondary": format_window(limits.get("secondary")),
-    }
+    windows = [
+        formatted
+        for key in ("primary", "secondary")
+        if (formatted := format_window(limits.get(key))) is not None
+    ]
+    return {"windows": windows}
 
 
 def terminate(process: subprocess.Popen[str]) -> None:
