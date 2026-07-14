@@ -190,6 +190,48 @@ sketchybar --add item clock right \
               label.padding_right=12 \
               background.drawing=off
 
+sketchybar --add item codex_usage right \
+  --set codex_usage \
+    background.drawing=off \
+    background.padding_left=0 \
+    background.padding_right=0 \
+    update_freq=60 \
+    script="$PLUGIN_DIR/codex_usage.sh" \
+    popup.background.color=$POPUP_BACKGROUND_COLOR \
+    popup.background.corner_radius=15 \
+    popup.background.border_width=2 \
+    popup.background.border_color=$ACCENT_COLOR \
+    popup.blur_radius=0 \
+  --subscribe codex_usage mouse.entered mouse.exited system_woke \
+  --add item codex_usage.popup.primary popup.codex_usage \
+  --set codex_usage.popup.primary drawing=on \
+    label.font="SF pro:Semibold:13.0" \
+    label.color=$LABEL_COLOR \
+    label.padding_left=12 \
+    label.padding_right=12 \
+    background.drawing=off \
+  --add item codex_usage.popup.primary_reset popup.codex_usage \
+  --set codex_usage.popup.primary_reset drawing=on \
+    label.font="SF pro:Semibold:13.0" \
+    label.color=$LABEL_COLOR \
+    label.padding_left=12 \
+    label.padding_right=12 \
+    background.drawing=off \
+  --add item codex_usage.popup.secondary popup.codex_usage \
+  --set codex_usage.popup.secondary drawing=on \
+    label.font="SF pro:Semibold:13.0" \
+    label.color=$LABEL_COLOR \
+    label.padding_left=12 \
+    label.padding_right=12 \
+    background.drawing=off \
+  --add item codex_usage.popup.secondary_reset popup.codex_usage \
+  --set codex_usage.popup.secondary_reset drawing=on \
+    label.font="SF pro:Semibold:13.0" \
+    label.color=$LABEL_COLOR \
+    label.padding_left=12 \
+    label.padding_right=12 \
+    background.drawing=off
+
 
 ##### Force all scripts to run the first time  #####
 sketchybar --update
