@@ -5,6 +5,17 @@ function zvm_after_init() {
 
 # PATH & COMPLETION INIT
 typeset -U path cdpath fpath manpath
+path+=("$HOME/.maestro/bin")
+
+# FZF SETTINGS
+export FZF_DEFAULT_COMMAND="fd --type file --hidden --exclude=.git"
+export FZF_DEFAULT_OPTS="--ansi --height 60% --reverse --bind=ctrl-t:toggle-preview"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi'"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+export FZF_CTRL_R_OPTS="--sort --exact --preview 'echo {}' --preview-window=up:3:hidden:wrap --bind ctrl-t:toggle-preview"
+
 autoload -Uz compinit
 compinit
 
@@ -31,8 +42,12 @@ zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $word 
 zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview 'case "$group" in "modified file") git diff $word | delta ;; "recent commit object name") git show --color=always $word | delta ;; *) git log --color=always $word ;; esac'
 
 # HISTORY SETTINGS
+export HISTFILE="$HOME/.local/share/zsh/zsh_history"
+export HISTSIZE=50000
+export SAVEHIST=50000
+[[ -d "${HISTFILE:h}" ]] || mkdir -p "${HISTFILE:h}"
+
 setopt HIST_FCNTL_LOCK
-setopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
@@ -52,7 +67,8 @@ setopt CORRECT
 # ANTIDOTE BOOTSTRAPPING
 zsh_plugins="$HOME/.zsh_plugins"
 [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
-fpath=("$(brew --prefix)/opt/antidote/share/antidote/functions" $fpath)
+homebrew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
+fpath=("$homebrew_prefix/opt/antidote/share/antidote/functions" $fpath)
 autoload -Uz antidote
 if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
   antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
@@ -97,7 +113,7 @@ if [[ -n "$KITTY_INSTALLATION_DIR" ]]; then
   kitty-integration
   unfunction kitty-integration
 fi
-source "$(brew --prefix)/etc/profile.d/zsh_command_not_found.sh" 2>/dev/null
+[[ -r "$homebrew_prefix/etc/profile.d/zsh_command_not_found.sh" ]] && source "$homebrew_prefix/etc/profile.d/zsh_command_not_found.sh"
 
 # TOOL EXPORTS
 export BAT_STYLE="numbers,changes,header"
@@ -105,5 +121,4 @@ export BAT_THEME="Monokai Extended Bright"
 export FD_OPTIONS="--hidden --exclude .git --exclude .DS_Store"
 
 # LOCAL COMPLETIONS
-source "/Users/psunanand/.openclaw/completions/openclaw.zsh"
-export PATH=$PATH:$HOME/.maestro/bin
+[[ -r "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"

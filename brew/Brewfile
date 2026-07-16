@@ -19,6 +19,7 @@ brew "uv"                    # Fast Python package manager
 
 # System & CLI Utilities (Command Line Utilities)
 brew "zsh"                   # Zsh shell (default shell)
+brew "zsh-completions"       # Additional completion definitions for Zsh
 brew "antidote"              # Lightweight zsh plugin manager
 brew "starship"              # Recommended prompt for zsh
 brew "zoxide"                # Better 'cd' (zoxide integrates with shells)
