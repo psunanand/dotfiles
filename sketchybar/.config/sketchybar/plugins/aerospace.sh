@@ -1,128 +1,101 @@
 #!/usr/bin/env bash
 
-source "$CONFIG_DIR/plugins/colors.sh"
+set -u
 
-if ! command -v aerospace &>/dev/null; then
-  exit 0
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/colors.sh"
+
+command -v aerospace >/dev/null 2>&1 || exit 0
+
+focused_workspace="${FOCUSED_WORKSPACE:-}"
+if [[ -z "$focused_workspace" ]]; then
+  focused_workspace="$(aerospace list-workspaces --focused 2>/dev/null)"
 fi
 
-# $1 is the workspace ID passed from sketchybarrc
-# $FOCUSED_WORKSPACE is passed from the Aerospace trigger
+workspace_monitors="$(
+  aerospace list-workspaces --monitor all \
+    --format '%{workspace} %{monitor-appkit-nsscreen-screens-id}' 2>/dev/null
+)"
+all_windows="$(
+  aerospace list-windows --monitor all \
+    --format $'%{workspace}\t%{app-name}' 2>/dev/null
+)"
 
-if [ -z "$FOCUSED_WORKSPACE" ]; then
-  FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
-fi
+state_dir="${SKETCHYBAR_STATE_DIR:-${TMPDIR:-/tmp}}"
+mkdir -p "$state_dir"
+printf '%s\n' "$focused_workspace" >"$state_dir/sketchybar_focused_workspace"
 
-# Determine display dynamically
-DISPLAY_ID=$(aerospace list-workspaces --monitor all --format "%{workspace} %{monitor-appkit-nsscreen-screens-id}" 2>/dev/null | awk -v ws="$1" '$1 == ws {print $2}')
-if [ -z "$DISPLAY_ID" ]; then
-  DISPLAY_ID=1
-  [ "$1" -ge 8 ] && DISPLAY_ID=2
-fi
+updates=()
 
-# Only update display if it changed
-DISPLAY_CACHE="/tmp/sketchybar_display_${NAME}"
-CACHED_DISPLAY=$(cat "$DISPLAY_CACHE" 2>/dev/null || echo "")
-if [ "$DISPLAY_ID" != "$CACHED_DISPLAY" ]; then
-  sketchybar --set "$NAME" display="$DISPLAY_ID"
-  echo "$DISPLAY_ID" > "$DISPLAY_CACHE"
-fi
+for workspace in {1..7}; do
+  monitor="$(awk -v workspace="$workspace" '$1 == workspace { print $2; exit }' <<<"$workspace_monitors")"
+  [[ -z "$monitor" ]] && monitor=1
 
-# Query unique app names (deduplicated)
-APPS=$(aerospace list-windows --workspace "$1" --format "%{app-name}" 2>/dev/null | sort -u)
-
-APP_COUNT=0
-APP_LIST=()
-if [ -n "$APPS" ]; then
+  apps=()
   while IFS= read -r app; do
-    APP_LIST+=("$app")
-  done <<< "$APPS"
-  APP_COUNT=${#APP_LIST[@]}
-fi
+    [[ -n "$app" ]] && apps+=("$app")
+  done < <(
+    awk -F '\t' -v workspace="$workspace" \
+      '$1 == workspace && !seen[$2]++ { print $2 }' <<<"$all_windows"
+  )
 
-IS_FOCUSED=false
-[ "$1" = "$FOCUSED_WORKSPACE" ] && IS_FOCUSED=true
-WS=$1
+  app_count=${#apps[@]}
+  updates+=(--set "space.$workspace" "display=$monitor")
 
-# --- Update the number pill ---
-if $IS_FOCUSED; then
-  sketchybar --set space."$1" \
-    label.drawing=on \
-    background.color=$BAR_COLOR \
-    background.border_color=$ACCENT_COLOR \
-    background.border_width=2 \
-    drawing=on
-  [ "$1" -lt 10 ] && sketchybar --set space."$1".sep drawing=on
-elif [ "$APP_COUNT" -gt 0 ]; then
-  sketchybar --set space."$1" \
-    label.drawing=on \
-    background.color=$BAR_COLOR \
-    background.border_width=0 \
-    drawing=on
-  [ "$1" -lt 10 ] && sketchybar --set space."$1".sep drawing=on
-else
-  sketchybar --set space."$1" drawing=off
-  for idx in 1 2 3; do
-    sketchybar --set space."$WS".app$idx drawing=off
-  done
-  [ "$1" -lt 10 ] && sketchybar --set space."$1".sep drawing=off
-  exit 0
-fi
+  if [[ "$workspace" == "$focused_workspace" ]]; then
+    updates+=(
+      drawing=on
+      "label=$workspace"
+      "label.color=$BAR_COLOR"
+      background.drawing=on
+      "background.color=$THEME_FOCUSED"
+    )
+  elif ((app_count > 0)); then
+    updates+=(
+      drawing=on
+      "label=$workspace"
+      "label.color=$THEME_MUTED"
+      background.drawing=on
+      "background.color=$THEME_TRANSPARENT"
+    )
+  else
+    updates+=(drawing=off)
+  fi
 
-# --- Update the app pills ---
-if [ "$APP_COUNT" -eq 0 ]; then
-  for idx in 1 2 3; do
-    sketchybar --set space."$WS".app$idx drawing=off
+  for index in 1 2 3; do
+    updates+=(
+      --set "space.$workspace.app$index"
+      "display=$monitor"
+      drawing=off
+    )
   done
-elif [ "$APP_COUNT" -le 3 ]; then
-  for ((i=0; i<3; i++)); do
-    idx=$((i+1))
-    if [ "$i" -lt "$APP_COUNT" ]; then
-      APP="${APP_LIST[$i]}"
-      sketchybar --set space."$WS".app$idx \
-        drawing=on \
-        display="$DISPLAY_ID" \
-        background.color=$BAR_COLOR \
-        background.border_width=0 \
-        icon.background.drawing=on \
-        icon.background.image="app.$APP" \
-        icon.background.image.scale=0.65 \
-        icon.padding_left=8 \
-        icon.padding_right=8 \
-        label.drawing=off
-    else
-      sketchybar --set space."$WS".app$idx drawing=off
-    fi
-  done
-else
-  for ((i=0; i<2; i++)); do
-    APP="${APP_LIST[$i]}"
-    sketchybar --set space."$WS".app$((i+1)) \
-      drawing=on \
-      display="$DISPLAY_ID" \
-      background.color=$BAR_COLOR \
-      background.border_width=0 \
-      icon.background.drawing=on \
-      icon.background.image="app.$APP" \
-      icon.background.image.scale=0.65 \
-      icon.padding_left=8 \
-      icon.padding_right=8 \
+
+  icon_count=$app_count
+  ((icon_count > 2)) && icon_count=2
+  for ((index = 0; index < icon_count; index++)); do
+    item_index=$((index + 1))
+    updates+=(
+      --set "space.$workspace.app$item_index"
+      "display=$monitor"
+      drawing=on
+      icon.background.drawing=on
+      "icon.background.image=app.${apps[$index]}"
+      icon.background.image.scale=0.62
       label.drawing=off
+    )
   done
 
-  EXTRA=$((APP_COUNT - 2))
-  sketchybar --set space."$WS".app3 \
-    drawing=on \
-    display="$DISPLAY_ID" \
-    background.color=$BAR_COLOR \
-    background.border_width=0 \
-    icon.background.drawing=off \
-    icon.padding_left=0 \
-    icon.padding_right=0 \
-    label.drawing=on \
-    label="+${EXTRA}" \
-    label.color=$GREY \
-    label.font="SF pro:Semibold:12.0" \
-    label.padding_left=8 \
-    label.padding_right=8
-fi
+  if ((app_count > 2)); then
+    updates+=(
+      --set "space.$workspace.app3"
+      "display=$monitor"
+      drawing=on
+      icon.background.drawing=off
+      label.drawing=on
+      "label=+$((app_count - 2))"
+      "label.color=$THEME_MUTED"
+    )
+  fi
+done
+
+sketchybar "${updates[@]}"

@@ -1,18 +1,12 @@
-# All the plugin files .sh must be chmod u+x
+#!/usr/bin/env bash
+
+CONFIG_DIR="${CONFIG_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
+source "$PLUGIN_DIR/ui.sh"
 
-# Load the color variables
-source "$PLUGIN_DIR/colors.sh"
-
-##### Bar Appearance #####
-# Configuring the general appearance of the bar.
-# For all options see:
-# https://felixkratz.github.io/SketchyBar/config/bar
-# For color picker see:
-# https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 bar=(
   height=36
-  color=$BAR_COLOR
+  color="$BAR_COLOR"
   shadow=on
   position=top
   sticky=on
@@ -22,216 +16,180 @@ bar=(
 )
 sketchybar --bar "${bar[@]}"
 
-##### Changing Defaults #####
-# We now change some default values, which are applied to all further items.
-# For a full list of all available item properties see:
-# https://felixkratz.github.io/SketchyBar/config/items
-
 default=(
   drawing=on
   icon.font="SauceCodePro Nerd Font:Bold:16.0"
-  label.font="SF pro:Semibold:14.0"
-  icon.color=$ICON_COLOR
-  label.color=$LABEL_COLOR
-
-  # --- THE PILL GEOMETRY ---
-  background.color=$ITEM_BG_COLOR
-  background.corner_radius=15      # Rounded ends for the pill
-  background.height=26             # Smaller than bar height (36) to float
-  background.drawing=on            # Explicitly enable background drawing
-  background.border_width=0        # No border
-
-  # --- PADDING & SPACING ---
-  icon.padding_left=10
+  label.font="SF Pro:Semibold:13.0"
+  "icon.color=$THEME_NORMAL"
+  "label.color=$THEME_NORMAL"
+  background.drawing=on
+  "background.color=$THEME_TRANSPARENT"
+  background.corner_radius=8
+  background.height=26
+  background.border_width=0
+  icon.padding_left=7
   icon.padding_right=4
-  label.padding_left=4
-  label.padding_right=10
-  background.padding_left=5
-  background.padding_right=5
+  label.padding_left=3
+  label.padding_right=7
+  background.padding_left=2
+  background.padding_right=2
 )
 sketchybar --default "${default[@]}"
 
+add_popup_row() {
+  local item="$1"
+  local parent="$2"
+  local icon="$3"
+  sketchybar --add item "$item" "popup.$parent" \
+    --set "$item" "${POPUP_ROW_STYLE[@]}" icon="$icon"
+}
 
-##### Adding Mission Control Space Indicators #####
-# Let's add some mission control spaces:
-# https://felixkratz.github.io/SketchyBar/config/components#space----associate-mission-control-spaces-with-an-item
-# to indicate active and available mission control spaces.
-
-##### Adding Left Items #####
-# We add some regular items to the left side of the bar, where
-# only the properties deviating from the current defaults need to be set
-
-# Add the aerospace_workspace_change event we specified in aerospace.toml
 sketchybar --add event aerospace_workspace_change
 
-for sid in {1..10}; do
-    sketchybar --add item space.$sid left \
-        --subscribe space.$sid aerospace_workspace_change \
-        --set space.$sid \
-            drawing=off \
-            script="$CONFIG_DIR/plugins/aerospace.sh $sid" \
-            click_script="aerospace workspace $sid" \
-            icon.drawing=off \
-            label="$sid" \
-            label.padding_left=12 \
-            label.padding_right=12
+for workspace in {1..7}; do
+  sketchybar --add item "space.$workspace" left \
+    --set "space.$workspace" \
+      drawing=off \
+      label="$workspace" \
+      icon.drawing=off \
+      label.padding_left=8 \
+      label.padding_right=8 \
+      background.padding_left=1 \
+      background.padding_right=1 \
+      script="$PLUGIN_DIR/ui.sh" \
+      click_script="aerospace workspace $workspace" \
+    --subscribe "space.$workspace" mouse.entered mouse.exited mouse.exited.global
 
-    for idx in 1 2 3; do
-        sketchybar --add item space.$sid.app$idx left \
-            --set space.$sid.app$idx \
-                drawing=off \
-                click_script="aerospace workspace $sid"
-    done
-
-    if [ "$sid" -lt 10 ]; then
-        sketchybar --add item space.$sid.sep left \
-            --set space.$sid.sep \
-                drawing=off \
-                icon="│" \
-                icon.font="SF Pro:Semibold:14.0" \
-                icon.color=$GREY \
-                icon.padding_left=2 \
-                icon.padding_right=2 \
-                label.drawing=off \
-                background.drawing=off
-    fi
+  for index in 1 2 3; do
+    sketchybar --add item "space.$workspace.app$index" left \
+      --set "space.$workspace.app$index" \
+        drawing=off \
+        icon="" \
+        icon.width=18 \
+        icon.padding_left=3 \
+        icon.padding_right=3 \
+        label.font="SF Pro:Semibold:11.0" \
+        label.padding_left=4 \
+        label.padding_right=4 \
+        background.padding_left=0 \
+        background.padding_right=0 \
+        script="$PLUGIN_DIR/ui.sh" \
+        click_script="aerospace workspace $workspace" \
+      --subscribe "space.$workspace.app$index" mouse.entered mouse.exited mouse.exited.global
+  done
 done
 
-sketchybar --add item space_separator left \
-  --set space_separator icon="􀆊" \
-  icon.font="SF Pro:Heavy:18.0" \
-  icon.color=$GREY \
-  icon.padding_left=4 \
-  label.drawing=off \
-  background.drawing=off
+sketchybar --add item workspace_observer left \
+  --set workspace_observer \
+    drawing=off \
+    updates=on \
+    update_freq=5 \
+    script="$PLUGIN_DIR/aerospace.sh" \
+  --subscribe workspace_observer aerospace_workspace_change system_woke
+
+sketchybar --add item front_app.badge left \
+  --set front_app.badge \
+    display=active \
+    icon.drawing=off \
+    label=ACTIVE \
+    label.font="SF Pro:Bold:10.0" \
+    "label.color=$BAR_COLOR" \
+    label.padding_left=7 \
+    label.padding_right=7 \
+    background.drawing=on \
+    "background.color=$THEME_FOCUSED" \
+    background.height=20 \
+    background.corner_radius=6 \
+    background.padding_left=3 \
+    background.padding_right=2
 
 sketchybar --add item front_app left \
-           --set front_app \
-           display=active \
-           script="$PLUGIN_DIR/front_app.sh" \
-           click_script="open -a 'Mission Control'" \
-           --subscribe front_app front_app_switched
+  --set front_app \
+    display=active \
+    background.drawing=on \
+    "background.color=$THEME_TRANSPARENT" \
+    background.height=22 \
+    background.corner_radius=6 \
+    background.padding_left=0 \
+    background.padding_right=3 \
+    script="$PLUGIN_DIR/front_app.sh" \
+    click_script="open -a 'Mission Control'" \
+  --subscribe front_app front_app_switched mouse.entered mouse.exited mouse.exited.global
 
-##### Adding Right Items #####
-# In the same way as the left items we can add items to the right side.
-# Additional position (e.g. center) are available, see:
-# https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
+sketchybar --add bracket front_app.group front_app.badge front_app \
+  --set front_app.group \
+    display=active \
+    background.drawing=on \
+    "background.color=$THEME_POPUP" \
+    background.height=26 \
+    background.corner_radius=8 \
+    background.border_width=1 \
+    "background.border_color=$THEME_FOCUSED"
 
-# Some items refresh on a fixed cycle, e.g. the clock runs its script once
-# every 10s. Other items respond to events they subscribe to, e.g. the
-# volume.sh script is only executed once an actual change in system audio
-# volume is registered. More info about the event system can be found here:
-# https://felixkratz.github.io/SketchyBar/config/events
-
+# Right-side items are added from the outside edge inward.
 sketchybar --add item clock right \
-           --set clock background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=10 script="$PLUGIN_DIR/clock.sh" \
-           click_script="open -a Calendar" \
-           --add item volume right \
-            --set volume background.drawing=off background.padding_left=0 background.padding_right=0 script="$PLUGIN_DIR/volume.sh" \
-            click_script="open x-apple.systempreferences:com.apple.Sound-Settings.extension" \
-            --subscribe volume volume_change \
-            --add item battery right \
-            --set battery background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-            click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
-            --subscribe battery system_woke power_source_change \
-           --add item network right \
-            --set network \
-              background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=2 label.drawing=off script="$PLUGIN_DIR/network.sh" \
-              popup.background.color=$POPUP_BACKGROUND_COLOR \
-              popup.background.corner_radius=15 \
-              popup.background.border_width=2 \
-              popup.background.border_color=$ACCENT_COLOR \
-              popup.blur_radius=0 \
-              click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
-            --subscribe network wifi_change mouse.entered mouse.exited system_woke \
-            --add item network.popup.ssid popup.network \
-            --set network.popup.ssid drawing=on \
-              label.font="SF pro:Semibold:13.0" \
-              label.color=$LABEL_COLOR \
-              label.padding_left=12 \
-              label.padding_right=12 \
-              background.drawing=off \
-            --add item network.popup.speed popup.network \
-            --set network.popup.speed drawing=on \
-              label.font="SF pro:Semibold:13.0" \
-              label.color=$LABEL_COLOR \
-              label.padding_left=12 \
-              label.padding_right=12 \
-              background.drawing=off \
-           --add item usage right \
-            --set usage \
-              background.drawing=off background.padding_left=0 background.padding_right=0 update_freq=10 label.drawing=off script="$PLUGIN_DIR/usage.sh" \
-              popup.background.color=$POPUP_BACKGROUND_COLOR \
-              popup.background.corner_radius=15 \
-              popup.background.border_width=2 \
-              popup.background.border_color=$ACCENT_COLOR \
-              popup.blur_radius=0 \
-              click_script="open -a 'Activity Monitor'" \
-            --subscribe usage mouse.entered mouse.exited system_woke \
-            --add item usage.popup.cpu popup.usage \
-            --set usage.popup.cpu drawing=on \
-              label.font="SF pro:Semibold:13.0" \
-              label.color=$LABEL_COLOR \
-              label.padding_left=12 \
-              label.padding_right=12 \
-              background.drawing=off \
-            --add item usage.popup.ram popup.usage \
-            --set usage.popup.ram drawing=on \
-              label.font="SF pro:Semibold:13.0" \
-              label.color=$LABEL_COLOR \
-              label.padding_left=12 \
-              label.padding_right=12 \
-              background.drawing=off \
-            --add item usage.popup.disk popup.usage \
-            --set usage.popup.disk drawing=on \
-              label.font="SF pro:Semibold:13.0" \
-              label.color=$LABEL_COLOR \
-              label.padding_left=12 \
-              label.padding_right=12 \
-              background.drawing=off
+  --set clock \
+    update_freq=10 \
+    script="$PLUGIN_DIR/clock.sh" \
+    click_script="open -a Calendar" \
+    "${POPUP_STYLE[@]}" \
+  --subscribe clock mouse.entered mouse.exited mouse.exited.global system_woke
+add_popup_row clock.popup.date clock "󰃭"
+add_popup_row clock.popup.time clock "󰥔"
+
+sketchybar --add item battery right \
+  --set battery \
+    update_freq=120 \
+    script="$PLUGIN_DIR/battery.sh" \
+    click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
+    "${POPUP_STYLE[@]}" \
+  --subscribe battery system_woke power_source_change mouse.entered mouse.exited mouse.exited.global
+add_popup_row battery.popup.power battery "󰚥"
+add_popup_row battery.popup.estimate battery "󰔟"
+
+sketchybar --add item volume right \
+  --set volume \
+    label.drawing=off \
+    script="$PLUGIN_DIR/volume.sh" \
+    click_script="open x-apple.systempreferences:com.apple.Sound-Settings.extension" \
+    "${POPUP_STYLE[@]}" \
+  --subscribe volume volume_change system_woke mouse.entered mouse.exited mouse.exited.global
+add_popup_row volume.popup.level volume "󰕾"
+
+sketchybar --add item network right \
+  --set network \
+    label.drawing=off \
+    update_freq=2 \
+    script="$PLUGIN_DIR/network.sh" \
+    click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
+    background.padding_left=5 \
+    "${POPUP_STYLE[@]}" \
+  --subscribe network wifi_change system_woke mouse.entered mouse.exited mouse.exited.global
+add_popup_row network.popup.ssid network "󰖩"
+add_popup_row network.popup.speed network "󰯎"
+
+sketchybar --add item usage right \
+  --set usage \
+    label.drawing=off \
+    update_freq=10 \
+    script="$PLUGIN_DIR/usage.sh" \
+    click_script="open -a 'Activity Monitor'" \
+    "${POPUP_STYLE[@]}" \
+  --subscribe usage system_woke mouse.entered mouse.exited mouse.exited.global
+add_popup_row usage.popup.cpu usage "󰻠"
+add_popup_row usage.popup.ram usage "󰍛"
+add_popup_row usage.popup.disk usage "󰋊"
 
 sketchybar --add item codex_usage right \
   --set codex_usage \
-    background.drawing=off \
-    background.padding_left=0 \
-    background.padding_right=0 \
     update_freq=60 \
     script="$PLUGIN_DIR/codex_usage.sh" \
-    popup.background.color=$POPUP_BACKGROUND_COLOR \
-    popup.background.corner_radius=15 \
-    popup.background.border_width=2 \
-    popup.background.border_color=$ACCENT_COLOR \
-    popup.blur_radius=0 \
-  --subscribe codex_usage mouse.entered mouse.exited system_woke \
-  --add item codex_usage.popup.primary popup.codex_usage \
-  --set codex_usage.popup.primary drawing=on \
-    label.font="SF pro:Semibold:13.0" \
-    label.color=$LABEL_COLOR \
-    label.padding_left=12 \
-    label.padding_right=12 \
-    background.drawing=off \
-  --add item codex_usage.popup.primary_reset popup.codex_usage \
-  --set codex_usage.popup.primary_reset drawing=on \
-    label.font="SF pro:Semibold:13.0" \
-    label.color=$LABEL_COLOR \
-    label.padding_left=12 \
-    label.padding_right=12 \
-    background.drawing=off \
-  --add item codex_usage.popup.secondary popup.codex_usage \
-  --set codex_usage.popup.secondary drawing=off \
-    label.font="SF pro:Semibold:13.0" \
-    label.color=$LABEL_COLOR \
-    label.padding_left=12 \
-    label.padding_right=12 \
-    background.drawing=off \
-  --add item codex_usage.popup.secondary_reset popup.codex_usage \
-  --set codex_usage.popup.secondary_reset drawing=off \
-    label.font="SF pro:Semibold:13.0" \
-    label.color=$LABEL_COLOR \
-    label.padding_left=12 \
-    label.padding_right=12 \
-    background.drawing=off
+    background.padding_left=5 \
+    "${POPUP_STYLE[@]}" \
+  --subscribe codex_usage system_woke mouse.entered mouse.exited mouse.exited.global
+add_popup_row codex_usage.popup.primary codex_usage "󰚩"
+add_popup_row codex_usage.popup.primary_reset codex_usage "󰑐"
+add_popup_row codex_usage.popup.secondary codex_usage "󰚩"
+add_popup_row codex_usage.popup.secondary_reset codex_usage "󰑐"
 
-
-##### Force all scripts to run the first time  #####
 sketchybar --update

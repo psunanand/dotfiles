@@ -1,77 +1,90 @@
 #!/usr/bin/env bash
 
-STATE_FILE="/tmp/sketchybar_net_state"
-[[ ! -f "$STATE_FILE" ]] && echo "0 0 $(date +%s)" >"$STATE_FILE"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/ui.sh"
 
-# Find the active gateway interface
-INTERFACE=$(route -n get default 2>/dev/null | awk '/interface: / {print $2}')
+state_dir="${SKETCHYBAR_STATE_DIR:-${TMPDIR:-/tmp}}"
+mkdir -p "$state_dir"
+state_file="$state_dir/sketchybar_network_state"
+current_time="$(date +%s)"
+interface="$(route -n get default 2>/dev/null | awk '/interface: / { print $2; exit }')"
 
-if [[ -z "$INTERFACE" ]]; then
-  sketchybar --set "$NAME" icon="􀙈" label="Offline"
+if [[ -z "$interface" ]]; then
+  printf 'offline 0 0 %s\n' "$current_time" >"$state_file"
+  sketchybar --set "$NAME" icon="􀙈" "icon.color=$THEME_CRITICAL" \
+    --set "$NAME.popup.ssid" label="Offline" \
+    --set "$NAME.popup.speed" label="↓0 B/s  ↑0 B/s"
+  ui_handle_popup_event && exit 0
   exit 0
 fi
 
-# Extract hardware type
-HW_TYPE=$(networksetup -listallhardwareports | grep -B 1 "$INTERFACE" | awk -F': ' '/Hardware Port/ {print $2}')
+hardware_type="$(
+  networksetup -listallhardwareports 2>/dev/null |
+    awk -v interface="$interface" '
+      /^Hardware Port:/ { port = substr($0, index($0, ":") + 2) }
+      /^Device:/ && $2 == interface { print port; exit }
+    '
+)"
+[[ -z "$hardware_type" && "$interface" == bridge* ]] && hardware_type="Bridge"
+[[ -z "$hardware_type" ]] && hardware_type="Virtual"
 
-if [[ -z "$HW_TYPE" ]]; then
-  [[ "$INTERFACE" == bridge* ]] && HW_TYPE="Bridge" || HW_TYPE="Virtual"
+ssid=""
+if [[ "$hardware_type" == "Wi-Fi" ]]; then
+  ssid="$(ipconfig getsummary "$interface" 2>/dev/null | awk -F ': ' '/ SSID : / { print $2; exit }')"
 fi
 
-SSID=""
-if [[ "$HW_TYPE" == "Wi-Fi" ]]; then
-  SSID=$(ipconfig getsummary "$INTERFACE" | awk -F': ' '/ SSID : / {print $2}' | xargs)
+network_data="$(netstat -ibnI "$interface" 2>/dev/null | awk 'NR == 2 { print $7, $10; exit }')"
+current_down=${network_data%% *}
+current_up=${network_data##* }
+[[ "$current_down" =~ ^[0-9]+$ ]] || current_down=0
+[[ "$current_up" =~ ^[0-9]+$ ]] || current_up=0
+
+previous_interface=none
+previous_down=0
+previous_up=0
+previous_time=$current_time
+if [[ -f "$state_file" ]]; then
+  read -r previous_interface previous_down previous_up previous_time <"$state_file"
 fi
+printf '%s %s %s %s\n' "$interface" "$current_down" "$current_up" "$current_time" >"$state_file"
 
-# Calculate the network speed using delta
-NET_DATA=$(netstat -ibnI "$INTERFACE" | awk 'NR==2 {print $7, $10}')
-CURR_DOWN=${NET_DATA%% *}
-CURR_UP=${NET_DATA##* }
-CURR_TIME=$(date +%s)
-
-read PREV_DOWN PREV_UP PREV_TIME <"$STATE_FILE"
-echo "$CURR_DOWN $CURR_UP $CURR_TIME" >"$STATE_FILE"
-INTERVAL=$((CURR_TIME - PREV_TIME))
-[[ $INTERVAL -le 0 ]] && INTERVAL=1
-
-BPS_DOWN=$(((CURR_DOWN - PREV_DOWN) / INTERVAL))
-BPS_UP=$(((CURR_UP - PREV_UP) / INTERVAL))
+interval=$((current_time - previous_time))
+((interval <= 0)) && interval=1
+if [[ "$interface" != "$previous_interface" ]]; then
+  bytes_down=0
+  bytes_up=0
+else
+  bytes_down=$(((current_down - previous_down) / interval))
+  bytes_up=$(((current_up - previous_up) / interval))
+  ((bytes_down < 0)) && bytes_down=0
+  ((bytes_up < 0)) && bytes_up=0
+fi
 
 format_speed() {
-  local bytes=$1
-  if ((bytes > 1048576)); then
-    printf "%.1f MB/s" "$(echo "$bytes / 1048576" | bc -l)"
-  elif ((bytes > 1024)); then
-    printf "%.1f KB/s" "$(echo "$bytes / 1024" | bc -l)"
-  else
-    printf "%d B/s" "$bytes"
-  fi
+  awk -v bytes="$1" 'BEGIN {
+    if (bytes >= 1048576) printf "%.1f MB/s", bytes / 1048576
+    else if (bytes >= 1024) printf "%.1f KB/s", bytes / 1024
+    else printf "%d B/s", bytes
+  }'
 }
 
-DOWN_STR=$(format_speed "$BPS_DOWN")
-UP_STR=$(format_speed "$BPS_UP")
+down_label="$(format_speed "$bytes_down")"
+up_label="$(format_speed "$bytes_up")"
+color="$THEME_NORMAL"
 
-if [[ "$HW_TYPE" == "Wi-Fi" ]]; then
-  ICON="􀙇"
-  LABEL="$SSID"
-elif [[ "$HW_TYPE" == *"Ethernet"* || "$HW_TYPE" == *"Thunderbolt"* ]]; then
-  ICON="􀤆"
-  LABEL="Wired"
+if [[ "$hardware_type" == "Wi-Fi" ]]; then
+  icon="􀙇"
+  network_label="${ssid:-Wi-Fi}"
+elif [[ "$hardware_type" == *Ethernet* || "$hardware_type" == *Thunderbolt* ]]; then
+  icon="􀤆"
+  network_label="Wired"
 else
-  ICON="􀁶"
-  LABEL="Other"
+  icon="􀁶"
+  network_label="$hardware_type"
 fi
 
-case "$SENDER" in
-"mouse.entered")
-  sketchybar --set "$NAME" popup.drawing=on
-  ;;
-"mouse.exited")
-  sketchybar --set "$NAME" popup.drawing=off
-  ;;
-*)
-  sketchybar --set "$NAME" icon="$ICON" label="$LABEL" icon.padding_right=12 \
-    --set "$NAME".popup.ssid label="$LABEL" \
-    --set "$NAME".popup.speed label="↓$DOWN_STR  ↑$UP_STR"
-  ;;
-esac
+sketchybar --set "$NAME" icon="$icon" "icon.color=$color" \
+  --set "$NAME.popup.ssid" "label=$network_label" \
+  --set "$NAME.popup.speed" "label=↓$down_label  ↑$up_label"
+
+ui_handle_popup_event && exit 0

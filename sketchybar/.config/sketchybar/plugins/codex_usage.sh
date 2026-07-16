@@ -6,13 +6,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HELPER="$SCRIPT_DIR/../helpers/codex_usage.py"
 ICON="󰚩"
 
-source "$SCRIPT_DIR/colors.sh"
+source "$SCRIPT_DIR/ui.sh"
 
 set_unavailable() {
   sketchybar --set "$NAME" \
     icon="$ICON" \
-    label="Codex ?" \
-    label.color="$GREY" \
+    label="?" \
+    label.color="$THEME_MUTED" \
     --set "$NAME".popup.primary drawing=on label="Usage unavailable" \
     --set "$NAME".popup.primary_reset drawing=off \
     --set "$NAME".popup.secondary drawing=off \
@@ -21,11 +21,11 @@ set_unavailable() {
 
 case "${SENDER:-}" in
 "mouse.entered")
-  sketchybar --set "$NAME" popup.drawing=on
+  ui_show_popup
   exit 0
   ;;
-"mouse.exited")
-  sketchybar --set "$NAME" popup.drawing=off
+"mouse.exited" | "mouse.exited.global")
+  ui_hide_popup
   exit 0
   ;;
 esac
@@ -40,7 +40,7 @@ if ! window_count="$(jq -er '.windows | length' <<<"$result" 2>/dev/null)" || ((
   exit 0
 fi
 
-summary="$(jq -r '[.windows[] | "\(.short_label) \(.remaining)%"] | join(" · ")' <<<"$result")"
+summary="$(jq -r '.windows | min_by(.remaining) | "\(.short_label) \(.remaining)%"' <<<"$result")"
 lowest_remaining="$(jq -er '[.windows[].remaining] | min' <<<"$result")"
 first_label="$(jq -r '.windows[0].label' <<<"$result")"
 first_remaining="$(jq -r '.windows[0].remaining' <<<"$result")"
@@ -50,11 +50,11 @@ second_remaining="$(jq -r '.windows[1].remaining // empty' <<<"$result")"
 second_reset="$(jq -r '.windows[1].reset // empty' <<<"$result")"
 
 if (( lowest_remaining <= 10 )); then
-  color="$RED"
+  color="$THEME_CRITICAL"
 elif (( lowest_remaining <= 30 )); then
-  color="$YELLOW"
+  color="$THEME_WARNING"
 else
-  color="$GREEN"
+  color="$THEME_HEALTHY"
 fi
 
 sketchybar --set "$NAME" \
