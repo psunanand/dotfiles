@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/.." && pwd)"
+DOTFILES_DIR="${0:A:h:h}"
 
 if command -v stow &>/dev/null; then
   echo "Action: Restowing configurations..."
