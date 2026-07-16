@@ -9,7 +9,7 @@ mouse.entered)
   exit 0
   ;;
 mouse.exited | mouse.exited.global)
-  ui_unhover "$THEME_TRANSPARENT"
+  ui_unhover "$THEME_POPUP"
   exit 0
   ;;
 esac
@@ -23,8 +23,8 @@ fi
 [[ -z "$app_name" ]] && exit 0
 
 label="$app_name"
-if ((${#label} > 20)); then
-  label="${label:0:19}…"
+if ((${#label} > 18)); then
+  label="${label:0:17}…"
 fi
 
 sketchybar --set "$NAME" \
@@ -32,6 +32,6 @@ sketchybar --set "$NAME" \
   "label.color=$THEME_NORMAL" \
   icon.background.drawing=on \
   "icon.background.image=app.$app_name" \
-  icon.background.image.scale=0.62 \
+  icon.background.image.scale=0.58 \
   background.drawing=on \
-  "background.color=$THEME_TRANSPARENT"
+  "background.color=$THEME_POPUP"

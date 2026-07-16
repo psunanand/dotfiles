@@ -40,38 +40,64 @@ for workspace in {1..7}; do
   )
 
   app_count=${#apps[@]}
-  updates+=(--set "space.$workspace" "display=$monitor")
 
   if [[ "$workspace" == "$focused_workspace" ]]; then
     updates+=(
+      --set "space.$workspace"
+      "display=$monitor"
       drawing=on
       "label=$workspace"
-      "label.color=$BAR_COLOR"
+      "label.color=$THEME_FOCUSED"
+      --set "space.$workspace.group"
       background.drawing=on
-      "background.color=$THEME_FOCUSED"
+      "background.color=$THEME_POPUP"
+      background.border_width=1
+      "background.border_color=$THEME_FOCUSED"
+      --set "space.$workspace.gap"
+      "display=$monitor"
+      drawing=on
     )
   elif ((app_count > 0)); then
     updates+=(
+      --set "space.$workspace"
+      "display=$monitor"
       drawing=on
       "label=$workspace"
       "label.color=$THEME_MUTED"
+      --set "space.$workspace.group"
       background.drawing=on
-      "background.color=$THEME_TRANSPARENT"
+      "background.color=$THEME_POPUP"
+      background.border_width=0
+      "background.border_color=$THEME_TRANSPARENT"
+      --set "space.$workspace.gap"
+      "display=$monitor"
+      drawing=on
     )
   else
-    updates+=(drawing=off)
+    updates+=(
+      --set "space.$workspace"
+      "display=$monitor"
+      drawing=off
+      --set "space.$workspace.group"
+      background.drawing=off
+      --set "space.$workspace.gap"
+      "display=$monitor"
+      drawing=off
+    )
   fi
 
-  for index in 1 2 3; do
+  for index in 1 2 3 4; do
     updates+=(
       --set "space.$workspace.app$index"
       "display=$monitor"
       drawing=off
+      icon.background.drawing=off
+      label.drawing=off
     )
   done
 
   icon_count=$app_count
-  ((icon_count > 2)) && icon_count=2
+  ((icon_count > 3)) && icon_count=3
   for ((index = 0; index < icon_count; index++)); do
     item_index=$((index + 1))
     updates+=(
@@ -80,19 +106,19 @@ for workspace in {1..7}; do
       drawing=on
       icon.background.drawing=on
       "icon.background.image=app.${apps[$index]}"
-      icon.background.image.scale=0.62
+      icon.background.image.scale=0.58
       label.drawing=off
     )
   done
 
-  if ((app_count > 2)); then
+  if ((app_count > 3)); then
     updates+=(
-      --set "space.$workspace.app3"
+      --set "space.$workspace.app4"
       "display=$monitor"
       drawing=on
       icon.background.drawing=off
       label.drawing=on
-      "label=+$((app_count - 2))"
+      "label=+$((app_count - 3))"
       "label.color=$THEME_MUTED"
     )
   fi

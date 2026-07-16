@@ -17,16 +17,19 @@ POPUP_ROW_STYLE=(
   icon.drawing=on
   icon.font="SauceCodePro Nerd Font:Bold:13.0"
   icon.color="$THEME_MUTED"
-  icon.width=16
-  icon.padding_left=10
-  icon.padding_right=4
+  icon.width=24
+  icon.align=center
+  icon.padding_left=0
+  icon.padding_right=0
   label.font="SF Pro:Semibold:12.0"
   label.color="$THEME_NORMAL"
-  label.padding_left=4
-  label.padding_right=10
+  label.padding_left=6
+  label.padding_right=0
   background.drawing=on
   background.color="$THEME_TRANSPARENT"
   background.height=28
+  background.padding_left=10
+  background.padding_right=10
 )
 
 ui_hover() {

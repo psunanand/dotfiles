@@ -113,10 +113,20 @@ class PluginCommandTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("--set space.2", sketchybar)
-        self.assertIn("background.color=0xffa7c080", sketchybar)
+        self.assertRegex(
+            sketchybar,
+            r"--set space\.2\.group .*background\.drawing=on "
+            r".*background\.border_width=1 "
+            r".*background\.border_color=0xffa7c080",
+        )
+        self.assertRegex(sketchybar, r"--set space\.2\.gap .*drawing=on")
         self.assertRegex(sketchybar, r"--set space\.1 .*drawing=off")
+        self.assertRegex(
+            sketchybar, r"--set space\.1\.group .*background\.drawing=off"
+        )
+        self.assertRegex(sketchybar, r"--set space\.1\.gap .*drawing=off")
 
-    def test_apps_are_deduplicated_and_overflow_follows_two_icons(self):
+    def test_apps_are_deduplicated_and_overflow_follows_three_icons(self):
         result, sketchybar, aerospace = self.run_workspace_observer(
             MOCK_FOCUSED_WORKSPACE="1",
             MOCK_WINDOWS=(
@@ -131,7 +141,10 @@ class PluginCommandTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(sketchybar.count("icon.background.image=app.Google Chrome"), 1)
         self.assertIn("icon.background.image=app.kitty", sketchybar)
-        self.assertIn("label=+2", sketchybar)
+        self.assertIn("icon.background.image=app.Notes", sketchybar)
+        self.assertNotIn("icon.background.image=app.Slack", sketchybar)
+        self.assertIn("--set space.1.app4", sketchybar)
+        self.assertIn("label=+1", sketchybar)
         self.assertEqual(aerospace.count("list-windows"), 1)
         self.assertIn("list-windows --monitor all", aerospace)
 
@@ -145,6 +158,8 @@ class PluginCommandTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertRegex(sketchybar, r"--set space\.7 .*display=42")
         self.assertRegex(sketchybar, r"--set space\.7\.app1 .*display=42")
+        self.assertRegex(sketchybar, r"--set space\.7\.app4 .*display=42")
+        self.assertRegex(sketchybar, r"--set space\.7\.gap .*display=42")
 
     def test_battery_accepts_pmset_tab_before_percentage(self):
         result, sketchybar = self.run_plugin("battery.sh", NAME="battery")
@@ -179,19 +194,34 @@ class PluginCommandTests(unittest.TestCase):
             )[0]
             self.assertIn('${POPUP_STYLE[@]}', block, item)
 
-    def test_popup_rows_use_fixed_width_muted_semantic_icons(self):
+    def test_clock_popup_shows_the_date_without_repeating_the_time(self):
+        result, sketchybar = self.run_plugin("clock.sh", NAME="clock")
+        config = (ROOT / "sketchybarrc").read_text()
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--set clock icon=", sketchybar)
+        self.assertIn("--set clock.popup.date", sketchybar)
+        self.assertNotIn("clock.popup.time", sketchybar)
+        self.assertNotIn("clock.popup.time", config)
+
+    def test_popup_rows_reserve_a_centered_icon_column_before_labels(self):
         config = (ROOT / "sketchybarrc").read_text()
         ui = (PLUGINS / "ui.sh").read_text()
 
         self.assertIn("icon.drawing=on", ui)
-        self.assertIn("icon.width=16", ui)
+        self.assertIn("icon.width=24", ui)
+        self.assertIn("icon.align=center", ui)
+        self.assertIn("icon.padding_left=0", ui)
+        self.assertIn("icon.padding_right=0", ui)
+        self.assertIn("label.padding_left=6", ui)
+        self.assertIn("background.padding_left=10", ui)
+        self.assertIn("background.padding_right=10", ui)
         self.assertIn('icon.color="$THEME_MUTED"', ui)
         self.assertIn('local icon="$3"', config)
         self.assertIn('icon="$icon"', config)
 
         expected_rows = (
             "clock.popup.date clock",
-            "clock.popup.time clock",
             "battery.popup.power battery",
             "battery.popup.estimate battery",
             "volume.popup.level volume",
@@ -208,29 +238,54 @@ class PluginCommandTests(unittest.TestCase):
         for row in expected_rows:
             self.assertRegex(config, rf"add_popup_row {row} \S+")
 
-    def test_front_app_has_stable_active_badge_and_group(self):
+    def test_workspace_items_are_wrapped_in_soft_capsules(self):
         config = (ROOT / "sketchybarrc").read_text()
 
+        self.assertIn('--add bracket "space.$workspace.group"', config)
+        group = config.split(
+            '--add bracket "space.$workspace.group"', 1
+        )[1].split('--set "space.$workspace.group"', 1)[0]
+        for member in (
+            '"space.$workspace"',
+            '"space.$workspace.app1"',
+            '"space.$workspace.app2"',
+            '"space.$workspace.app3"',
+            '"space.$workspace.app4"',
+        ):
+            self.assertIn(member, group)
+        self.assertIn('"background.color=$THEME_POPUP"', config)
         self.assertRegex(
             config,
-            r"(?s)--add item front_app\.badge left.*?display=active.*?label=ACTIVE",
+            r'(?s)--add item "space\.\$workspace\.gap" left.*?width=4',
         )
+
+    def test_front_app_is_a_single_compact_chip(self):
+        config = (ROOT / "sketchybarrc").read_text()
+
+        self.assertNotIn("front_app.badge", config)
+        self.assertNotIn("front_app.group", config)
         self.assertRegex(
             config,
             r"(?s)--add item front_app left.*?display=active.*?script=\"\$PLUGIN_DIR/front_app\.sh\"",
         )
-        self.assertRegex(
-            config,
-            r"(?s)--add bracket front_app\.group front_app\.badge front_app.*?display=active",
-        )
-        group = config.split("--add bracket front_app.group", 1)[1].split(
+        front_app = config.split("sketchybar --add item front_app left", 1)[1].split(
             "# Right-side items", 1
         )[0]
-        self.assertIn("background.height=26", group)
-        self.assertIn("background.corner_radius=8", group)
-        self.assertIn('"background.color=$THEME_POPUP"', group)
-        self.assertIn('"background.border_color=$THEME_FOCUSED"', group)
-        self.assertIn("background.border_width=1", group)
+        self.assertIn("background.height=26", front_app)
+        self.assertIn("background.corner_radius=8", front_app)
+        self.assertIn('"background.color=$THEME_POPUP"', front_app)
+
+    def test_front_app_truncates_long_names_to_eighteen_characters(self):
+        result, sketchybar = self.run_plugin(
+            "front_app.sh",
+            NAME="front_app",
+            INFO="An Extremely Long Application Name",
+            SENDER="front_app_switched",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("label=An Extremely Long…", sketchybar)
+        self.assertIn("background.color=0xff3a4248", sketchybar)
 
     def test_battery_formats_power_state_and_remaining_time_compactly(self):
         result, sketchybar = self.run_plugin("battery.sh", NAME="battery")

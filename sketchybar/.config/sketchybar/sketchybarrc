@@ -52,31 +52,55 @@ for workspace in {1..7}; do
       drawing=off \
       label="$workspace" \
       icon.drawing=off \
-      label.padding_left=8 \
-      label.padding_right=8 \
-      background.padding_left=1 \
-      background.padding_right=1 \
-      script="$PLUGIN_DIR/ui.sh" \
-      click_script="aerospace workspace $workspace" \
-    --subscribe "space.$workspace" mouse.entered mouse.exited mouse.exited.global
+      label.padding_left=6 \
+      label.padding_right=6 \
+      background.drawing=off \
+      background.padding_left=0 \
+      background.padding_right=0 \
+      click_script="aerospace workspace $workspace"
 
-  for index in 1 2 3; do
+  for index in 1 2 3 4; do
     sketchybar --add item "space.$workspace.app$index" left \
       --set "space.$workspace.app$index" \
         drawing=off \
         icon="" \
-        icon.width=18 \
-        icon.padding_left=3 \
-        icon.padding_right=3 \
+        icon.width=20 \
+        icon.padding_left=0 \
+        icon.padding_right=0 \
         label.font="SF Pro:Semibold:11.0" \
         label.padding_left=4 \
         label.padding_right=4 \
+        background.drawing=off \
         background.padding_left=0 \
         background.padding_right=0 \
-        script="$PLUGIN_DIR/ui.sh" \
-        click_script="aerospace workspace $workspace" \
-      --subscribe "space.$workspace.app$index" mouse.entered mouse.exited mouse.exited.global
+        click_script="aerospace workspace $workspace"
   done
+
+  sketchybar --add bracket "space.$workspace.group" \
+    "space.$workspace" \
+    "space.$workspace.app1" \
+    "space.$workspace.app2" \
+    "space.$workspace.app3" \
+    "space.$workspace.app4" \
+    --set "space.$workspace.group" \
+      background.drawing=off \
+      "background.color=$THEME_POPUP" \
+      background.height=26 \
+      background.corner_radius=8 \
+      background.border_width=0 \
+      "background.border_color=$THEME_TRANSPARENT" \
+      background.padding_left=2 \
+      background.padding_right=2
+
+  sketchybar --add item "space.$workspace.gap" left \
+    --set "space.$workspace.gap" \
+      drawing=off \
+      width=4 \
+      icon.drawing=off \
+      label.drawing=off \
+      background.drawing=off \
+      background.padding_left=0 \
+      background.padding_right=0
 done
 
 sketchybar --add item workspace_observer left \
@@ -87,44 +111,25 @@ sketchybar --add item workspace_observer left \
     script="$PLUGIN_DIR/aerospace.sh" \
   --subscribe workspace_observer aerospace_workspace_change system_woke
 
-sketchybar --add item front_app.badge left \
-  --set front_app.badge \
-    display=active \
-    icon.drawing=off \
-    label=ACTIVE \
-    label.font="SF Pro:Bold:10.0" \
-    "label.color=$BAR_COLOR" \
-    label.padding_left=7 \
-    label.padding_right=7 \
-    background.drawing=on \
-    "background.color=$THEME_FOCUSED" \
-    background.height=20 \
-    background.corner_radius=6 \
-    background.padding_left=3 \
-    background.padding_right=2
-
 sketchybar --add item front_app left \
   --set front_app \
     display=active \
-    background.drawing=on \
-    "background.color=$THEME_TRANSPARENT" \
-    background.height=22 \
-    background.corner_radius=6 \
-    background.padding_left=0 \
-    background.padding_right=3 \
-    script="$PLUGIN_DIR/front_app.sh" \
-    click_script="open -a 'Mission Control'" \
-  --subscribe front_app front_app_switched mouse.entered mouse.exited mouse.exited.global
-
-sketchybar --add bracket front_app.group front_app.badge front_app \
-  --set front_app.group \
-    display=active \
+    padding_left=8 \
+    icon.width=18 \
+    icon.padding_left=0 \
+    icon.padding_right=0 \
+    label.font="SF Pro:Semibold:12.0" \
+    label.padding_left=5 \
+    label.padding_right=8 \
     background.drawing=on \
     "background.color=$THEME_POPUP" \
     background.height=26 \
     background.corner_radius=8 \
-    background.border_width=1 \
-    "background.border_color=$THEME_FOCUSED"
+    background.padding_left=6 \
+    background.padding_right=0 \
+    script="$PLUGIN_DIR/front_app.sh" \
+    click_script="open -a 'Mission Control'" \
+  --subscribe front_app front_app_switched mouse.entered mouse.exited mouse.exited.global
 
 # Right-side items are added from the outside edge inward.
 sketchybar --add item clock right \
@@ -135,7 +140,6 @@ sketchybar --add item clock right \
     "${POPUP_STYLE[@]}" \
   --subscribe clock mouse.entered mouse.exited mouse.exited.global system_woke
 add_popup_row clock.popup.date clock "󰃭"
-add_popup_row clock.popup.time clock "󰥔"
 
 sketchybar --add item battery right \
   --set battery \
