@@ -47,8 +47,38 @@
       cleanup = "none";
     };
 
-    brews = [ ];
-    casks = [ ];
-    masApps = { };
+    brews = [
+      {
+        name = "docker";
+        link = false;
+      }
+      "docker-buildx"
+      "docker-completion"
+      "docker-compose"
+      "llama.cpp"
+      "mas"
+      "ollama"
+      "openjdk"
+      "FelixKratz/formulae/borders"
+      "FelixKratz/formulae/sketchybar"
+    ];
+    casks = [
+      "aerospace"
+      "android-commandlinetools"
+      "android-platform-tools"
+      "bitwarden"
+      "caffeine"
+      "db-browser-for-sqlite"
+      "discord"
+      "font-sauce-code-pro-nerd-font"
+      "font-sf-pro"
+      "google-drive"
+      "hyperkey"
+      "kitty"
+      "obsidian"
+      "raycast"
+      "telegram"
+      "visual-studio-code"
+    ];
   };
 }
