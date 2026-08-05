@@ -17,5 +17,8 @@
     gh
     uv
     go
+
+    btop
+    fastfetch
   ];
 }
