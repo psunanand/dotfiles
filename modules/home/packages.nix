@@ -12,5 +12,10 @@
     just
     delta
     rm-improved
+
+    git
+    gh
+    uv
+    go
   ];
 }
