@@ -20,5 +20,10 @@
 
     btop
     fastfetch
+
+    zsh
+    zsh-completions
+    tmux
+    neovim
   ];
 }
