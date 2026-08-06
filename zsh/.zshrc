@@ -67,13 +67,16 @@ setopt CORRECT
 # ANTIDOTE BOOTSTRAPPING
 zsh_plugins="$HOME/.zsh_plugins"
 [[ -f ${zsh_plugins}.txt ]] || touch ${zsh_plugins}.txt
-homebrew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
-fpath=("$homebrew_prefix/opt/antidote/share/antidote/functions" $fpath)
-autoload -Uz antidote
-if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
-  antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+antidote_functions="${XDG_DATA_HOME:-$HOME/.local/share}/antidote/functions"
+if [[ -d "$antidote_functions" ]]; then
+  fpath=("$antidote_functions" $fpath)
+  autoload -Uz antidote
+  if [[ ! ${zsh_plugins}.zsh -nt ${zsh_plugins}.txt ]]; then
+    antidote bundle <${zsh_plugins}.txt >|${zsh_plugins}.zsh
+  fi
 fi
 [[ -f ${zsh_plugins}.zsh ]] && source ${zsh_plugins}.zsh
+unset antidote_functions
 
 # VI MODE
 export ZVM_INIT_MODE="sourcing"

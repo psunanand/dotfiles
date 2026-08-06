@@ -23,7 +23,10 @@
 
     zsh
     zsh-completions
+    antidote
     tmux
     neovim
   ];
+
+  xdg.dataFile."antidote".source = "${pkgs.antidote}/share/antidote";
 }
