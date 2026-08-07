@@ -1,7 +1,7 @@
-{
-  inputs,
-  username,
-  ...
+{ inputs
+, pkgs
+, username
+, ...
 }:
 
 {
@@ -9,7 +9,10 @@
     ../../modules/darwin
   ];
 
-  users.users.${username}.home = "/Users/${username}";
+  users.users.${username} = {
+    home = "/Users/${username}";
+    shell = pkgs.zsh;
+  };
 
   system = {
     primaryUser = username;

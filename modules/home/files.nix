@@ -6,10 +6,6 @@ in
 {
   xdg.dataFile."antidote".source = "${pkgs.antidote}/share/antidote";
 
-  xdg.configFile."ripgrep".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/.config/ripgrep";
-
   xdg.configFile."starship.toml".source =
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/starship.toml";
@@ -53,18 +49,6 @@ in
   home.file.".ssh/config".source =
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/home/ssh/config";
-
-  home.file.".zprofile".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/home/zsh/.zprofile";
-
-  home.file.".zshenv".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/home/zsh/.zshenv";
-
-  home.file.".zshrc".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/home/zsh/.zshrc";
 
   home.file.".zsh_plugins.txt".source =
     config.lib.file.mkOutOfStoreSymlink

@@ -106,9 +106,10 @@ For shell and script changes:
 ```sh
 bash -n scripts/*.sh .config/sketchybar/sketchybarrc \
   .config/sketchybar/plugins/*.sh .config/borders/bordersrc
-
-zsh -n home/zsh/.zprofile home/zsh/.zshrc home/zsh/.zshenv
 ```
+
+Zsh startup files are generated from `modules/home/programs.nix`; use the Nix
+checks above for changes there.
 
 For SketchyBar helper changes:
 
