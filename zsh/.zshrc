@@ -106,6 +106,9 @@ alias vi='nvim'
 alias uistack-reload='brew services restart borders && aerospace reload-config && brew services restart sketchybar'
 
 # TOOL INITIALIZATION
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh --cmd cd)"
 
