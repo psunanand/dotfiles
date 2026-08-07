@@ -69,8 +69,14 @@
       "llama.cpp"
       "ollama"
       "openjdk"
-      "FelixKratz/formulae/borders"
-      "FelixKratz/formulae/sketchybar"
+      {
+        name = "FelixKratz/formulae/borders";
+        start_service = true;
+      }
+      {
+        name = "FelixKratz/formulae/sketchybar";
+        start_service = true;
+      }
     ];
     casks = [
       "aerospace"
