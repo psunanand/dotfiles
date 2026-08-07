@@ -146,7 +146,7 @@
         reload = "exec -l $SHELL";
         rip = "rip --graveyard $HOME/.local/share/Trash";
         vi = "nvim";
-        uistack-reload = "brew services restart borders && aerospace reload-config && brew services restart sketchybar";
+        uistack-reload = "env -u TMUX brew services restart borders && /opt/homebrew/bin/aerospace reload-config && env -u TMUX brew services restart sketchybar";
       };
 
       profileExtra = ''

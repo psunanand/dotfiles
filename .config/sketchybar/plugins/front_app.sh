@@ -16,8 +16,9 @@ esac
 
 app_name="${INFO:-}"
 if [[ -z "$app_name" ]]; then
+  aerospace_bin="${AEROSPACE_BIN:-/opt/homebrew/bin/aerospace}"
   app_name="$(
-    osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null
+    "$aerospace_bin" list-windows --focused --format '%{app-name}' 2>/dev/null | head -n 1
   )"
 fi
 [[ -z "$app_name" ]] && exit 0

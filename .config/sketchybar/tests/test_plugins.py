@@ -22,6 +22,8 @@ elif [[ "$*" == 'list-workspaces --monitor all --format %{workspace} %{monitor-a
   printf '%b' "$MOCK_WORKSPACES"
 elif [[ "$*" == $'list-windows --monitor all --format %{workspace}\t%{app-name}' ]]; then
   printf '%b' "$MOCK_WINDOWS"
+elif [[ "$*" == 'list-windows --focused --format %{app-name}' ]]; then
+  printf '%s\n' "$MOCK_FOCUSED_APP"
 fi
 """
 
@@ -61,6 +63,7 @@ class PluginCommandTests(unittest.TestCase):
             "MOCK_FOCUSED_WORKSPACE": "2",
             "MOCK_WORKSPACES": "1 1\n2 1\n3 1\n4 1\n5 1\n6 1\n7 1\n",
             "MOCK_WINDOWS": "",
+            "MOCK_FOCUSED_APP": "Safari",
             "MOCK_VOLUME": "50",
             "MOCK_BATTERY": (
                 "Now drawing from 'AC Power'\n"
@@ -72,10 +75,12 @@ class PluginCommandTests(unittest.TestCase):
 
     def run_plugin(self, plugin, **overrides):
         with tempfile.TemporaryDirectory() as directory:
+            self.make_command(directory, "aerospace", FAKE_AEROSPACE)
             self.make_command(directory, "sketchybar", FAKE_SKETCHYBAR)
             self.make_command(directory, "osascript", FAKE_OSASCRIPT)
             self.make_command(directory, "pmset", FAKE_PMSET)
             environment = self.environment(directory) | overrides
+            environment["AEROSPACE_BIN"] = str(Path(directory) / "aerospace")
 
             result = subprocess.run(
                 ["bash", str(PLUGINS / plugin)],
@@ -286,6 +291,18 @@ class PluginCommandTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("label=An Extremely Long…", sketchybar)
         self.assertIn("background.color=0xff3a4248", sketchybar)
+
+    def test_front_app_uses_aerospace_for_initial_app_name_without_info(self):
+        result, sketchybar = self.run_plugin(
+            "front_app.sh",
+            NAME="front_app",
+            INFO="",
+            SENDER="routine",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("label=Safari", sketchybar)
+        self.assertIn("icon.background.image=app.Safari", sketchybar)
 
     def test_battery_formats_power_state_and_remaining_time_compactly(self):
         result, sketchybar = self.run_plugin("battery.sh", NAME="battery")
