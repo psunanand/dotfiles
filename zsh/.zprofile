@@ -1,6 +1,8 @@
-# Initialize login-shell tool paths
-if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+# Keep unmanaged toolchains available without putting Homebrew before Nix.
+typeset -U path
 
-[[ -r "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
+path+=(
+  "$HOME/.cargo/bin"
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+)

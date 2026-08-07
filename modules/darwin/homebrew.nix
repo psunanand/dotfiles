@@ -11,6 +11,7 @@
     enableRosetta = true;
     autoMigrate = true;
     mutableTaps = false;
+    enableZshIntegration = false;
 
     extraEnv = {
       # Don't see the usage info to any analytics

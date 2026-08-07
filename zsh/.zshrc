@@ -116,7 +116,9 @@ if [[ -n "$KITTY_INSTALLATION_DIR" ]]; then
   kitty-integration
   unfunction kitty-integration
 fi
+homebrew_prefix="/opt/homebrew"
 [[ -r "$homebrew_prefix/etc/profile.d/zsh_command_not_found.sh" ]] && source "$homebrew_prefix/etc/profile.d/zsh_command_not_found.sh"
+unset homebrew_prefix
 
 # TOOL EXPORTS
 export BAT_STYLE="numbers,changes,header"
