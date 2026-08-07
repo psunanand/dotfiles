@@ -49,31 +49,31 @@ sketchybar --add event aerospace_workspace_change
 for workspace in {1..7}; do
   sketchybar --add item "space.$workspace" left \
     --set "space.$workspace" \
-      drawing=off \
-      label="$workspace" \
-      icon.drawing=off \
-      label.padding_left=6 \
-      label.padding_right=6 \
-      background.drawing=off \
-      background.padding_left=0 \
-      background.padding_right=0 \
-      click_script="aerospace workspace $workspace"
+    drawing=off \
+    label="$workspace" \
+    icon.drawing=off \
+    label.padding_left=6 \
+    label.padding_right=6 \
+    background.drawing=off \
+    background.padding_left=0 \
+    background.padding_right=0 \
+    click_script="aerospace workspace $workspace"
 
   for index in 1 2 3 4; do
     sketchybar --add item "space.$workspace.app$index" left \
       --set "space.$workspace.app$index" \
-        drawing=off \
-        icon="" \
-        icon.width=20 \
-        icon.padding_left=0 \
-        icon.padding_right=0 \
-        label.font="SF Pro:Semibold:11.0" \
-        label.padding_left=4 \
-        label.padding_right=4 \
-        background.drawing=off \
-        background.padding_left=0 \
-        background.padding_right=0 \
-        click_script="aerospace workspace $workspace"
+      drawing=off \
+      icon="" \
+      icon.width=20 \
+      icon.padding_left=0 \
+      icon.padding_right=0 \
+      label.font="SF Pro:Semibold:11.0" \
+      label.padding_left=4 \
+      label.padding_right=4 \
+      background.drawing=off \
+      background.padding_left=0 \
+      background.padding_right=0 \
+      click_script="aerospace workspace $workspace"
   done
 
   sketchybar --add bracket "space.$workspace.group" \
@@ -83,102 +83,102 @@ for workspace in {1..7}; do
     "space.$workspace.app3" \
     "space.$workspace.app4" \
     --set "space.$workspace.group" \
-      background.drawing=off \
-      "background.color=$THEME_POPUP" \
-      background.height=26 \
-      background.corner_radius=8 \
-      background.border_width=0 \
-      "background.border_color=$THEME_TRANSPARENT" \
-      background.padding_left=2 \
-      background.padding_right=2
+    background.drawing=off \
+    "background.color=$THEME_POPUP" \
+    background.height=26 \
+    background.corner_radius=8 \
+    background.border_width=0 \
+    "background.border_color=$THEME_TRANSPARENT" \
+    background.padding_left=2 \
+    background.padding_right=2
 
   sketchybar --add item "space.$workspace.gap" left \
     --set "space.$workspace.gap" \
-      drawing=off \
-      width=4 \
-      icon.drawing=off \
-      label.drawing=off \
-      background.drawing=off \
-      background.padding_left=0 \
-      background.padding_right=0
+    drawing=off \
+    width=4 \
+    icon.drawing=off \
+    label.drawing=off \
+    background.drawing=off \
+    background.padding_left=0 \
+    background.padding_right=0
 done
 
 sketchybar --add item workspace_observer left \
   --set workspace_observer \
-    drawing=off \
-    updates=on \
-    update_freq=5 \
-    script="$PLUGIN_DIR/aerospace.sh" \
+  drawing=off \
+  updates=on \
+  update_freq=5 \
+  script="$PLUGIN_DIR/aerospace.sh" \
   --subscribe workspace_observer aerospace_workspace_change system_woke
 
 sketchybar --add item front_app left \
   --set front_app \
-    display=active \
-    padding_left=8 \
-    icon.width=18 \
-    icon.padding_left=0 \
-    icon.padding_right=0 \
-    label.font="SF Pro:Semibold:12.0" \
-    label.padding_left=5 \
-    label.padding_right=8 \
-    background.drawing=on \
-    "background.color=$THEME_POPUP" \
-    background.height=26 \
-    background.corner_radius=8 \
-    background.padding_left=6 \
-    background.padding_right=0 \
-    script="$PLUGIN_DIR/front_app.sh" \
-    click_script="open -a 'Mission Control'" \
+  display=active \
+  padding_left=8 \
+  icon.width=18 \
+  icon.padding_left=0 \
+  icon.padding_right=0 \
+  label.font="SF Pro:Semibold:12.0" \
+  label.padding_left=5 \
+  label.padding_right=8 \
+  background.drawing=on \
+  "background.color=$THEME_POPUP" \
+  background.height=26 \
+  background.corner_radius=8 \
+  background.padding_left=6 \
+  background.padding_right=0 \
+  script="$PLUGIN_DIR/front_app.sh" \
+  click_script="open -a 'Mission Control'" \
   --subscribe front_app front_app_switched mouse.entered mouse.exited mouse.exited.global
 
 # Right-side items are added from the outside edge inward.
 sketchybar --add item clock right \
   --set clock \
-    update_freq=10 \
-    script="$PLUGIN_DIR/clock.sh" \
-    click_script="open -a Calendar" \
-    "${POPUP_STYLE[@]}" \
+  update_freq=10 \
+  script="$PLUGIN_DIR/clock.sh" \
+  click_script="open -a Calendar" \
+  "${POPUP_STYLE[@]}" \
   --subscribe clock mouse.entered mouse.exited mouse.exited.global system_woke
 add_popup_row clock.popup.date clock "󰃭"
 
 sketchybar --add item battery right \
   --set battery \
-    update_freq=120 \
-    script="$PLUGIN_DIR/battery.sh" \
-    click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
-    "${POPUP_STYLE[@]}" \
+  update_freq=120 \
+  script="$PLUGIN_DIR/battery.sh" \
+  click_script="open x-apple.systempreferences:com.apple.Battery-Settings.extension" \
+  "${POPUP_STYLE[@]}" \
   --subscribe battery system_woke power_source_change mouse.entered mouse.exited mouse.exited.global
 add_popup_row battery.popup.power battery "󰚥"
 add_popup_row battery.popup.estimate battery "󰔟"
 
 sketchybar --add item volume right \
   --set volume \
-    label.drawing=off \
-    script="$PLUGIN_DIR/volume.sh" \
-    click_script="open x-apple.systempreferences:com.apple.Sound-Settings.extension" \
-    "${POPUP_STYLE[@]}" \
+  label.drawing=off \
+  script="$PLUGIN_DIR/volume.sh" \
+  click_script="open x-apple.systempreferences:com.apple.Sound-Settings.extension" \
+  "${POPUP_STYLE[@]}" \
   --subscribe volume volume_change system_woke mouse.entered mouse.exited mouse.exited.global
 add_popup_row volume.popup.level volume "󰕾"
 
 sketchybar --add item network right \
   --set network \
-    label.drawing=off \
-    update_freq=2 \
-    script="$PLUGIN_DIR/network.sh" \
-    click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
-    background.padding_left=5 \
-    "${POPUP_STYLE[@]}" \
+  label.drawing=off \
+  update_freq=2 \
+  script="$PLUGIN_DIR/network.sh" \
+  click_script="open x-apple.systempreferences:com.apple.Network-Settings.extension" \
+  background.padding_left=5 \
+  "${POPUP_STYLE[@]}" \
   --subscribe network wifi_change system_woke mouse.entered mouse.exited mouse.exited.global
 add_popup_row network.popup.ssid network "󰖩"
 add_popup_row network.popup.speed network "󰯎"
 
 sketchybar --add item usage right \
   --set usage \
-    label.drawing=off \
-    update_freq=10 \
-    script="$PLUGIN_DIR/usage.sh" \
-    click_script="open -a 'Activity Monitor'" \
-    "${POPUP_STYLE[@]}" \
+  label.drawing=off \
+  update_freq=10 \
+  script="$PLUGIN_DIR/usage.sh" \
+  click_script="open -a 'Activity Monitor'" \
+  "${POPUP_STYLE[@]}" \
   --subscribe usage system_woke mouse.entered mouse.exited mouse.exited.global
 add_popup_row usage.popup.cpu usage "󰻠"
 add_popup_row usage.popup.ram usage "󰍛"
@@ -186,10 +186,10 @@ add_popup_row usage.popup.disk usage "󰋊"
 
 sketchybar --add item codex_usage right \
   --set codex_usage \
-    update_freq=60 \
-    script="$PLUGIN_DIR/codex_usage.sh" \
-    background.padding_left=5 \
-    "${POPUP_STYLE[@]}" \
+  update_freq=60 \
+  script="$PLUGIN_DIR/codex_usage.sh" \
+  background.padding_left=5 \
+  "${POPUP_STYLE[@]}" \
   --subscribe codex_usage system_woke mouse.entered mouse.exited mouse.exited.global
 add_popup_row codex_usage.popup.primary codex_usage "󰚩"
 add_popup_row codex_usage.popup.primary_reset codex_usage "󰑐"
