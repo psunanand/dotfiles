@@ -32,8 +32,8 @@ source_nix_profile() {
 source_nix_profile
 
 if ! command -v nix >/dev/null 2>&1; then
-  curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix \
-    | sh -s -- install --no-confirm
+  curl --proto '=https' --tlsv1.2 -sSf -L https://install.lix.systems/lix |
+    sh -s -- install --no-confirm
   source_nix_profile
 fi
 

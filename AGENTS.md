@@ -1,45 +1,49 @@
-# Repository agent guide
+# Repository Agent Guide
 
-This repository contains macOS dotfiles installed with GNU Stow, with system
-packages managed by Homebrew through `brew/Brewfile`.
+This repo manages MK's macOS dotfiles with Nix flakes, nix-darwin, Home
+Manager, and nix-homebrew.
 
-## Work in the source tree
+Use this file as guardrails. Use `readme.md` for the fuller bootstrap,
+rebuild, rollback, and verification workflow.
 
-- Treat the tracked package directories as the source of truth. Edit files in
-  this repository, not the generated symlinks or copies under `$HOME`.
-- Leave ignored runtime and third-party content, including `tmux/.config/tmux/plugins/`, unchanged unless the task explicitly targets it.
-- Preserve the existing language boundaries: Zsh for `sync.sh`, setup scripts,
-  and Zsh configuration; Bash for SketchyBar and Borders; Python standard
-  library and `unittest` for SketchyBar helpers and tests.
+## Source Layout
 
-## Protect host state
+- `.config/`: native XDG config sources linked by Home Manager
+- `home/`: home-root dotfile sources linked by Home Manager
+- `modules/home/packages.nix`: Nix CLI packages
+- `modules/home/programs.nix`: Home Manager program modules
+- `modules/home/files.nix`: out-of-store symlink declarations
+- `modules/darwin/homebrew.nix`: nix-homebrew taps and Homebrew apps
+- `modules/darwin/macos-defaults.nix`: stable macOS defaults
+- `hosts/`: host-specific nix-darwin configuration
 
-Inspect and syntax-check scripts freely. Get explicit user approval before
-running commands that change the host, including:
+## Rules
 
-- `sync.sh` or scripts that install or remove Homebrew packages.
-- GNU Stow operations that change links under `$HOME`.
-- Scripts that apply macOS defaults, install fonts, or restart services.
-- `scripts/test_vm.sh`, which deletes and recreates its named Tart VM.
+- Edit files in this repo, not generated links under `$HOME`.
+- Keep native app configs native when that is clearer than Nix options.
+- Do not install the same executable through multiple managers without a
+  documented reason.
+- Keep secrets, private agent content, credentials, and local backups out of
+  this repo.
+- Leave ignored runtime and third-party content alone unless explicitly asked.
+- Ask before running host-changing commands like `darwin-rebuild switch`,
+  Homebrew cleanup, Nix garbage collection, service reloads, macOS defaults, or
+  bulk file deletion.
 
-## Verification
+## Checks
 
-Run the checks relevant to the changed files:
+Run only checks relevant to the changed files. At minimum:
 
 ```sh
-python3 -m unittest discover -s sketchybar/.config/sketchybar/tests -p 'test_*.py'
-zsh scripts/tests/test_sync.sh
-zsh -n sync.sh scripts/*.sh scripts/tests/*.sh scripts/tests/fixtures/*.sh \
-  zsh/.zprofile zsh/.zshrc zsh/.zshenv
-bash -n sketchybar/.config/sketchybar/sketchybarrc \
-  sketchybar/.config/sketchybar/plugins/*.sh \
-  borders/.config/borders/bordersrc
 git diff --check
 ```
 
-For UI changes, inspect the rendered result after an explicitly authorized
-reload. If live verification is not authorized or available, report that it was
-skipped.
+For Nix changes, prefer:
 
-Do not create commits unless the user explicitly requests one. When asked to
-commit, follow the repository template in `git/.gitmessage`.
+```sh
+nix flake check --option eval-cache false
+nix build --option eval-cache false .#darwinConfigurations.mksmbp.system
+```
+
+Do not claim activation, cleanup, or rollback succeeded unless the exact command
+was run. Do not commit unless the user explicitly asks.
