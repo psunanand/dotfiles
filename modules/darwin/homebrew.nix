@@ -8,6 +8,10 @@
   nix-homebrew = {
     enable = true;
     user = username;
+    package = inputs.brew-src // {
+      name = "brew-6.0.15";
+      version = "6.0.15";
+    };
     enableRosetta = true;
     autoMigrate = true;
     mutableTaps = false;
@@ -27,12 +31,9 @@
     };
 
     trust = {
-      formulae = [
-        "FelixKratz/formulae/borders"
-        "FelixKratz/formulae/sketchybar"
-      ];
-      casks = [
-        "nikitabobko/tap/aerospace"
+      taps = [
+        "FelixKratz/formulae"
+        "nikitabobko/tap"
       ];
     };
   };
@@ -40,24 +41,32 @@
   homebrew = {
     enable = true;
 
-    taps = builtins.attrNames config.nix-homebrew.taps;
+    taps =
+      let
+        trustedTaps = [
+          "FelixKratz/homebrew-formulae"
+          "nikitabobko/homebrew-tap"
+        ];
+
+        mkTap = name:
+          if builtins.elem name trustedTaps then
+            {
+              inherit name;
+              trusted = true;
+            }
+          else
+            name;
+      in
+      map mkTap (builtins.attrNames config.nix-homebrew.taps);
 
     onActivation = {
       autoUpdate = false;
-      upgrade = false;
-      cleanup = "none";
+      upgrade = true;
+      cleanup = "uninstall";
     };
 
     brews = [
-      {
-        name = "docker";
-        link = false;
-      }
-      "docker-buildx"
-      "docker-completion"
-      "docker-compose"
       "llama.cpp"
-      "mas"
       "ollama"
       "openjdk"
       "FelixKratz/formulae/borders"

@@ -10,6 +10,10 @@
     git
     uv
     go
+    docker
+    docker-buildx
+    docker-compose
+    mas
 
     btop
     fastfetch

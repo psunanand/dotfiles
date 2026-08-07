@@ -92,6 +92,29 @@ The direct command is also fine:
 sudo -H darwin-rebuild switch --flake .#mksmbp
 ```
 
+## Update Inputs
+
+Update all pinned flake inputs, then run the default Nix checks:
+
+```sh
+./scripts/update-flake.sh
+```
+
+Update only Nix packages:
+
+```sh
+./scripts/update-flake.sh nixpkgs
+```
+
+Update only the Homebrew runtime and pinned taps:
+
+```sh
+./scripts/update-flake.sh --homebrew
+```
+
+The update script only changes and verifies `flake.lock`. Activate the new
+generation separately with `./scripts/darwin-switch.sh`.
+
 ## Verify Changes
 
 For Nix changes:
