@@ -130,3 +130,7 @@ export FD_OPTIONS="--hidden --exclude .git --exclude .DS_Store"
 
 # LOCAL COMPLETIONS
 [[ -r "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/psunanand/.lmstudio/bin"
+# End of LM Studio CLI section

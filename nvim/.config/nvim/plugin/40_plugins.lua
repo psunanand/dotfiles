@@ -51,6 +51,7 @@ now_if_args(function()
 	local languages = {
 		"lua",
 		"javascript",
+		"typescript",
 		"vimdoc",
 		"markdown",
 		"python",
@@ -111,6 +112,7 @@ later(function()
 			bash = { "shfmt" },
 			zsh = { "shfmt" },
 			python = { "ruff" },
+			nix = { "nixpkgs_fmt" },
 			["_"] = { "trim_whitespace", "trim_newlines" },
 		},
 		format_on_save = {
@@ -139,23 +141,6 @@ end)
 now_if_args(function()
 	add({
 		"https://github.com/christoomey/vim-tmux-navigator",
-	})
-end)
-
--- == AI cursortab
-later(function()
-	Config.new_autocmd("PackChanged", nil, function(ev)
-		local name, kind = ev.data.spec.name, ev.data.kind
-		if name == "cursortab.nvim" and (kind == "install" or kind == "update") then
-			vim.system({ "go", "build" }, { cwd = ev.data.path .. "/server" }):wait()
-		end
-	end, nil)
-	add({ "https://github.com/cursortab/cursortab.nvim" })
-	require("cursortab").setup({
-		provider = {
-			type = "zeta-2",
-			url = "http://127.0.0.1:8000",
-		},
 	})
 end)
 
