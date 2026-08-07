@@ -8,53 +8,65 @@ in
 
   xdg.configFile."ripgrep".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/ripgrep/.config/ripgrep";
+      "${dotfiles}/.config/ripgrep";
 
   xdg.configFile."starship.toml".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/starship/.config/starship.toml";
+      "${dotfiles}/.config/starship.toml";
 
   xdg.configFile."kitty".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/kitty/.config/kitty";
+      "${dotfiles}/.config/kitty";
 
   xdg.configFile."nvim".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/nvim/.config/nvim";
+      "${dotfiles}/.config/nvim";
 
   xdg.configFile."borders".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/borders/.config/borders";
+      "${dotfiles}/.config/borders";
 
   xdg.configFile."sketchybar".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/sketchybar/.config/sketchybar";
+      "${dotfiles}/.config/sketchybar";
 
   xdg.configFile."tmux".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/tmux/.config/tmux";
+      "${dotfiles}/.config/tmux";
 
   home.file.".aerospace.toml".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/aerospace/.aerospace.toml";
+      "${dotfiles}/home/aerospace/.aerospace.toml";
 
   home.file.".gitconfig".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/git/.gitconfig";
+      "${dotfiles}/home/git/.gitconfig";
+
+  home.file.".gitignore_global".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/home/git/.gitignore_global";
+
+  home.file.".gitmessage".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/home/git/.gitmessage";
+
+  home.file.".ssh/config".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/home/ssh/config";
 
   home.file.".zprofile".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/zsh/.zprofile";
+      "${dotfiles}/home/zsh/.zprofile";
 
   home.file.".zshenv".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/zsh/.zshenv";
+      "${dotfiles}/home/zsh/.zshenv";
 
   home.file.".zshrc".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/zsh/.zshrc";
+      "${dotfiles}/home/zsh/.zshrc";
 
   home.file.".zsh_plugins.txt".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/zsh/.zsh_plugins.txt";
+      "${dotfiles}/home/zsh/.zsh_plugins.txt";
 }
