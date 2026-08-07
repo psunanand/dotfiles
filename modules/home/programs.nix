@@ -143,10 +143,10 @@
         fd = "fd --hidden";
         grep = "grep --color=auto";
         mv = "mv -iv";
-        reload = "exec -l $SHELL";
+        reload = "exec -l /run/current-system/sw/bin/zsh";
         rip = "rip --graveyard $HOME/.local/share/Trash";
         vi = "nvim";
-        uistack-reload = "env -u TMUX brew services restart borders && /opt/homebrew/bin/aerospace reload-config && env -u TMUX brew services restart sketchybar";
+        uistack-reload = "env -u TMUX brew services restart felixkratz/formulae/borders && /opt/homebrew/bin/aerospace reload-config && env -u TMUX brew services restart felixkratz/formulae/sketchybar";
       };
 
       profileExtra = ''
