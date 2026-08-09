@@ -45,6 +45,21 @@ wallpaper setup. Use `modules/darwin/security.nix` for sudo Touch ID settings.
 Keep secrets, credentials, local backups, and private agent material outside
 this public repo.
 
+Git commit messages use the Conventional Commits format through the global
+`commit-msg` hook at `~/.config/git/hooks/commit-msg`. The existing
+`~/.gitmessage` remains the editor template. To opt out for a repository, run:
+
+```sh
+git config --local conventionalCommits.enabled false
+```
+
+A repository can replace the global hook directory with its own hooks by
+setting a local `core.hooksPath`, for example:
+
+```sh
+git config --local core.hooksPath .githooks
+```
+
 ## Bootstrap A New Mac
 
 Clone this repository to the path expected by `modules/home/files.nix`:

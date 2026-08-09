@@ -30,6 +30,10 @@ in
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/tmux";
 
+  xdg.configFile."git/hooks/commit-msg".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/.config/git/hooks/commit-msg";
+
   home.file.".aerospace.toml".source =
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/home/aerospace/.aerospace.toml";

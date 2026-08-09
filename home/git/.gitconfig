@@ -5,6 +5,7 @@
 [core]
     editor = nvim
     pager = delta
+    hooksPath = ~/.config/git/hooks
     # Treat spaces before tabs and trailing whitespace as errors
     whitespace = space-before-tab,-indent-with-non-tab,trailing-space
     # Make `git rebase` safer on macOS
@@ -61,6 +62,9 @@
 [commit]
     verbose = true
     template = ~/.gitmessage # Standard filename for commit templates
+
+[conventionalCommits]
+    enabled = true
 
 [pull]
     rebase = interactive

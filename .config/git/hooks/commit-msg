@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+message_file="${1:?commit-msg hook requires a message file}"
+enabled="$(git config --bool --get conventionalCommits.enabled || :)"
+
+if [ "$enabled" = "false" ]; then
+  exit 0
+fi
+
+subject="$(
+  sed \
+    -e '/^[[:space:]]*#/d' \
+    -e '/^[[:space:]]*$/d' \
+    "$message_file" |
+    sed -n '1p'
+)"
+
+# Permit messages generated for merges, reverts, and autosquash operations.
+case "$subject" in
+  Merge\ *|Revert\ \"*|fixup!\ *|squash!\ *|amend!\ *)
+    exit 0
+    ;;
+esac
+
+pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([[:alnum:]./_-]+\))?!?: [^[:space:]].*$'
+
+if ! printf '%s\n' "$subject" | grep -Eq "$pattern"; then
+  printf '%s\n' \
+    "Invalid commit message:" \
+    "  $subject" \
+    "" \
+    "Expected:" \
+    "  <type>(<optional-scope>): <description>" \
+    "" \
+    "Allowed types:" \
+    "  feat fix docs style refactor perf test build ci chore revert" >&2
+  exit 1
+fi
