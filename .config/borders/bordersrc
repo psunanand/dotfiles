@@ -9,12 +9,10 @@ options=(
   active_color=$ACTIVE_COLOR
   inactive_color=$INACTIVE_COLOR
   width=6     # thickness of the border in pixels
-  radius=12   # corner roundness
   hidpi=on    # accounts for retina display scaling
   order=above # border drawn on top on window so it's not hidden by the window itself
   style=round
   blacklist="SketchyBar"
 )
 
-pkill borders
 borders "${options[@]}"
