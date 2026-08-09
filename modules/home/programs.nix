@@ -27,6 +27,14 @@
       };
     };
 
+    btop = {
+      enable = true;
+
+      settings = {
+        vim_keys = true;
+      };
+    };
+
     eza = {
       enable = true;
       enableZshIntegration = true;
@@ -172,6 +180,7 @@
           zstyle ':completion:*:history-words' list-colors '=(#b) #(.+)=38;5;06'
           zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
           zstyle ':completion:*' menu no
+          zstyle ':completion:*' verbose yes
 
           export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=8"
           export ZSH_AUTOSUGGEST_STRATEGY=(history completion)

@@ -15,7 +15,6 @@
     docker-compose
     mas
 
-    btop
     fastfetch
 
     zsh-completions
