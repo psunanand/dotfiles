@@ -95,6 +95,7 @@
       "raycast"
       "telegram"
       "visual-studio-code"
+      "brave-browser"
     ];
   };
 }
