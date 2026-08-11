@@ -33,8 +33,8 @@ the install/integration and a small, stable configuration. This repo currently
 uses it for `mise`.
 
 Use `modules/home/files.nix` for out-of-store symlinks. The source files live
-in `.config/` for XDG configs and `home/` for home-root files like `.zshrc`,
-`.gitconfig`, and `.aerospace.toml`.
+in `.config/` for XDG configs like Git's config, ignore file, commit template,
+and hooks, and `home/` for home-root files like `.zshrc` and `.aerospace.toml`.
 
 Use `modules/darwin/homebrew.nix` for nix-homebrew taps plus nix-darwin
 Homebrew formulae, casks, and Mac App Store entries.
@@ -45,9 +45,10 @@ wallpaper setup. Use `modules/darwin/security.nix` for sudo Touch ID settings.
 Keep secrets, credentials, local backups, and private agent material outside
 this public repo.
 
-Git commit messages use the Conventional Commits format through the global
-`commit-msg` hook at `~/.config/git/hooks/commit-msg`. The existing
-`~/.gitmessage` remains the editor template. To opt out for a repository, run:
+Git configuration, global ignores, and the commit template live under
+`~/.config/git/`. Git commit messages use the Conventional Commits format
+through the global `commit-msg` hook at `~/.config/git/hooks/commit-msg`. To
+opt out for a repository, run:
 
 ```sh
 git config --local conventionalCommits.enabled false

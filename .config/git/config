@@ -11,7 +11,7 @@
     # Make `git rebase` safer on macOS
     trustctime = false
     # Link to global ignore file
-    excludesfile = ~/.gitignore_global
+    excludesfile = ~/.config/git/ignore
 
 [init]
     defaultBranch = main
@@ -61,7 +61,7 @@
 
 [commit]
     verbose = true
-    template = ~/.gitmessage # Standard filename for commit templates
+    template = ~/.config/git/message # Standard filename for commit templates
 
 [conventionalCommits]
     enabled = true

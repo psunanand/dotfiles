@@ -34,21 +34,21 @@ in
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/git/hooks/commit-msg";
 
+  xdg.configFile."git/config".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/.config/git/config";
+
+  xdg.configFile."git/ignore".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/.config/git/ignore";
+
+  xdg.configFile."git/message".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/.config/git/message";
+
   home.file.".aerospace.toml".source =
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/home/aerospace/.aerospace.toml";
-
-  home.file.".gitconfig".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/home/git/.gitconfig";
-
-  home.file.".gitignore_global".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/home/git/.gitignore_global";
-
-  home.file.".gitmessage".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/home/git/.gitmessage";
 
   home.file.".ssh/config".source =
     config.lib.file.mkOutOfStoreSymlink
