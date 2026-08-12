@@ -1,3 +1,4 @@
+-- hello
 vim.keymap.set("n", "<Esc>", "<Cmd>nohlsearch<CR>", { desc = "Clear highlight" })
 vim.keymap.set("n", "[p", '<Cmd>exe "iput! " . v:register<CR>', { desc = "Paste Above" })
 vim.keymap.set("n", "]p", '<Cmd>exe "iput "  . v:register<CR>', { desc = "Paste Below" })
@@ -27,7 +28,7 @@ Config.leader_group_clues = {
 local nmap_leader = function(suffix, rhs, opts)
 	vim.keymap.set("n", "<Leader>" .. suffix, rhs, opts)
 end
-local xmap_leader = function(suffix, rhs, desc)
+local xmap_leader = function(suffix, rhs, opts)
 	vim.keymap.set("x", "<Leader>" .. suffix, rhs, opts)
 end
 

@@ -143,16 +143,3 @@ now_if_args(function()
 		"https://github.com/christoomey/vim-tmux-navigator",
 	})
 end)
-
--- == markdown, html previwer
-later(function()
-	add({ "https://github.com/brianhuster/live-preview.nvim" })
-	require("livepreview.config").set({
-		port = 5500,
-		browser = "default",
-		dynamic_root = false,
-		sync_scroll = true,
-		picker = "fzf-lua",
-		address = "127.0.0.1",
-	})
-end)
