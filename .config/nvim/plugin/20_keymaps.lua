@@ -13,6 +13,7 @@ Config.leader_group_clues = {
 	{ mode = "n", keys = "<Leader>f", desc = "+Find" },
 	{ mode = "n", keys = "<Leader>g", desc = "+Git" },
 	{ mode = "n", keys = "<Leader>l", desc = "+LSP" },
+	{ mode = "n", keys = "<Leader>q", desc = "+Quickfix" },
 	{ mode = "n", keys = "<Leader>t", desc = "+Terminal" },
 	{ mode = "n", keys = "<Leader>u", desc = "+Undo" },
 	{ mode = "n", keys = "<Leader>v", desc = "+Visits" },
@@ -60,8 +61,6 @@ nmap_leader("em", edit_plugin_file("30_mini.lua"), { desc = "Config: mini" })
 nmap_leader("en", "<Cmd>lua MiniNotify.show_history()<CR>", { desc = "Notifications" })
 nmap_leader("eo", edit_plugin_file("10_options.lua"), { desc = "Config: options" })
 nmap_leader("ep", edit_plugin_file("40_plugins.lua"), { desc = "Config: plugins" })
-nmap_leader("eq", explore_quickfix, { desc = "Quickfix [toggle]" })
-nmap_leader("eQ", explore_locations, { desc = "Location list [toggle]" })
 
 -- `f` -> Find
 nmap_leader("f/", "<Cmd>FzfLua search_history<CR>", { desc = '"/" history' })
@@ -77,6 +76,7 @@ nmap_leader("fD", "<Cmd>FzfLua lsp_document_diagnostics<CR>", { desc = "Diagnost
 nmap_leader("ff", "<Cmd>FzfLua files<CR>", { desc = "Files [cwd]" })
 nmap_leader("fg", "<Cmd>FzfLua live_grep<CR>", { desc = "Grep [live]" })
 nmap_leader("fG", "<Cmd>FzfLua grep_cword<CR>", { desc = "Grep [word]" })
+xmap_leader("fg", "<Cmd>FzfLua grep_visual<CR>", { desc = "Grep [selection]" })
 nmap_leader("fh", "<Cmd>FzfLua help_tags<CR>", { desc = "Help tags" })
 nmap_leader("fH", "<Cmd>FzfLua highlights<CR>", { desc = "Highlight groups" })
 nmap_leader("fl", "<Cmd>FzfLua lines<CR>", { desc = "Lines [open buffers]" })
@@ -92,6 +92,7 @@ local git_log_cmd = [[Git log --pretty=format:\%h\ \%as\ │\ \%s --topo-order]]
 local git_log_buf_cmd = git_log_cmd .. " --follow -- %"
 nmap_leader("ga", "<Cmd>Git diff --cached<CR>", { desc = "Diff [staged]" })
 nmap_leader("gA", "<Cmd>Git diff --cached -- %<CR>", { desc = "Diff [staged buffer]" })
+nmap_leader("gB", "<Cmd>FzfLua git_blame<CR>", { desc = "Blame [buffer]" })
 nmap_leader("gc", "<Cmd>Git commit<CR>", { desc = "Commit" })
 nmap_leader("gC", "<Cmd>Git commit --amend<CR>", { desc = "Commit [amend]" })
 nmap_leader("gd", "<Cmd>Git diff<CR>", { desc = "Diff [repo]" })
@@ -101,6 +102,10 @@ nmap_leader("gL", "<Cmd>" .. git_log_buf_cmd .. "<CR>", { desc = "Log [buffer]" 
 nmap_leader("go", "<Cmd>lua MiniDiff.toggle_overlay()<CR>", { desc = "Hunk overlay [toggle]" })
 nmap_leader("gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Git info [cursor]" })
 xmap_leader("gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", { desc = "Git info [selection]" })
+
+-- `q` -> Quickfix
+nmap_leader("qq", explore_quickfix, { desc = "Quickfix [toggle]" })
+nmap_leader("ql", explore_locations, { desc = "Location list [toggle]" })
 
 -- `l` -> LSP
 nmap_leader("la", "<Cmd>FzfLua lsp_code_actions<CR>", { desc = "Code actions" })
