@@ -239,8 +239,6 @@
           [[ -r "$homebrew_prefix/etc/profile.d/zsh_command_not_found.sh" ]] && source "$homebrew_prefix/etc/profile.d/zsh_command_not_found.sh"
           unset homebrew_prefix
 
-          [[ -r "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"
-
           # Added by LM Studio CLI (lms)
           export PATH="$PATH:$HOME/.lmstudio/bin"
           # End of LM Studio CLI section
