@@ -30,8 +30,7 @@ main() {
 
   local path output=""
   while IFS= read -r path; do
-    printf -v path '%q' "$path"
-    output+="$path "
+    output+="@$path "
   done <<<"$selected"
 
   tmux send-keys -t "$target_pane" -l -- "$output"
