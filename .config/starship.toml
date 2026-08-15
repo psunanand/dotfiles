@@ -26,10 +26,9 @@ style_user = "#d8caac bold"
 format = "[$user]($style) "
 
 [hostname]
-ssh_only = false
+ssh_only = true
 format = "on [$hostname](bold #e68183) "
 trim_at = "."
-detect_env_vars = ['!TMUX', 'SSH_CONNECTION']
 
 # ── Directory ────────────────────────────────────────────
 [directory]
