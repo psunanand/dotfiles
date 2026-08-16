@@ -21,5 +21,6 @@
     antidote
     tmux
     neovim
+    mdterm
   ];
 }
