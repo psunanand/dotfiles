@@ -112,8 +112,11 @@ in
           capsLockRemapped = 1;
           executeQuickHyperKey = 1;
           hyperFlags = 1966080;
-          keyRemap = 1;
+          # Hyperkey is disabled so it does not capture the left Option key,
+          # which AeroSpace uses for workspace bindings.
+          keyRemap = 2;
           launchOnLogin = 1;
+          physicalKeycode = 226;
           quickHyperKeycode = 53;
         };
       };
