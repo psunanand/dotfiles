@@ -5,6 +5,7 @@
     ./packages.nix
     ./programs.nix
     ./files.nix
+    ./wallpaper.nix
   ];
 
   home = {

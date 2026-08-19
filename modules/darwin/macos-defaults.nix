@@ -3,19 +3,11 @@
 let
   homeDirectory = "/Users/${username}";
   screenshotDirectory = "${homeDirectory}/Pictures/Screenshots";
-  wallpaper = ../../wallpapers/green_forest_2.png;
 in
 {
   system = {
     activationScripts.postActivation.text = ''
       /usr/bin/install -d -o ${username} -g staff -m 0755 "${screenshotDirectory}"
-
-      uid="$(/usr/bin/id -u ${username})"
-      if ! /bin/launchctl asuser "$uid" /usr/bin/sudo -u ${username} --set-home \
-        /usr/bin/osascript -e 'tell application "System Events" to tell every desktop to set picture to "${wallpaper}"'
-      then
-        echo "warning: unable to set wallpaper from ${wallpaper}" >&2
-      fi
     '';
 
     defaults = {
