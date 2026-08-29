@@ -1,8 +1,24 @@
--- hello
 vim.keymap.set("n", "<Esc>", "<Cmd>nohlsearch<CR>", { desc = "Clear highlight" })
 vim.keymap.set("n", "[p", '<Cmd>exe "iput! " . v:register<CR>', { desc = "Paste Above" })
 vim.keymap.set("n", "]p", '<Cmd>exe "iput "  . v:register<CR>', { desc = "Paste Below" })
 vim.keymap.set("x", "gp", '"+P', { desc = "Paste from system clipboard" })
+
+local function copy_file_path()
+	local path = vim.fn.expand("%:p")
+
+	if path == "" then
+		vim.notify("Buffer has no file path", vim.log.levels.WARN)
+		return
+	end
+
+	vim.fn.setreg("+", path)
+	vim.cmd("file")
+	vim.notify("Copied file path")
+end
+
+vim.keymap.set("n", "<C-g>", copy_file_path, {
+	desc = "Copy file path",
+})
 
 -- Leader mappings follow <Leader><domain><action>. Suffix case identifies a
 -- documented variant, not a universal scope rule; descriptions name scope and
@@ -142,7 +158,7 @@ local make_pick_core = function(cwd, desc)
 end
 nmap_leader("vc", make_pick_core("", "Core visits [all]"), { desc = "Core visits [all]" })
 nmap_leader("vC", make_pick_core(nil, "Core visits [cwd]"), { desc = "Core visits [cwd]" })
-nmap_leader("vv", '<Cmd>lua MiniVisits.add_label("core")<CR>', { desc = 'Core label [add]' })
-nmap_leader("vV", '<Cmd>lua MiniVisits.remove_label("core")<CR>', { desc = 'Core label [remove]' })
+nmap_leader("vv", '<Cmd>lua MiniVisits.add_label("core")<CR>', { desc = "Core label [add]" })
+nmap_leader("vV", '<Cmd>lua MiniVisits.remove_label("core")<CR>', { desc = "Core label [remove]" })
 nmap_leader("vl", "<Cmd>lua MiniVisits.add_label()<CR>", { desc = "Label [add]" })
 nmap_leader("vL", "<Cmd>lua MiniVisits.remove_label()<CR>", { desc = "Label [remove]" })
