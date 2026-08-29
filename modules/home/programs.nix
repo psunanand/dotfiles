@@ -87,6 +87,14 @@
       enable = true;
       enableZshIntegration = false;
       enableMutableConfig = true;
+
+      # Keep Pi in mise's npm backend so it is available independently of
+      # whichever Node version is active.
+      globalConfig = {
+        tools = {
+          "npm:@earendil-works/pi-coding-agent" = "latest";
+        };
+      };
     };
 
     ripgrep = {

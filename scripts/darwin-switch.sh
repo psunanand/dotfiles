@@ -64,7 +64,8 @@ find_darwin_rebuild() {
 }
 
 if DARWIN_REBUILD="$(find_darwin_rebuild)"; then
-  exec sudo -H "$DARWIN_REBUILD" switch --flake "$ROOT_DIR#$HOST" "$@"
+  sudo -H "$DARWIN_REBUILD" switch --flake "$ROOT_DIR#$HOST" "$@"
+  exit 0
 fi
 
 NIX="$(find_nix)" || {
@@ -76,4 +77,4 @@ OUT_LINK="$ROOT_DIR/.tmp/darwin-system-$HOST"
 mkdir -p "$ROOT_DIR/.tmp"
 
 "$NIX" build "$ROOT_DIR#darwinConfigurations.$HOST.system" --out-link "$OUT_LINK"
-exec sudo -H "$OUT_LINK/sw/bin/darwin-rebuild" switch --flake "$ROOT_DIR#$HOST" "$@"
+sudo -H "$OUT_LINK/sw/bin/darwin-rebuild" switch --flake "$ROOT_DIR#$HOST" "$@"

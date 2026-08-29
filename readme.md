@@ -83,6 +83,11 @@ argument:
 ./scripts/bootstrap-lix-darwin.sh other-host
 ```
 
+After nix-darwin activates, the bootstrap ensures Node LTS is available to
+mise and installs the npm-backed CLI tools declared in
+`modules/home/programs.nix` (including Pi). Pi credentials remain local and
+are not stored in this repository.
+
 ## Rebuild This Mac
 
 After the first bootstrap, use:

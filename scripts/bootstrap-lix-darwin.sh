@@ -43,3 +43,29 @@ if ! command -v nix >/dev/null 2>&1; then
 fi
 
 "$ROOT_DIR/scripts/darwin-switch.sh" "$HOST" "$@"
+
+# Home Manager declares npm-based CLI tools in mise, but mise installs them
+# outside the Nix activation. Ensure Node exists for mise's npm backend, then
+# install the declared tools (including Pi).
+find_mise() {
+  if command -v mise >/dev/null 2>&1; then
+    command -v mise
+    return
+  fi
+
+  local candidate="/etc/profiles/per-user/${USER}/bin/mise"
+  if [[ -x "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return
+  fi
+
+  return 1
+}
+
+MISE="$(find_mise)" || {
+  printf 'error: mise is not available after nix-darwin activation. Open a new shell and run: mise install\n' >&2
+  exit 1
+}
+
+"$MISE" use --global node@lts
+"$MISE" install
