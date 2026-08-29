@@ -69,6 +69,7 @@
       "llama.cpp"
       "ollama"
       "openjdk"
+      "mongosh"
       {
         name = "FelixKratz/formulae/borders";
         start_service = true;
@@ -96,6 +97,7 @@
       "telegram"
       "visual-studio-code"
       "brave-browser"
+      "codex"
     ];
   };
 }
