@@ -161,6 +161,7 @@
         reload = "exec -l /run/current-system/sw/bin/zsh";
         rip = "rip --graveyard $HOME/.local/share/Trash";
         vi = "nvim";
+        md = "mdterm";
         uistack-reload = "env -u TMUX brew services restart felixkratz/formulae/borders && /opt/homebrew/bin/aerospace reload-config && env -u TMUX brew services restart felixkratz/formulae/sketchybar";
       };
 
