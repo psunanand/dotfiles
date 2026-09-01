@@ -1,0 +1,16 @@
+# Workmux defaults for parallel agent worktrees.
+# Window mode keeps all worktrees in one tmux session and is the
+# lowest-overhead starting point for monitoring several agents.
+nerdfont: true
+agent: pi
+mode: window
+window_prefix: "wm-"
+base_branch: auto
+merge_strategy: rebase
+merge_keep: true
+
+panes:
+  - command: <agent>
+    focus: true
+  - split: horizontal
+    percentage: 35

@@ -30,6 +30,10 @@ in
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/tmux";
 
+  xdg.configFile."workmux".source =
+    config.lib.file.mkOutOfStoreSymlink
+      "${dotfiles}/.config/workmux";
+
   xdg.configFile."git/hooks/commit-msg".source =
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/git/hooks/commit-msg";

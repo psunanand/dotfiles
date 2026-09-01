@@ -352,6 +352,22 @@
         "type": "github"
       }
     },
+    "raine-homebrew-workmux": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1787775015,
+        "narHash": "sha256-z41bkkCVUUXw2cKpwRnxIvf4Gn5Kol6QoOoT4sXicCg=",
+        "owner": "raine",
+        "repo": "homebrew-workmux",
+        "rev": "ac4ab63cda3653de8cf16a2d7f61b929d927da56",
+        "type": "github"
+      },
+      "original": {
+        "owner": "raine",
+        "repo": "homebrew-workmux",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "brew-src": "brew-src",
@@ -364,7 +380,8 @@
         "nikitabobko-homebrew-tap": "nikitabobko-homebrew-tap",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": "nixpkgs_5",
+        "raine-homebrew-workmux": "raine-homebrew-workmux"
       }
     },
     "systems": {

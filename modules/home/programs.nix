@@ -162,6 +162,13 @@
         rip = "rip --graveyard $HOME/.local/share/Trash";
         vi = "nvim";
         md = "mdterm";
+        wm = "workmux";
+        wma = "workmux add";
+        wmd = "workmux dashboard";
+        wms = "workmux status";
+        wml = "workmux list";
+        wmo = "workmux open";
+        wmb = "workmux sidebar --session";
         uistack-reload = "env -u TMUX brew services restart felixkratz/formulae/borders && /opt/homebrew/bin/aerospace reload-config && env -u TMUX brew services restart felixkratz/formulae/sketchybar";
       };
 

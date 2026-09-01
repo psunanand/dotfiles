@@ -28,6 +28,7 @@
       "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
       "FelixKratz/homebrew-formulae" = inputs.felixkratz-homebrew-formulae;
       "nikitabobko/homebrew-tap" = inputs.nikitabobko-homebrew-tap;
+      "raine/homebrew-workmux" = inputs.raine-homebrew-workmux;
     };
 
     trust = {
@@ -70,6 +71,7 @@
       "ollama"
       "openjdk"
       "mongosh"
+      "raine/workmux/workmux"
       {
         name = "FelixKratz/formulae/borders";
         start_service = true;

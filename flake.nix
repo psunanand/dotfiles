@@ -46,6 +46,11 @@
       flake = false;
     };
 
+    raine-homebrew-workmux = {
+      url = "github:raine/homebrew-workmux";
+      flake = false;
+    };
+
     # Fix app launching/Spotlight behavior for Nix-installed GUI apps.
     mac-app-util.url = "github:hraban/mac-app-util";
   };
