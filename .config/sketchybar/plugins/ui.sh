@@ -32,6 +32,8 @@ POPUP_ROW_STYLE=(
   background.padding_right=10
 )
 
+POPUP_ITEMS=(clock battery volume network usage codex_usage)
+
 ui_hover() {
   sketchybar --animate sin 9 --set "$NAME" \
     background.drawing=on \
@@ -46,13 +48,37 @@ ui_unhover() {
 }
 
 ui_show_popup() {
-  ui_hover
-  sketchybar --set "$NAME" popup.drawing=on
+  local args=(
+    sketchybar
+    --set "$NAME"
+    background.drawing=on
+    "background.color=$THEME_HOVER"
+  )
+  for item in "${POPUP_ITEMS[@]}"; do
+    [[ "$item" == "$NAME" ]] && continue
+    args+=(
+      --set "$item"
+      popup.drawing=off
+      background.drawing=on
+      "background.color=$THEME_TRANSPARENT"
+    )
+  done
+  args+=(--set "$NAME" popup.drawing=on)
+  "${args[@]}"
+}
+
+ui_hide_all_popups() {
+  local args=(sketchybar)
+  for item in "${POPUP_ITEMS[@]}"; do
+    args+=(--set "$item" popup.drawing=off)
+  done
+  "${args[@]}"
 }
 
 ui_hide_popup() {
-  sketchybar --set "$NAME" popup.drawing=off
-  ui_unhover "${1:-$THEME_TRANSPARENT}"
+  local color="${1:-$THEME_TRANSPARENT}"
+  sketchybar --set "$NAME" popup.drawing=off \
+    --set "$NAME" background.drawing=on "background.color=$color"
 }
 
 ui_handle_popup_event() {

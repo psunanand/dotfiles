@@ -3,6 +3,8 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/ui.sh"
 
+ui_handle_popup_event && exit 0
+
 core_count="$(sysctl -n hw.logicalcpu 2>/dev/null)"
 [[ "$core_count" =~ ^[0-9]+$ ]] || core_count=1
 cpu_usage="$(ps -A -o %cpu | awk -v cores="$core_count" '{ total += $1 } END { printf "%.0f", total / cores }')"
@@ -36,5 +38,3 @@ sketchybar --set "$NAME" icon="􀫥" "icon.color=$color" \
   --set "$NAME.popup.cpu" "label=CPU: $cpu_usage%" \
   --set "$NAME.popup.ram" "label=RAM pressure: $ram_pressure%" \
   --set "$NAME.popup.disk" "label=Disk: $disk_usage%"
-
-ui_handle_popup_event && exit 0

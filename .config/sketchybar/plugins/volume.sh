@@ -3,27 +3,18 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/ui.sh"
 
+ui_handle_popup_event && exit 0
+
 read_volume() {
   osascript -e 'output volume of (get volume settings)' 2>/dev/null
 }
 
 volume=""
-case "${SENDER:-}" in
-volume_change)
+if [[ "${SENDER:-}" == "volume_change" ]]; then
   volume="${INFO:-}"
-  ;;
-mouse.entered)
-  ui_show_popup
-  exit 0
-  ;;
-mouse.exited | mouse.exited.global)
-  ui_hide_popup
-  exit 0
-  ;;
-*)
+else
   volume="$(read_volume)"
-  ;;
-esac
+fi
 
 [[ "$volume" =~ ^[0-9]+$ ]] || exit 0
 

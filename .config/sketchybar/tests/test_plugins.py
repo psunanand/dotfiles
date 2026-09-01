@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import json
 import os
 from pathlib import Path
 import stat
@@ -46,6 +47,15 @@ printf '%b' "$MOCK_BATTERY"
 """
 
 
+FAKE_CODEX = r"""#!/usr/bin/env bash
+read -r
+printf '%s\n' '{"id":1,"result":{}}'
+read -r
+read -r
+printf '{"id":2,"result":%s}\n' "$FAKE_CODEX_RESPONSE"
+"""
+
+
 class PluginCommandTests(unittest.TestCase):
     def make_command(self, directory, name, contents):
         command = Path(directory) / name
@@ -79,8 +89,10 @@ class PluginCommandTests(unittest.TestCase):
             self.make_command(directory, "sketchybar", FAKE_SKETCHYBAR)
             self.make_command(directory, "osascript", FAKE_OSASCRIPT)
             self.make_command(directory, "pmset", FAKE_PMSET)
+            self.make_command(directory, "codex", FAKE_CODEX)
             environment = self.environment(directory) | overrides
             environment["AEROSPACE_BIN"] = str(Path(directory) / "aerospace")
+            environment["CODEX_BIN"] = str(Path(directory) / "codex")
 
             result = subprocess.run(
                 ["bash", str(PLUGINS / plugin)],
@@ -112,6 +124,60 @@ class PluginCommandTests(unittest.TestCase):
                 sketchybar_log.read_text() if sketchybar_log.exists() else "",
                 aerospace_log.read_text() if aerospace_log.exists() else "",
             )
+
+    def run_ui(self, function, **overrides):
+        with tempfile.TemporaryDirectory() as directory:
+            self.make_command(directory, "sketchybar", FAKE_SKETCHYBAR)
+            environment = self.environment(directory) | overrides
+            ui = PLUGINS / "ui.sh"
+            result = subprocess.run(
+                ["bash", "-c", f'source "{ui}"; {function}'],
+                capture_output=True,
+                check=False,
+                env=environment,
+                text=True,
+            )
+            sketchybar_log = Path(environment["SKETCHYBAR_LOG"])
+            return result, sketchybar_log.read_text() if sketchybar_log.exists() else ""
+
+    def test_showing_one_popup_closes_other_right_side_popups(self):
+        result, sketchybar = self.run_ui("ui_show_popup", NAME="network")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        for item in ("clock", "battery", "volume", "usage", "codex_usage"):
+            self.assertIn(f"--set {item} popup.drawing=off", sketchybar)
+        self.assertIn("--set network popup.drawing=on", sketchybar)
+
+    def test_battery_hover_shows_popup_before_refreshing_data(self):
+        result, sketchybar = self.run_plugin(
+            "battery.sh", NAME="battery", SENDER="mouse.entered"
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--set battery popup.drawing=on", sketchybar)
+        self.assertNotIn("--set battery icon=", sketchybar)
+
+    def test_codex_popup_explains_usage_and_reset(self):
+        result, sketchybar = self.run_plugin(
+            "codex_usage.sh",
+            NAME="codex_usage",
+            FAKE_CODEX_RESPONSE=json.dumps(
+                {
+                    "rateLimits": {
+                        "primary": {
+                            "usedPercent": 8,
+                            "resetsAt": 0,
+                            "windowDurationMins": 10080,
+                        }
+                    }
+                }
+            ),
+            TZ="UTC",
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("label=Weekly: 8% used · 92% left", sketchybar)
+        self.assertIn("label=Resets: Thu 00:00", sketchybar)
 
     def test_focused_empty_workspace_remains_visible(self):
         result, sketchybar, _ = self.run_workspace_observer()

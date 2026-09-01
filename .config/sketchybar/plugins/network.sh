@@ -3,6 +3,8 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/ui.sh"
 
+ui_handle_popup_event && exit 0
+
 state_dir="${SKETCHYBAR_STATE_DIR:-${TMPDIR:-/tmp}}"
 mkdir -p "$state_dir"
 state_file="$state_dir/sketchybar_network_state"
@@ -14,7 +16,6 @@ if [[ -z "$interface" ]]; then
   sketchybar --set "$NAME" icon="􀙈" "icon.color=$THEME_CRITICAL" \
     --set "$NAME.popup.ssid" label="Offline" \
     --set "$NAME.popup.speed" label="↓0 B/s  ↑0 B/s"
-  ui_handle_popup_event && exit 0
   exit 0
 fi
 
@@ -86,5 +87,3 @@ fi
 sketchybar --set "$NAME" icon="$icon" "icon.color=$color" \
   --set "$NAME.popup.ssid" "label=$network_label" \
   --set "$NAME.popup.speed" "label=↓$down_label  ↑$up_label"
-
-ui_handle_popup_event && exit 0

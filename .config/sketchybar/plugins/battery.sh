@@ -3,6 +3,8 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/ui.sh"
 
+ui_handle_popup_event && exit 0
+
 battery_data="$(pmset -g batt 2>/dev/null)"
 percentage="$(grep -Eo '[0-9]+%' <<<"$battery_data" | head -n 1 | tr -d '%')"
 [[ "$percentage" =~ ^[0-9]+$ ]] || exit 0
@@ -46,5 +48,4 @@ sketchybar --set "$NAME" icon="$icon" "icon.color=$color" \
   --set "$NAME.popup.power" "label=$power_source · $status" \
   --set "$NAME.popup.estimate" "label=$estimate"
 
-ui_handle_popup_event && exit 0
 exit 0

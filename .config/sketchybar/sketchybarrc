@@ -196,4 +196,6 @@ add_popup_row codex_usage.popup.primary_reset codex_usage "󰑐"
 add_popup_row codex_usage.popup.secondary codex_usage "󰚩"
 add_popup_row codex_usage.popup.secondary_reset codex_usage "󰑐"
 
+# Never preserve a stale popup across a config reload.
+ui_hide_all_popups
 sketchybar --update
