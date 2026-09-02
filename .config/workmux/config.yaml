@@ -13,4 +13,4 @@ panes:
   - command: <agent>
     focus: true
   - split: horizontal
-    percentage: 35
+    percentage: 50
