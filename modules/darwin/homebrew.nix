@@ -100,6 +100,7 @@
       "visual-studio-code"
       "brave-browser"
       "codex"
+      "maccy"
     ];
   };
 }
