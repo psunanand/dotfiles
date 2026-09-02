@@ -124,12 +124,12 @@ def format_window(window: object) -> dict[str, int | str] | None:
     if not isinstance(used_percent, (int, float)) or isinstance(used_percent, bool):
         return None
 
-    used = max(0, min(100, round(used_percent)))
+    remaining = max(0, min(100, round(100 - used_percent)))
     label, short_label = window_labels(window.get("windowDurationMins"))
     return {
         "label": label,
         "short_label": short_label,
-        "used": used,
+        "remaining": remaining,
         "reset": format_reset(window.get("resetsAt")),
     }
 

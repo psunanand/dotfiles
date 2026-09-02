@@ -176,8 +176,8 @@ class PluginCommandTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("label=Weekly: 8% used", sketchybar)
-        self.assertNotIn("left", sketchybar)
+        self.assertIn("label=Weekly: 92% remaining", sketchybar)
+        self.assertNotIn("used", sketchybar)
         self.assertIn("label=Resets: Thu 00:00", sketchybar)
 
     def test_focused_empty_workspace_remains_visible(self):

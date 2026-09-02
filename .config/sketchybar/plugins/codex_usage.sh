@@ -31,18 +31,18 @@ if ! window_count="$(jq -er '.windows | length' <<<"$result" 2>/dev/null)" || ((
   exit 0
 fi
 
-summary="$(jq -r '.windows | max_by(.used) | "\(.short_label) \(.used)%"' <<<"$result")"
-highest_used="$(jq -er '[.windows[].used] | max' <<<"$result")"
+summary="$(jq -r '.windows | min_by(.remaining) | "\(.short_label) \(.remaining)%"' <<<"$result")"
+lowest_remaining="$(jq -er '[.windows[].remaining] | min' <<<"$result")"
 first_label="$(jq -r '.windows[0].label' <<<"$result")"
-first_used="$(jq -r '.windows[0].used' <<<"$result")"
+first_remaining="$(jq -r '.windows[0].remaining' <<<"$result")"
 first_reset="$(jq -r '.windows[0].reset' <<<"$result")"
 second_label="$(jq -r '.windows[1].label // empty' <<<"$result")"
-second_used="$(jq -r '.windows[1].used // empty' <<<"$result")"
+second_remaining="$(jq -r '.windows[1].remaining // empty' <<<"$result")"
 second_reset="$(jq -r '.windows[1].reset // empty' <<<"$result")"
 
-if (( highest_used >= 90 )); then
+if (( lowest_remaining <= 10 )); then
   color="$THEME_CRITICAL"
-elif (( highest_used >= 70 )); then
+elif (( lowest_remaining <= 30 )); then
   color="$THEME_WARNING"
 else
   color="$THEME_HEALTHY"
@@ -52,7 +52,7 @@ sketchybar --set "$NAME" \
   icon="$ICON" \
   label="$summary" \
   label.color="$color" \
-  --set "$NAME".popup.primary drawing=on label="$first_label: $first_used% used" \
+  --set "$NAME".popup.primary drawing=on label="$first_label: $first_remaining% remaining" \
   --set "$NAME".popup.primary_reset drawing=on label="Resets: $first_reset" \
-  --set "$NAME".popup.secondary drawing=$([[ -n "$second_label" ]] && echo on || echo off) label="$second_label: $second_used% used" \
+  --set "$NAME".popup.secondary drawing=$([[ -n "$second_label" ]] && echo on || echo off) label="$second_label: $second_remaining% remaining" \
   --set "$NAME".popup.secondary_reset drawing=$([[ -n "$second_label" ]] && echo on || echo off) label="Resets: $second_reset"
