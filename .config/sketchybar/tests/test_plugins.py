@@ -157,7 +157,7 @@ class PluginCommandTests(unittest.TestCase):
         self.assertIn("--set battery popup.drawing=on", sketchybar)
         self.assertNotIn("--set battery icon=", sketchybar)
 
-    def test_codex_popup_explains_usage_and_reset(self):
+    def test_codex_popup_shows_usage_and_reset(self):
         result, sketchybar = self.run_plugin(
             "codex_usage.sh",
             NAME="codex_usage",
@@ -176,7 +176,8 @@ class PluginCommandTests(unittest.TestCase):
         )
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("label=Weekly: 8% used · 92% left", sketchybar)
+        self.assertIn("label=Weekly: 8% used", sketchybar)
+        self.assertNotIn("left", sketchybar)
         self.assertIn("label=Resets: Thu 00:00", sketchybar)
 
     def test_focused_empty_workspace_remains_visible(self):

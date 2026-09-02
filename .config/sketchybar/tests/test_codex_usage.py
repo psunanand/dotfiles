@@ -82,7 +82,7 @@ class CodexUsageHelperTests(unittest.TestCase):
                     {
                         "label": "Weekly",
                         "short_label": "W",
-                        "remaining": 72,
+                        "used": 28,
                         "reset": "Thu 00:00",
                     }
                 ]
@@ -115,13 +115,13 @@ class CodexUsageHelperTests(unittest.TestCase):
                     {
                         "label": "5-hour",
                         "short_label": "5h",
-                        "remaining": 89,
+                        "used": 11,
                         "reset": "Thu 00:00",
                     },
                     {
                         "label": "Weekly",
                         "short_label": "W",
-                        "remaining": 39,
+                        "used": 61,
                         "reset": "Thu 00:00",
                     },
                 ]
