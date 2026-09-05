@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "automic-vault-homebrew-isotopes": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788620349,
+        "narHash": "sha256-oLUuMLVZRs6+2GNUgFw761g8mf+0lgN8rcfR5AAyKW0=",
+        "owner": "automic-vault",
+        "repo": "homebrew-isotopes",
+        "rev": "3674a5d70e8a85e674e62de3b314124ed373df97",
+        "type": "github"
+      },
+      "original": {
+        "owner": "automic-vault",
+        "repo": "homebrew-isotopes",
+        "type": "github"
+      }
+    },
     "brew-src": {
       "flake": false,
       "locked": {
@@ -370,6 +386,7 @@
     },
     "root": {
       "inputs": {
+        "automic-vault-homebrew-isotopes": "automic-vault-homebrew-isotopes",
         "brew-src": "brew-src",
         "felixkratz-homebrew-formulae": "felixkratz-homebrew-formulae",
         "home-manager": "home-manager",

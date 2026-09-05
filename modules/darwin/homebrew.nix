@@ -29,12 +29,16 @@
       "FelixKratz/homebrew-formulae" = inputs.felixkratz-homebrew-formulae;
       "nikitabobko/homebrew-tap" = inputs.nikitabobko-homebrew-tap;
       "raine/homebrew-workmux" = inputs.raine-homebrew-workmux;
+      "automic-vault/homebrew-isotopes" = inputs.automic-vault-homebrew-isotopes;
     };
 
     trust = {
       taps = [
         "FelixKratz/formulae"
         "nikitabobko/tap"
+      ];
+      casks = [
+        "automic-vault/isotopes/automic-vault"
       ];
     };
   };
@@ -101,6 +105,10 @@
       "brave-browser"
       "codex"
       "maccy"
+      {
+        name = "automic-vault/isotopes/automic-vault";
+        trusted = true;
+      }
     ];
   };
 }

@@ -51,6 +51,11 @@
       flake = false;
     };
 
+    automic-vault-homebrew-isotopes = {
+      url = "github:automic-vault/homebrew-isotopes";
+      flake = false;
+    };
+
     # Fix app launching/Spotlight behavior for Nix-installed GUI apps.
     mac-app-util.url = "github:hraban/mac-app-util";
   };
