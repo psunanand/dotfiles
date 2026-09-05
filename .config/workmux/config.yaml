@@ -4,7 +4,6 @@
 nerdfont: true
 agent: pi
 mode: window
-window_prefix: "wm-"
 base_branch: auto
 merge_strategy: rebase
 merge_keep: true
