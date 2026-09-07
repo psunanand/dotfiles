@@ -15,6 +15,8 @@ HOMEBREW_INPUTS=(
   homebrew-bundle
   felixkratz-homebrew-formulae
   nikitabobko-homebrew-tap
+  raine-homebrew-workmux
+  automic-vault-homebrew-isotopes
 )
 
 usage() {

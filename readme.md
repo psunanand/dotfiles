@@ -85,8 +85,9 @@ argument:
 
 After nix-darwin activates, the bootstrap ensures Node LTS is available to
 mise and installs the npm-backed CLI tools declared in
-`modules/home/programs.nix` (including Pi). Pi credentials remain local and
-are not stored in this repository.
+`modules/home/programs.nix` (including Pi). The first tmux start bootstraps
+TPM; press `Ctrl-a`, then `I` to install its declared plugins. Pi credentials
+remain local and are not stored in this repository.
 
 ## Rebuild This Mac
 
@@ -132,6 +133,19 @@ Update only the Homebrew runtime and pinned taps:
 ```sh
 ./scripts/update-flake.sh --homebrew
 ```
+
+To update the Homebrew formulae and casks declared in
+`modules/darwin/homebrew.nix`, refresh those pins and activate the result:
+
+```sh
+./scripts/update-flake.sh --homebrew
+./scripts/darwin-switch.sh
+```
+
+Activation runs `brew bundle install` with upgrades enabled. Do not use
+`brew update` or `brew upgrade` for this managed Homebrew installation: its
+runtime and taps are pinned by the flake. Add or remove applications in
+`modules/darwin/homebrew.nix`, then activate the configuration.
 
 The update script only changes and verifies `flake.lock`. Activate the new
 generation separately with `./scripts/darwin-switch.sh`.
