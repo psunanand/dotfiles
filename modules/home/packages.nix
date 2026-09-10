@@ -22,5 +22,6 @@
     tmux
     neovim
     mdterm
+    tree-sitter
   ];
 }
