@@ -14,6 +14,7 @@
       EDITOR = "nvim";
       VISUAL = "nvim";
       FD_OPTIONS = "--hidden --exclude .git --exclude .DS_Store";
+      PI_IMAGE_PROTOCOL = "kitty";
     };
   };
 
