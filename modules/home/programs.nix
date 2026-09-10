@@ -235,6 +235,7 @@
           bindkey '\C-x\C-e' edit-command-line
           bindkey '^f' vi-forward-word
           bindkey '^ ' autosuggest-accept
+          bindkey '^y' autosuggest-accept
         '')
 
         (lib.mkOrder 950 ''
