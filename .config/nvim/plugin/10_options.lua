@@ -23,6 +23,7 @@ opt.colorcolumn = "+1"
 opt.cursorline = true
 opt.cursorlineopt = "screenline,number"
 opt.linebreak = true
+opt.termguicolors = true
 opt.list = true
 opt.listchars = "extends:…,nbsp:␣,precedes:…,tab:> "
 opt.fillchars = "eob: ,fold:╌"

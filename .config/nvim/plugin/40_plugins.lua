@@ -93,6 +93,7 @@ now_if_args(function()
 			"shfmt",
 			"lua_ls",
 			"stylua",
+			"vtsls",
 		},
 		auto_update = false,
 		run_on_start = true,
