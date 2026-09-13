@@ -5,7 +5,7 @@ source "$SCRIPT_DIR/ui.sh"
 
 ui_handle_popup_event && exit 0
 
-time_label="$(date +%-I:%M)"
+time_label="$(date '+%-I:%M %p')"
 date_label="$(date '+%A, %B %-d')"
 
 sketchybar --set "$NAME" icon="" "label=$time_label" \
