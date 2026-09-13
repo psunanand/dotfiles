@@ -71,6 +71,7 @@
     };
 
     brews = [
+      "typescript-language-server"
       "llama.cpp"
       "ollama"
       "openjdk"

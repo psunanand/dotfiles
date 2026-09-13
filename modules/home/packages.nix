@@ -23,5 +23,6 @@
     neovim
     mdterm
     tree-sitter
+    shellcheck
   ];
 }

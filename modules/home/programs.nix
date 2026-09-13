@@ -235,8 +235,9 @@
           zle -N edit-command-line
           bindkey '\C-x\C-e' edit-command-line
           bindkey '^f' vi-forward-word
-          bindkey '^ ' autosuggest-accept
-          bindkey '^y' autosuggest-accept
+          # zsh-vi-mode reads bindings from viins while editing.
+          bindkey -M viins '^ ' autosuggest-accept
+          bindkey -M viins '^y' autosuggest-accept
         '')
 
         (lib.mkOrder 950 ''
