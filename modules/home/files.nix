@@ -62,8 +62,4 @@ in
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/home/zsh/.zsh_plugins.txt";
 
-  xdg.configFile."mdterm".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/.config/mdterm";
-
 }
