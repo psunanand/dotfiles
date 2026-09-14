@@ -91,7 +91,6 @@
       "android-commandlinetools"
       "android-platform-tools"
       "bitwarden"
-      "caffeine"
       "db-browser-for-sqlite"
       "discord"
       "font-sauce-code-pro-nerd-font"
@@ -105,11 +104,11 @@
       "visual-studio-code"
       "brave-browser"
       "codex"
-      "maccy"
       {
         name = "automic-vault/isotopes/automic-vault";
         trusted = true;
       }
+      "vorssaint"
     ];
   };
 }
