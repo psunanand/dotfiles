@@ -172,18 +172,6 @@ sketchybar --add item network right \
 add_popup_row network.popup.ssid network "󰖩"
 add_popup_row network.popup.speed network "󰯎"
 
-sketchybar --add item usage right \
-  --set usage \
-  label.drawing=off \
-  update_freq=10 \
-  script="$PLUGIN_DIR/usage.sh" \
-  click_script="open -a 'Activity Monitor'" \
-  "${POPUP_STYLE[@]}" \
-  --subscribe usage system_woke mouse.entered mouse.exited mouse.exited.global
-add_popup_row usage.popup.cpu usage "󰻠"
-add_popup_row usage.popup.ram usage "󰍛"
-add_popup_row usage.popup.disk usage "󰋊"
-
 sketchybar --add item codex_usage right \
   --set codex_usage \
   update_freq=60 \

@@ -144,9 +144,17 @@ class PluginCommandTests(unittest.TestCase):
         result, sketchybar = self.run_ui("ui_show_popup", NAME="network")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        for item in ("clock", "battery", "volume", "usage", "codex_usage"):
+        for item in ("clock", "battery", "volume", "codex_usage"):
             self.assertIn(f"--set {item} popup.drawing=off", sketchybar)
         self.assertIn("--set network popup.drawing=on", sketchybar)
+
+    def test_system_usage_widget_is_removed(self):
+        config = (ROOT / "sketchybarrc").read_text()
+        ui = (PLUGINS / "ui.sh").read_text()
+
+        self.assertNotIn("sketchybar --add item usage right", config)
+        self.assertNotIn('$PLUGIN_DIR/usage.sh', config)
+        self.assertNotIn("usage", ui.split("POPUP_ITEMS=(", 1)[1].split(")", 1)[0].split())
 
     def test_battery_hover_shows_popup_before_refreshing_data(self):
         result, sketchybar = self.run_plugin(
@@ -260,7 +268,7 @@ class PluginCommandTests(unittest.TestCase):
         ui = (PLUGINS / "ui.sh").read_text()
         self.assertIn("popup.align=right", ui)
 
-        for item in ("clock", "battery", "volume", "network", "usage", "codex_usage"):
+        for item in ("clock", "battery", "volume", "network", "codex_usage"):
             block = config.split(f"sketchybar --add item {item} right", 1)[1].split(
                 "sketchybar --add item ", 1
             )[0]
@@ -299,9 +307,6 @@ class PluginCommandTests(unittest.TestCase):
             "volume.popup.level volume",
             "network.popup.ssid network",
             "network.popup.speed network",
-            "usage.popup.cpu usage",
-            "usage.popup.ram usage",
-            "usage.popup.disk usage",
             "codex_usage.popup.primary codex_usage",
             "codex_usage.popup.primary_reset codex_usage",
             "codex_usage.popup.secondary codex_usage",

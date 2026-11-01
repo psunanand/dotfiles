@@ -32,7 +32,7 @@ POPUP_ROW_STYLE=(
   background.padding_right=10
 )
 
-POPUP_ITEMS=(clock battery volume network usage codex_usage)
+POPUP_ITEMS=(clock battery volume network codex_usage)
 
 ui_hover() {
   sketchybar --animate sin 9 --set "$NAME" \
