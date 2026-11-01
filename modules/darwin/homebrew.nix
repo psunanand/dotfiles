@@ -9,8 +9,8 @@
     enable = true;
     user = username;
     package = inputs.brew-src // {
-      name = "brew-6.0.15";
-      version = "6.0.15";
+      name = "brew-7.0.11";
+      version = "7.0.11";
     };
     enableRosetta = true;
     autoMigrate = true;
@@ -20,6 +20,9 @@
     extraEnv = {
       # Don't see the usage info to any analytics
       HOMEBREW_NO_ANALYTICS = "1";
+      # The pinned Homebrew runtime requires this; nix-homebrew does not export it.
+      # The wrapper substitutes @prefix@ for each native/Rosetta installation.
+      HOMEBREW_ORIGINAL_BREW_FILE = "@prefix@/bin/brew";
     };
 
     taps = {

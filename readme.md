@@ -147,8 +147,12 @@ Activation runs `brew bundle install` with upgrades enabled. Do not use
 runtime and taps are pinned by the flake. Add or remove applications in
 `modules/darwin/homebrew.nix`, then activate the configuration.
 
-The update script only changes and verifies `flake.lock`. Activate the new
-generation separately with `./scripts/darwin-switch.sh`.
+The update script only changes and verifies `flake.lock`. It does not advance
+the fixed Homebrew release in `flake.nix`. When upgrading that runtime, update
+`brew-src.url` there and the matching `nix-homebrew.package.name` and `version`
+in `modules/darwin/homebrew.nix`, then run `./scripts/update-flake.sh brew-src`.
+Newer taps may require a newer runtime; Nix build checks do not run `brew bundle`.
+Activate the new generation separately with `./scripts/darwin-switch.sh`.
 
 ## Verify Changes
 

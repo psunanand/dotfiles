@@ -20,7 +20,7 @@
     };
 
     brew-src = {
-      url = "github:Homebrew/brew/6.0.15";
+      url = "github:Homebrew/brew/7.0.11";
       flake = false;
     };
 
