@@ -93,6 +93,7 @@
       "bitwarden"
       "db-browser-for-sqlite"
       "discord"
+      "font-jetbrains-mono-nerd-font"
       "font-sauce-code-pro-nerd-font"
       "font-sf-pro"
       "google-drive"
