@@ -171,6 +171,7 @@
         wmo = "workmux open";
         wmb = "workmux sidebar --session";
         uistack-reload = "env -u TMUX brew services restart felixkratz/formulae/borders && /opt/homebrew/bin/aerospace reload-config && env -u TMUX brew services restart felixkratz/formulae/sketchybar";
+        pb = "pi-bolt";
       };
 
       profileExtra = ''
