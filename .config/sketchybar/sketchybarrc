@@ -172,18 +172,6 @@ sketchybar --add item network right \
 add_popup_row network.popup.ssid network "󰖩"
 add_popup_row network.popup.speed network "󰯎"
 
-sketchybar --add item codex_usage right \
-  --set codex_usage \
-  update_freq=60 \
-  script="$PLUGIN_DIR/codex_usage.sh" \
-  background.padding_left=5 \
-  "${POPUP_STYLE[@]}" \
-  --subscribe codex_usage system_woke mouse.entered mouse.exited mouse.exited.global
-add_popup_row codex_usage.popup.primary codex_usage "󰚩"
-add_popup_row codex_usage.popup.primary_reset codex_usage "󰑐"
-add_popup_row codex_usage.popup.secondary codex_usage "󰚩"
-add_popup_row codex_usage.popup.secondary_reset codex_usage "󰑐"
-
 # Never preserve a stale popup across a config reload.
 ui_hide_all_popups
 sketchybar --update

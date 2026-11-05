@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import json
 import os
 from pathlib import Path
 import stat
@@ -47,15 +46,6 @@ printf '%b' "$MOCK_BATTERY"
 """
 
 
-FAKE_CODEX = r"""#!/usr/bin/env bash
-read -r
-printf '%s\n' '{"id":1,"result":{}}'
-read -r
-read -r
-printf '{"id":2,"result":%s}\n' "$FAKE_CODEX_RESPONSE"
-"""
-
-
 class PluginCommandTests(unittest.TestCase):
     def make_command(self, directory, name, contents):
         command = Path(directory) / name
@@ -89,10 +79,8 @@ class PluginCommandTests(unittest.TestCase):
             self.make_command(directory, "sketchybar", FAKE_SKETCHYBAR)
             self.make_command(directory, "osascript", FAKE_OSASCRIPT)
             self.make_command(directory, "pmset", FAKE_PMSET)
-            self.make_command(directory, "codex", FAKE_CODEX)
             environment = self.environment(directory) | overrides
             environment["AEROSPACE_BIN"] = str(Path(directory) / "aerospace")
-            environment["CODEX_BIN"] = str(Path(directory) / "codex")
 
             result = subprocess.run(
                 ["bash", str(PLUGINS / plugin)],
@@ -144,7 +132,7 @@ class PluginCommandTests(unittest.TestCase):
         result, sketchybar = self.run_ui("ui_show_popup", NAME="network")
 
         self.assertEqual(result.returncode, 0, result.stderr)
-        for item in ("clock", "battery", "volume", "codex_usage"):
+        for item in ("clock", "battery", "volume"):
             self.assertIn(f"--set {item} popup.drawing=off", sketchybar)
         self.assertIn("--set network popup.drawing=on", sketchybar)
 
@@ -165,28 +153,14 @@ class PluginCommandTests(unittest.TestCase):
         self.assertIn("--set battery popup.drawing=on", sketchybar)
         self.assertNotIn("--set battery icon=", sketchybar)
 
-    def test_codex_popup_shows_usage_and_reset(self):
-        result, sketchybar = self.run_plugin(
-            "codex_usage.sh",
-            NAME="codex_usage",
-            FAKE_CODEX_RESPONSE=json.dumps(
-                {
-                    "rateLimits": {
-                        "primary": {
-                            "usedPercent": 8,
-                            "resetsAt": 0,
-                            "windowDurationMins": 10080,
-                        }
-                    }
-                }
-            ),
-            TZ="UTC",
-        )
+    def test_codex_usage_widget_is_removed(self):
+        config = (ROOT / "sketchybarrc").read_text()
+        ui = (PLUGINS / "ui.sh").read_text()
 
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("label=Weekly: 92% remaining", sketchybar)
-        self.assertNotIn("used", sketchybar)
-        self.assertIn("label=Resets: Thu 00:00", sketchybar)
+        self.assertNotIn("codex_usage", config)
+        self.assertNotIn("codex_usage", ui)
+        self.assertFalse((PLUGINS / "codex_usage.sh").exists())
+        self.assertFalse((ROOT / "helpers" / "codex_usage.py").exists())
 
     def test_focused_empty_workspace_remains_visible(self):
         result, sketchybar, _ = self.run_workspace_observer()
@@ -268,7 +242,7 @@ class PluginCommandTests(unittest.TestCase):
         ui = (PLUGINS / "ui.sh").read_text()
         self.assertIn("popup.align=right", ui)
 
-        for item in ("clock", "battery", "volume", "network", "codex_usage"):
+        for item in ("clock", "battery", "volume", "network"):
             block = config.split(f"sketchybar --add item {item} right", 1)[1].split(
                 "sketchybar --add item ", 1
             )[0]
@@ -307,10 +281,6 @@ class PluginCommandTests(unittest.TestCase):
             "volume.popup.level volume",
             "network.popup.ssid network",
             "network.popup.speed network",
-            "codex_usage.popup.primary codex_usage",
-            "codex_usage.popup.primary_reset codex_usage",
-            "codex_usage.popup.secondary codex_usage",
-            "codex_usage.popup.secondary_reset codex_usage",
         )
         for row in expected_rows:
             self.assertRegex(config, rf"add_popup_row {row} \S+")
