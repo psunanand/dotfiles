@@ -34,7 +34,7 @@ uses it for `mise`.
 
 Use `modules/home/files.nix` for out-of-store symlinks. The source files live
 in `.config/` for XDG configs like Git's config, ignore file, commit template,
-and hooks, and `home/` for home-root files like `.zshrc` and `.aerospace.toml`.
+and hooks, and `home/` for home-root files like `.zshrc`.
 
 Use `modules/darwin/homebrew.nix` for nix-homebrew taps plus nix-darwin
 Homebrew formulae, casks, and Mac App Store entries.
@@ -166,18 +166,13 @@ nix build --option eval-cache false .#darwinConfigurations.mksmbp.system
 For shell and script changes:
 
 ```sh
-bash -n scripts/*.sh .config/sketchybar/sketchybarrc \
-  .config/sketchybar/plugins/*.sh .config/borders/bordersrc
+for file in scripts/*.sh; do
+  bash -n "$file" || break
+done
 ```
 
 Zsh startup files are generated from `modules/home/programs.nix`; use the Nix
 checks above for changes there.
-
-For SketchyBar helper changes:
-
-```sh
-python3 -m unittest discover -s .config/sketchybar/tests -p 'test_*.py'
-```
 
 Always run:
 
