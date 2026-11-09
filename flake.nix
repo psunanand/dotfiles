@@ -57,7 +57,11 @@
     };
 
     # Fix app launching/Spotlight behavior for Nix-installed GUI apps.
-    mac-app-util.url = "github:hraban/mac-app-util";
+    mac-app-util = {
+      url = "github:hraban/mac-app-util";
+      # Use the current SBCL runtime, including macOS 27 compatibility fixes.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
