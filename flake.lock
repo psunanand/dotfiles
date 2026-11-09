@@ -54,22 +54,6 @@
         "type": "github"
       }
     },
-    "felixkratz-homebrew-formulae": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791580578,
-        "narHash": "sha256-E2lxCwGyWui+8+7AlntHhzaFENVm2o/CeVHNEeSEGPU=",
-        "owner": "FelixKratz",
-        "repo": "homebrew-formulae",
-        "rev": "e38ef7a0e90101100ca6fa66c1e1da80f3c1dc87",
-        "type": "github"
-      },
-      "original": {
-        "owner": "FelixKratz",
-        "repo": "homebrew-formulae",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -218,22 +202,6 @@
         "type": "github"
       }
     },
-    "nikitabobko-homebrew-tap": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1791286232,
-        "narHash": "sha256-Zsi4MqzCSUlx7Nfx7hkqafC4iyPAHZRDzL0xobOBNo8=",
-        "owner": "nikitabobko",
-        "repo": "homebrew-tap",
-        "rev": "086fa55e376037f28bd959a274f588c65296c1f1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nikitabobko",
-        "repo": "homebrew-tap",
-        "type": "github"
-      }
-    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -374,13 +342,11 @@
       "inputs": {
         "automic-vault-homebrew-isotopes": "automic-vault-homebrew-isotopes",
         "brew-src": "brew-src",
-        "felixkratz-homebrew-formulae": "felixkratz-homebrew-formulae",
         "home-manager": "home-manager",
         "homebrew-bundle": "homebrew-bundle",
         "homebrew-cask": "homebrew-cask",
         "homebrew-core": "homebrew-core",
         "mac-app-util": "mac-app-util",
-        "nikitabobko-homebrew-tap": "nikitabobko-homebrew-tap",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs_4",

@@ -18,14 +18,6 @@ in
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/nvim";
 
-  xdg.configFile."borders".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/.config/borders";
-
-  xdg.configFile."sketchybar".source =
-    config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/.config/sketchybar";
-
   xdg.configFile."tmux".source =
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/tmux";
@@ -50,9 +42,9 @@ in
     config.lib.file.mkOutOfStoreSymlink
       "${dotfiles}/.config/git/message";
 
-  home.file.".aerospace.toml".source =
+  xdg.configFile."omniwm".source =
     config.lib.file.mkOutOfStoreSymlink
-      "${dotfiles}/home/aerospace/.aerospace.toml";
+      "${dotfiles}/.config/omniwm";
 
   home.file.".ssh/config".source =
     config.lib.file.mkOutOfStoreSymlink

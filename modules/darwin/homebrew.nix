@@ -29,17 +29,11 @@
       "homebrew/homebrew-core" = inputs.homebrew-core;
       "homebrew/homebrew-cask" = inputs.homebrew-cask;
       "homebrew/homebrew-bundle" = inputs.homebrew-bundle;
-      "FelixKratz/homebrew-formulae" = inputs.felixkratz-homebrew-formulae;
-      "nikitabobko/homebrew-tap" = inputs.nikitabobko-homebrew-tap;
       "raine/homebrew-workmux" = inputs.raine-homebrew-workmux;
       "automic-vault/homebrew-isotopes" = inputs.automic-vault-homebrew-isotopes;
     };
 
     trust = {
-      taps = [
-        "FelixKratz/formulae"
-        "nikitabobko/tap"
-      ];
       casks = [
         "automic-vault/isotopes/automic-vault"
       ];
@@ -49,23 +43,7 @@
   homebrew = {
     enable = true;
 
-    taps =
-      let
-        trustedTaps = [
-          "FelixKratz/homebrew-formulae"
-          "nikitabobko/homebrew-tap"
-        ];
-
-        mkTap = name:
-          if builtins.elem name trustedTaps then
-            {
-              inherit name;
-              trusted = true;
-            }
-          else
-            name;
-      in
-      map mkTap (builtins.attrNames config.nix-homebrew.taps);
+    taps = builtins.attrNames config.nix-homebrew.taps;
 
     onActivation = {
       autoUpdate = false;
@@ -80,17 +58,9 @@
       "openjdk"
       "mongosh"
       "raine/workmux/workmux"
-      {
-        name = "FelixKratz/formulae/borders";
-        start_service = true;
-      }
-      {
-        name = "FelixKratz/formulae/sketchybar";
-        start_service = true;
-      }
     ];
     casks = [
-      "aerospace"
+      "omniwm"
       "android-commandlinetools"
       "android-platform-tools"
       "bitwarden"

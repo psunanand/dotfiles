@@ -87,7 +87,7 @@ in
         disable-shadow = true;
       };
 
-      # Keep each display as a separate Space for Aerospace/SketchyBar.
+      # OmniWM requires each display to have a separate Space.
       spaces = {
         spans-displays = false;
       };
@@ -105,7 +105,7 @@ in
           executeQuickHyperKey = 1;
           hyperFlags = 1966080;
           # Hyperkey is disabled so it does not capture the left Option key,
-          # which AeroSpace uses for workspace bindings.
+          # which OmniWM uses for workspace bindings.
           keyRemap = 2;
           launchOnLogin = 1;
           physicalKeycode = 226;

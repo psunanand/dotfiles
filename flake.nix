@@ -37,15 +37,6 @@
       flake = false;
     };
 
-    felixkratz-homebrew-formulae = {
-      url = "github:FelixKratz/homebrew-formulae";
-      flake = false;
-    };
-    nikitabobko-homebrew-tap = {
-      url = "github:nikitabobko/homebrew-tap";
-      flake = false;
-    };
-
     raine-homebrew-workmux = {
       url = "github:raine/homebrew-workmux";
       flake = false;
