@@ -46,4 +46,4 @@ nix build --option eval-cache false .#darwinConfigurations.mksmbp.system
 ```
 
 Do not claim activation, cleanup, or rollback succeeded unless the exact command
-was run. Do not commit unless the user explicitly asks.
+was run. Commit only when asked, using Conventional Commits.
